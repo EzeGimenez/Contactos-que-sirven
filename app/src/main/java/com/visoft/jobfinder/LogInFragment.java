@@ -5,18 +5,17 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -25,11 +24,13 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.FirebaseDatabase;
 
-
+/**
+ * Fragment del login
+ */
 public class LogInFragment extends Fragment implements View.OnClickListener {
     private GoogleSignInClient mGoogleSignInClient;
-    private SignInButton buttonGoogleSignIn;
     private FirebaseAuth mAuth;
     private EditText emailET, passwordET;
 
@@ -60,24 +61,24 @@ public class LogInFragment extends Fragment implements View.OnClickListener {
         mAuth = FirebaseAuth.getInstance();
 
         //Initialization of UI Components
-        buttonGoogleSignIn = view.findViewById(R.id.buttonSignInWithGoogle);
         emailET = view.findViewById(R.id.etUsername);
         passwordET = view.findViewById(R.id.etPassword);
 
         //Listeners for buttons
         view.findViewById(R.id.buttonAcceptLogIn).setOnClickListener(this);
-        buttonGoogleSignIn.setOnClickListener(this);
+        view.findViewById(R.id.buttonSignInWithGoogle).setOnClickListener(this);
+        view.findViewById(R.id.buttonSignUp).setOnClickListener(this);
     }
 
-
     /**
-     * Method to update UI and to check whether its null
+     * Método para actualizar la Interfaz de acuerdo a si se loggeo o no
      *
-     * @param account account of the logged in user, can be null
+     * @param account Cuenta del usuario loggeado
      */
     private void updateUI(@Nullable FirebaseUser account) {
         if (account != null) {
-            ((LoginActivity)getActivity()).onBackPressed();
+            //Retornando a la pantalla principal, ya loggeado
+            ((LoginActivity) getActivity()).onBackPressed();
         } else {
 
         }
@@ -99,6 +100,9 @@ public class LogInFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.buttonAcceptLogIn:
                 signInWithEmail(emailET.getText().toString(), passwordET.getText().toString());
+                break;
+            case R.id.buttonSignUp:
+                startSignUpFragment();
                 break;
         }
     }
@@ -179,14 +183,34 @@ public class LogInFragment extends Fragment implements View.OnClickListener {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+
                             Toast.makeText(getContext(), "Log in success", Toast.LENGTH_SHORT).show();
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
+                            FirebaseUser userfb = mAuth.getCurrentUser();
+                            if(task.getResult().getAdditionalUserInfo().isNewUser()) {
+                                User user = new User();
+                                user.setUsername(userfb.getDisplayName());
+                                FirebaseDatabase.getInstance()
+                                        .getReference()
+                                        .child(Constants.FIREBASE_USERS_CONTAINER_NAME)
+                                        .child(userfb.getUid())
+                                        .setValue(user);
+                            }
+                            updateUI(userfb);
                         } else {
                             Toast.makeText(getContext(), "Log in failed", Toast.LENGTH_SHORT).show();
                             updateUI(null);
                         }
                     }
                 });
+    }
+
+    /**
+     * Inicializacion del fragment para registrarse
+     */
+    private void startSignUpFragment() {
+        SignUpFragment signUpFragment = new SignUpFragment();
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragmentSignInSignUp, signUpFragment, Constants.SIGNUP_FRAGMENT_TAG);
+        transaction.commit();
     }
 }
