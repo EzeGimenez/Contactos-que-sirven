@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">JobFinder</string>
+    <string name="oauthId">421055195921-q7vcj31bcr0lmhe9s4p9176r44ndma8m.apps.googleusercontent.com</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
