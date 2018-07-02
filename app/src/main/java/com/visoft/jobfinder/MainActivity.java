@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         //Creacion de toolbar
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         isLoggedIn();
     }
