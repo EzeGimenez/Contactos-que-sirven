@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private TextView tvUsername;
     private Toolbar toolbar;
+    private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,43 +46,53 @@ public class MainActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+    }
 
-        isLoggedIn();
+    @Override
+    protected void onResume() {
+        super.onResume();
+        invalidateOptionsMenu();
     }
 
     /**
      * If user is signed in it will updateUI accordingly
      */
-    private void isLoggedIn() {
+    private void updateLogIn() {
         FirebaseUser acc = mAuth.getCurrentUser();
         updateUI(acc);
     }
 
     /**
      * Actualiza la interfaz de acuerdo si el usuario ya está registrado
+     *
      * @param user firebase user, puede ser null
      */
-    private void updateUI(@Nullable FirebaseUser user){
-        if(user != null){ // esta iniciado sesion
+    private void updateUI(@Nullable FirebaseUser user) {
+        MenuItem signOutItem = menu.findItem(R.id.signOut);
+        if (user != null) { // esta iniciado sesion
             tvUsername.setText("Bienvenido: " + user.getDisplayName());
+            tvUsername.setVisibility(View.VISIBLE);
             signInButton.setVisibility(View.INVISIBLE);
-        }else{ // no esta iniciado sesion
+            signOutItem.setVisible(true);
+        } else { // no esta iniciado sesion
             tvUsername.setVisibility(View.INVISIBLE);
             signInButton.setVisibility(View.VISIBLE);
+            signOutItem.setVisible(false);
         }
     }
 
     /**
      * Oyente de la toolbar
+     *
      * @param item
      * @return
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch(item.getItemId()){
-            case R.id.boton1:
-                Toast.makeText(this, "Bla", Toast.LENGTH_SHORT).show();
+        switch (item.getItemId()) {
+            case R.id.signOut:
+                mAuth.signOut();
+                updateUI(null);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -89,9 +100,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        updateLogIn();
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.toolbar, menu);
+        this.menu = menu;
         return true;
     }
 }

@@ -3,9 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/boton1"
-        android:icon="@drawable/ic_favorite_border_black_24dp"
-        android:title="boton1"
+        android:id="@+id/signOut"
+        android:title="Cerrar sesión"
         app:showAsAction="never" />
 
 </menu>
