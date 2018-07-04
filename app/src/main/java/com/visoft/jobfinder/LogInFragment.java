@@ -189,6 +189,8 @@ public class LogInFragment extends Fragment implements View.OnClickListener {
                             if(task.getResult().getAdditionalUserInfo().isNewUser()) {
                                 User user = new User();
                                 user.setUsername(userfb.getDisplayName());
+                                user.setRating(-1);
+                                user.setNumberReviews(0);
                                 FirebaseDatabase.getInstance()
                                         .getReference()
                                         .child(Constants.FIREBASE_USERS_CONTAINER_NAME)

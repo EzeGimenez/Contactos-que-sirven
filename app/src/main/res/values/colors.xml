@@ -4,4 +4,7 @@
     <color name="colorPrimary">#313131</color>
     <color name="primaryAccent">#e78700</color>
     <color name="secondaryAccent">#e25700</color>
+    <color name="ratingYellow">#ffd900</color>
+    <color name="lightgray">#999999</color>
+    <color name="transparent">#24ffffff</color>
 </resources>

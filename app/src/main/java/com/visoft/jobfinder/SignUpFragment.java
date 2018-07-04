@@ -79,6 +79,8 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     private void registerNewUserFirebase(String uid, String username) {
         User user = new User();
         user.setUsername(username);
+        user.setRating(-1);
+        user.setNumberReviews(0);
         FirebaseDatabase
                 .getInstance()
                 .getReference()

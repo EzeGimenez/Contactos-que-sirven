@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/goToProfile"
+        android:icon="@drawable/ic_person_outline"
+        android:title="ir a perfil"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/signOut"
         android:title="Cerrar sesión"
         app:showAsAction="never" />

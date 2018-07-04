@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -42,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         tvUsername = findViewById(R.id.tvLoggedInUsername);
 
 
-        //Creacion de toolbar
+        //Creacion de toolbar_main
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -69,20 +68,23 @@ public class MainActivity extends AppCompatActivity {
      */
     private void updateUI(@Nullable FirebaseUser user) {
         MenuItem signOutItem = menu.findItem(R.id.signOut);
+        MenuItem goToProfileItem = menu.findItem(R.id.goToProfile);
         if (user != null) { // esta iniciado sesion
             tvUsername.setText("Bienvenido: " + user.getDisplayName());
             tvUsername.setVisibility(View.VISIBLE);
             signInButton.setVisibility(View.INVISIBLE);
             signOutItem.setVisible(true);
+            goToProfileItem.setVisible(true);
         } else { // no esta iniciado sesion
             tvUsername.setVisibility(View.INVISIBLE);
             signInButton.setVisibility(View.VISIBLE);
             signOutItem.setVisible(false);
+            goToProfileItem.setVisible(false);
         }
     }
 
     /**
-     * Oyente de la toolbar
+     * Oyente de la toolbar_main
      *
      * @param item
      * @return
@@ -93,6 +95,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.signOut:
                 mAuth.signOut();
                 updateUI(null);
+                return true;
+            case R.id.goToProfile:
+                Intent intent = new Intent(this, ProfileActivity.class);
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -108,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.toolbar, menu);
+        getMenuInflater().inflate(R.menu.toolbar_main, menu);
         this.menu = menu;
         return true;
     }
