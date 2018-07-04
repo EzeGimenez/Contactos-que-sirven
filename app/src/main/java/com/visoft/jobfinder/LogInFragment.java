@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
@@ -79,6 +80,9 @@ public class LogInFragment extends Fragment implements View.OnClickListener {
         if (account != null) {
             //Retornando a la pantalla principal, ya loggeado
             ((LoginActivity) getActivity()).onBackPressed();
+
+            ConstraintLayout progressBarContainer = getActivity().findViewById(R.id.progressBarContainer);
+            progressBarContainer.setVisibility(View.GONE);
         } else {
 
         }
@@ -90,6 +94,9 @@ public class LogInFragment extends Fragment implements View.OnClickListener {
     private void signInWithGoogle() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_GOOGLE_SIGNIN);
+
+        ConstraintLayout progressBarContainer = getActivity().findViewById(R.id.progressBarContainer);
+        progressBarContainer.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -168,10 +175,14 @@ public class LogInFragment extends Fragment implements View.OnClickListener {
                 //Recibido un task completado conteniendo la cuenta de google
                 GoogleSignInAccount acc = task.getResult(ApiException.class);
                 authWithGoogle(acc);
+
             } catch (ApiException e) {
                 //TODO arreglar excepción
                 Toast.makeText(getContext(), "error al iniciar sesion", Toast.LENGTH_SHORT).show();
                 updateUI(null);
+
+                ConstraintLayout progressBarContainer = getActivity().findViewById(R.id.progressBarContainer);
+                progressBarContainer.setVisibility(View.GONE);
             }
         }
     }
@@ -183,7 +194,6 @@ public class LogInFragment extends Fragment implements View.OnClickListener {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-
                             Toast.makeText(getContext(), "Log in success", Toast.LENGTH_SHORT).show();
                             FirebaseUser userfb = mAuth.getCurrentUser();
                             if(task.getResult().getAdditionalUserInfo().isNewUser()) {
@@ -212,7 +222,8 @@ public class LogInFragment extends Fragment implements View.OnClickListener {
     private void startSignUpFragment() {
         SignUpFragment signUpFragment = new SignUpFragment();
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragmentSignInSignUp, signUpFragment, Constants.SIGNUP_FRAGMENT_TAG);
+        transaction.addToBackStack(Constants.LOGIN_FRAGMENT_TAG);
+        transaction.add(R.id.fragmentSignInSignUpContainer, signUpFragment, Constants.SIGNUP_FRAGMENT_TAG);
         transaction.commit();
     }
 }

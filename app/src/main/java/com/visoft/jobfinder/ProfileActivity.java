@@ -25,8 +25,6 @@ public class ProfileActivity extends AppCompatActivity {
     private User user;
     private FirebaseAuth mAuth;
     private DatabaseReference database;
-    private Toolbar toolbar;
-    private Menu menu;
 
     //Componentes gráficas
     private TextView tvUsername, tvNumberReviews;
@@ -34,6 +32,8 @@ public class ProfileActivity extends AppCompatActivity {
     //private ImageView ivProfilePic;
     private ConstraintLayout progressBarContainer;
     private ProgressBar progressBar;
+    private Toolbar toolbar;
+    private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +56,7 @@ public class ProfileActivity extends AppCompatActivity {
         progressBarContainer.setVisibility(View.VISIBLE);
 
         //Creacion del usuario
-        database.child("users").child(fbUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+        database.child(Constants.FIREBASE_USERS_CONTAINER_NAME).child(fbUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 user = dataSnapshot.getValue(User.class);
@@ -100,7 +100,7 @@ public class ProfileActivity extends AppCompatActivity {
         tvUsername.setText(user.getUsername());
         if (user.getNumberReviews() > 0) {
             ratingBar.setRating(user.getRating());
-            tvNumberReviews.setText(user.getRating() + " - " + user.getNumberReviews() + "Reviews");
+            tvNumberReviews.setText(user.getRating() + " - " + user.getNumberReviews() + " Reviews");
         } else {
             tvNumberReviews.setText("0 Reviews");
             ratingBar.setRating(0);

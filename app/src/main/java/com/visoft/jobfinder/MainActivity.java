@@ -3,43 +3,30 @@ package com.visoft.jobfinder;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
-    private Button signInButton;
     private FirebaseAuth mAuth;
-    private TextView tvUsername;
     private Toolbar toolbar;
     private Menu menu;
+    private ConstraintLayout fragmentContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        signInButton = findViewById(R.id.signInButton);
-        signInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                startActivity(intent);
-            }
-        });
-
         mAuth = FirebaseAuth.getInstance();
 
         //Inicializacion de variables
-        tvUsername = findViewById(R.id.tvLoggedInUsername);
-
+        fragmentContainer = findViewById(R.id.mainFragmentContainer);
 
         //Creacion de toolbar_main
         toolbar = findViewById(R.id.toolbar);
@@ -70,16 +57,25 @@ public class MainActivity extends AppCompatActivity {
         MenuItem signOutItem = menu.findItem(R.id.signOut);
         MenuItem goToProfileItem = menu.findItem(R.id.goToProfile);
         if (user != null) { // esta iniciado sesion
-            tvUsername.setText("Bienvenido: " + user.getDisplayName());
-            tvUsername.setVisibility(View.VISIBLE);
-            signInButton.setVisibility(View.INVISIBLE);
+
             signOutItem.setVisible(true);
             goToProfileItem.setVisible(true);
+
+            MainPageFragment mainPageFragment = new MainPageFragment();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.mainFragmentContainer, mainPageFragment, Constants.MAIN_PAGE_FRAGMENT_TAG)
+                    .commit();
         } else { // no esta iniciado sesion
-            tvUsername.setVisibility(View.INVISIBLE);
-            signInButton.setVisibility(View.VISIBLE);
+
             signOutItem.setVisible(false);
             goToProfileItem.setVisible(false);
+
+            SignInFragment signInFragment = new SignInFragment();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.mainFragmentContainer, signInFragment, Constants.SIGNIN_FRAGMENT_TAG)
+                    .commit();
         }
     }
 

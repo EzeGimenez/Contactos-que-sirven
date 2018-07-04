@@ -16,7 +16,7 @@
         android:layout_width="111dp"
         android:layout_height="93dp"
         android:layout_marginTop="32dp"
-        android:src="@drawable/ic_account_circle_black_24dp"
+        android:src="@drawable/account_border"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,6 +32,7 @@
         app:layout_constraintTop_toBottomOf="@+id/ivProfilePic">
 
         <TextView
+
             android:id="@+id/tvUsername"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -44,7 +45,7 @@
             android:id="@+id/tvNumberReviews"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
+            android:layout_marginStart="60dp"
             app:layout_constraintBottom_toBottomOf="@+id/ratingBar"
             app:layout_constraintStart_toEndOf="@+id/ratingBar"
             app:layout_constraintTop_toTopOf="@+id/ratingBar" />
@@ -55,16 +56,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:layout_marginStart="65dp"
+            android:layout_marginStart="36dp"
             android:layout_marginTop="16dp"
             android:numStars="5"
-            android:scaleX="1.5"
-            android:scaleY="1.5"
+            android:scaleX="2.0"
+            android:scaleY="2.0"
             android:theme="@style/RatingBar"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tvUsername"
             app:layout_constraintTop_toBottomOf="@+id/tvUsername"
-            app:layout_constraintVertical_bias="0.555" />
+            app:layout_constraintVertical_bias="0.0" />
 
     </android.support.constraint.ConstraintLayout>
 
@@ -74,6 +75,8 @@
         android:layout_height="0dp"
         android:background="@color/transparent"
         android:visibility="gone"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

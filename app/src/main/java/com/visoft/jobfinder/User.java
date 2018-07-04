@@ -16,11 +16,6 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(String username, float rating) {
-        this.username = username;
-        this.rating = rating;
-    }
-
     public String getUsername() {
         return username;
     }

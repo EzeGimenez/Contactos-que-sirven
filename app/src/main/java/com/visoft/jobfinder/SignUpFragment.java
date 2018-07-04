@@ -3,6 +3,7 @@ package com.visoft.jobfinder;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,28 +53,31 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.buttonAcceptSignUp:
                 signUp(etUsername.getText().toString(), etEmail.getText().toString(), etPassword.getText().toString(), etConfirmPassword.getText().toString());
+                ConstraintLayout progressBarContainer = getActivity().findViewById(R.id.progressBarContainer);
+                progressBarContainer.setVisibility(View.VISIBLE);
                 break;
         }
     }
 
     private void signUp(final String username, String email, String pw, String pw2) {
-        if (!validateCredentials(username, email, pw, pw2)) {
-            return;
-        }
-        mAuth.createUserWithEmailAndPassword(email, pw)
-                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(getContext(), "Created Account successfully", Toast.LENGTH_SHORT).show();
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            registerNewUserFirebase(user.getUid(), username);
-                            getActivity().onBackPressed();
-                        } else {
-                            Toast.makeText(getContext(), "Unsuccessfull registration", Toast.LENGTH_SHORT).show();
+        if (validateCredentials(username, email, pw, pw2)) {
+            mAuth.createUserWithEmailAndPassword(email, pw)
+                    .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(getContext(), "Created Account successfully", Toast.LENGTH_SHORT).show();
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                registerNewUserFirebase(user.getUid(), username);
+                                getActivity().onBackPressed();
+                            } else {
+                                Toast.makeText(getContext(), "Unsuccessfull registration", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                });
+                    });
+        }
+        ConstraintLayout progressBarContainer = getActivity().findViewById(R.id.progressBarContainer);
+        progressBarContainer.setVisibility(View.GONE);
     }
 
     private void registerNewUserFirebase(String uid, String username) {
