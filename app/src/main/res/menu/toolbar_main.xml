@@ -3,9 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:orderInCategory="50"
+        android:title="bla"
         android:id="@+id/goToProfile"
-        android:icon="@drawable/ic_person_outline"
-        android:title="ir a perfil"
+        app:actionLayout="@layout/go_to_profile_icon_layout"
         app:showAsAction="always" />
 
     <item

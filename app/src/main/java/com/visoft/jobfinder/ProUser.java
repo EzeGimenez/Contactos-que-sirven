@@ -4,9 +4,10 @@ public class ProUser extends User {
     private String telefono1, telefono2;
     private String cvText;
     private float mapBoundX, mapBoundY;
-    private String horarioAtencion;
+    private String horarioAtencion, rubroGeneral, rubroEspecifico;
 
     public ProUser() {
+        isPro = true;
     }
 
     public String getTelefono1() {
@@ -55,5 +56,21 @@ public class ProUser extends User {
 
     public void setHorarioAtencion(String horarioAtencion) {
         this.horarioAtencion = horarioAtencion;
+    }
+
+    public String getRubroGeneral() {
+        return rubroGeneral;
+    }
+
+    public void setRubroGeneral(String rubroGeneral) {
+        this.rubroGeneral = rubroGeneral;
+    }
+
+    public String getRubroEspecifico() {
+        return rubroEspecifico;
+    }
+
+    public void setRubroEspecifico(String rubroEspecifico) {
+        this.rubroEspecifico = rubroEspecifico;
     }
 }

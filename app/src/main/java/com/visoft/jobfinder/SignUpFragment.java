@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.FirebaseDatabase;
 
 
@@ -69,7 +70,10 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                                 Toast.makeText(getContext(), "Created Account successfully", Toast.LENGTH_SHORT).show();
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 registerNewUserFirebase(user.getUid(), username);
-                                getActivity().onBackPressed();
+                                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                        .setDisplayName(username).build();
+                                user.updateProfile(profileUpdates);
+                                getActivity().finish();
                             } else {
                                 Toast.makeText(getContext(), "Unsuccessfull registration", Toast.LENGTH_SHORT).show();
                             }
@@ -85,6 +89,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         user.setUsername(username);
         user.setRating(-1);
         user.setNumberReviews(0);
+        user.setPro(false);
         FirebaseDatabase
                 .getInstance()
                 .getReference()
@@ -111,4 +116,5 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         }
         return true;
     }
+
 }

@@ -1,16 +1,19 @@
 package com.visoft.jobfinder;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.RatingBar;
-import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -20,20 +23,19 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class ProfileActivity extends AppCompatActivity {
+public class UserProfileActivity extends AppCompatActivity {
     private FirebaseUser fbUser;
     private User user;
     private FirebaseAuth mAuth;
     private DatabaseReference database;
+    private static boolean isRunning;
 
     //Componentes gráficas
-    private TextView tvUsername, tvNumberReviews;
-    private RatingBar ratingBar;
-    //private ImageView ivProfilePic;
     private ConstraintLayout progressBarContainer;
     private ProgressBar progressBar;
     private Toolbar toolbar;
     private Menu menu;
+    private Button buttonShowReviews;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,13 +47,10 @@ public class ProfileActivity extends AppCompatActivity {
 
         logIn();
 
-
         //Inicializacion de componentes gráficas
-        tvNumberReviews = findViewById(R.id.tvNumberReviews);
-        tvUsername = findViewById(R.id.tvUsername);
-        ratingBar = findViewById(R.id.ratingBar);
         progressBarContainer = findViewById(R.id.progressBarContainer);
         progressBar = findViewById(R.id.progressBar);
+        buttonShowReviews = findViewById(R.id.buttonShowReviews);
 
         progressBarContainer.setVisibility(View.VISIBLE);
 
@@ -60,7 +59,9 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 user = dataSnapshot.getValue(User.class);
-                iniciarUI();
+                if (isRunning) {
+                    iniciarUI();
+                }
 
                 //remover progress bar
                 progressBarContainer.setVisibility(View.GONE);
@@ -69,6 +70,13 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 goBack();
+            }
+        });
+
+        buttonShowReviews.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                buttonShowReviews.setVisibility(View.GONE);
             }
         });
 
@@ -97,14 +105,32 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void iniciarUI() {
-        tvUsername.setText(user.getUsername());
         if (user.getNumberReviews() > 0) {
-            ratingBar.setRating(user.getRating());
-            tvNumberReviews.setText(user.getRating() + " - " + user.getNumberReviews() + " Reviews");
+            buttonShowReviews.setVisibility(View.VISIBLE);
+            buttonShowReviews.setText(user.getNumberReviews() + " Opiniones");
         } else {
-            tvNumberReviews.setText("0 Reviews");
-            ratingBar.setRating(0);
+            buttonShowReviews.setVisibility(View.GONE);
         }
+
+        MenuItem convertirEnProIcon = menu.findItem(R.id.convertirEnPro);
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("user", user);
+        Fragment fragment;
+        String id;
+        if (user.getIsPro()) {
+            convertirEnProIcon.setVisible(false);
+            fragment = new ProUserFragment();
+            id = Constants.PRO_USER_FRAGMENT;
+        } else {
+            convertirEnProIcon.setVisible(true);
+            fragment = new DefaultUserFragment();
+            id = Constants.DEFAULT_USER_FRAGMENT;
+        }
+        fragment.setArguments(bundle);
+        transaction.replace(R.id.ContainerProfileFragments, fragment, id);
+        transaction.commit();
     }
 
     private void goBack() {
@@ -120,9 +146,21 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.convertirEnPro:
+                convertirEnPro();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    /**
+     * Transforma el perfil de usuario en uno profesional
+     */
+    private void convertirEnPro() {
+        //Iniciar actividad para convertirse en pro
+        Intent intent = new Intent(this, TurnProActivity.class);
+        startActivity(intent);
     }
 
     @Override
@@ -136,5 +174,17 @@ public class ProfileActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.toolbar_perfil, menu);
         this.menu = menu;
         return true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isRunning = true;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        isRunning = false;
     }
 }

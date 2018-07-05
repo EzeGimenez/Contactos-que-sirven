@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="hogarymantenimiento">
+        <item>Jardinería</item>
+        <item>Servidumbre</item>
+        <item>Control de plagas</item>
+        <item>Arreglos Informáticos</item>
+        <item>Plomeria</item>
+        <item>Electricista</item>
+        <item>Cerrajería</item>
+        <item>Seguridad</item>
+        <item>Fiestas y Eventos</item>
+        <item>Cadetería</item>
+        <item>Viandas</item>
+        <item>Comida y delivery</item>
+    </string-array>
+
+    <string-array name="serviciosdefamilia">
+        <item>Estética</item>
+        <item>Estética a domicilio</item>
+        <item>Profesor particular</item>
+        <item>Transporte</item>
+        <item>Cuidado de niños</item>
+        <item>Cuidado de mascotas</item>
+    </string-array>
+
+    <string-array name="obrayconstrucción">
+        <item>Arquitectura</item>
+        <item>Ingeniería</item>
+        <item>Personal</item>
+        <item>Gasista</item>
+        <item>Abaliñería</item>
+        <item>Techista</item>
+        <item>Carpintería</item>
+        <item>Flete</item>
+        <item>Parquización</item>
+        <item>Picapedrería</item>
+        <item>Pintor</item>
+        <item>Movimientos Industriales</item>
+        <item>Electricista</item>
+        <item>Muebleria</item>
+        <item>Diseño gráfico</item>
+        <item>Plomería</item>
+        <item>Cerrajería</item>
+    </string-array>
+
+    <string-array name="personaleventual">
+        <item>Se requiere fuerza</item>
+        <item>No se requiere fuerza</item>
+    </string-array>
+
+    <string-array name="emergenciasmédicasyvehiculares">
+        <item>Grúa</item>
+        <item>Mecánico</item>
+        <item>Médica/Médico</item>
+        <item>Servicio para discapacitados</item>
+        <item>Cerrajería</item>
+        <item>Policía</item>
+        <item>Bomberos</item>
+        <item>Defensa Civil</item>
+        <item>Defensa de la mujer</item>
+
+    </string-array>
+
+    <string-array name="otros">
+        <item></item>
+    </string-array>
+</resources>

@@ -6,9 +6,10 @@ import java.io.Serializable;
  * Clase User, usada para almacenar la informacion de un usuario
  */
 public class User implements Serializable {
-    private String username;
-    private float rating;
-    private int numberReviews;
+    protected String username;
+    protected float rating;
+    protected int numberReviews;
+    protected boolean isPro;
 
     /**
      * Constructor de la clase
@@ -38,5 +39,13 @@ public class User implements Serializable {
 
     public void setNumberReviews(int numberReviews) {
         this.numberReviews = numberReviews;
+    }
+
+    public boolean getIsPro() {
+        return isPro;
+    }
+
+    public void setPro(boolean pro) {
+        isPro = pro;
     }
 }

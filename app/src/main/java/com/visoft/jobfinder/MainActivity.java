@@ -8,6 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.SearchView;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -18,6 +21,9 @@ public class MainActivity extends AppCompatActivity {
     private Menu menu;
     private ConstraintLayout fragmentContainer;
 
+    //Componentes graficas
+    private SearchView searchView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Inicializacion de variables
         fragmentContainer = findViewById(R.id.mainFragmentContainer);
+        searchView = findViewById(R.id.searchView);
 
         //Creacion de toolbar_main
         toolbar = findViewById(R.id.toolbar);
@@ -60,6 +67,18 @@ public class MainActivity extends AppCompatActivity {
 
             signOutItem.setVisible(true);
             goToProfileItem.setVisible(true);
+            searchView.setVisibility(View.VISIBLE);
+
+            View view = menu.findItem(R.id.goToProfile).getActionView();
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onOptionsItemSelected(menu.findItem(R.id.goToProfile));
+                }
+            });
+            TextView tvusername = view.findViewById(R.id.tvUsername);
+            tvusername.setText(user.getDisplayName());
+
 
             MainPageFragment mainPageFragment = new MainPageFragment();
             getSupportFragmentManager()
@@ -67,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
                     .replace(R.id.mainFragmentContainer, mainPageFragment, Constants.MAIN_PAGE_FRAGMENT_TAG)
                     .commit();
         } else { // no esta iniciado sesion
-
+            searchView.setVisibility(View.GONE);
             signOutItem.setVisible(false);
             goToProfileItem.setVisible(false);
 
@@ -77,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
                     .replace(R.id.mainFragmentContainer, signInFragment, Constants.SIGNIN_FRAGMENT_TAG)
                     .commit();
         }
+
     }
 
     /**
@@ -93,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                 updateUI(null);
                 return true;
             case R.id.goToProfile:
-                Intent intent = new Intent(this, ProfileActivity.class);
+                Intent intent = new Intent(this, UserProfileActivity.class);
                 startActivity(intent);
                 return true;
             default:

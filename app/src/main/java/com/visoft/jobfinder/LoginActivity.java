@@ -1,6 +1,7 @@
 package com.visoft.jobfinder;
 
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -30,5 +31,12 @@ public class LoginActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        ConstraintLayout progressBarContainer = findViewById(R.id.progressBarContainer);
+        progressBarContainer.setVisibility(View.GONE);
     }
 }
