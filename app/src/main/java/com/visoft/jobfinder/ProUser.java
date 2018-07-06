@@ -3,8 +3,9 @@ package com.visoft.jobfinder;
 public class ProUser extends User {
     private String telefono1, telefono2;
     private String cvText;
-    private float mapBoundX, mapBoundY;
-    private String horarioAtencion, rubroGeneral, rubroEspecifico;
+    private double mapBound1Lat, mapBound1Long, mapBound2Lat, mapBound2Long;
+    private String diasAtencion, horaAtencion, rubroGeneral, rubroEspecifico;
+    private boolean showEmail;
 
     public ProUser() {
         isPro = true;
@@ -26,20 +27,20 @@ public class ProUser extends User {
         this.cvText = cvText;
     }
 
-    public float getMapBoundY() {
-        return mapBoundY;
+    public double getMapBound1Long() {
+        return mapBound1Long;
     }
 
-    public void setMapBoundY(float mapBoundY) {
-        this.mapBoundY = mapBoundY;
+    public void setMapBound1Long(double mapBound1Long) {
+        this.mapBound1Long = mapBound1Long;
     }
 
-    public float getMapBoundX() {
-        return mapBoundX;
+    public double getMapBound1Lat() {
+        return mapBound1Lat;
     }
 
-    public void setMapBoundX(float mapBoundX) {
-        this.mapBoundX = mapBoundX;
+    public void setMapBound1Lat(double mapBound1Lat) {
+        this.mapBound1Lat = mapBound1Lat;
     }
 
     public String getTelefono2() {
@@ -50,12 +51,12 @@ public class ProUser extends User {
         this.telefono2 = telefono2;
     }
 
-    public String getHorarioAtencion() {
-        return horarioAtencion;
+    public String getDiasAtencion() {
+        return diasAtencion;
     }
 
-    public void setHorarioAtencion(String horarioAtencion) {
-        this.horarioAtencion = horarioAtencion;
+    public void setDiasAtencion(String diasAtencion) {
+        this.diasAtencion = diasAtencion;
     }
 
     public String getRubroGeneral() {
@@ -72,5 +73,37 @@ public class ProUser extends User {
 
     public void setRubroEspecifico(String rubroEspecifico) {
         this.rubroEspecifico = rubroEspecifico;
+    }
+
+    public double getMapBound2Long() {
+        return mapBound2Long;
+    }
+
+    public void setMapBound2Long(double mapBound2Long) {
+        this.mapBound2Long = mapBound2Long;
+    }
+
+    public double getMapBound2Lat() {
+        return mapBound2Lat;
+    }
+
+    public void setMapBound2Lat(double mapBound2Lat) {
+        this.mapBound2Lat = mapBound2Lat;
+    }
+
+    public boolean isShowEmail() {
+        return showEmail;
+    }
+
+    public void setShowEmail(boolean showEmail) {
+        this.showEmail = showEmail;
+    }
+
+    public String getHoraAtencion() {
+        return horaAtencion;
+    }
+
+    public void setHoraAtencion(String horaAtencion) {
+        this.horaAtencion = horaAtencion;
     }
 }

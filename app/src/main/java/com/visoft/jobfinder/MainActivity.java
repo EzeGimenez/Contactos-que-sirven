@@ -96,7 +96,6 @@ public class MainActivity extends AppCompatActivity {
                     .replace(R.id.mainFragmentContainer, signInFragment, Constants.SIGNIN_FRAGMENT_TAG)
                     .commit();
         }
-
     }
 
     /**

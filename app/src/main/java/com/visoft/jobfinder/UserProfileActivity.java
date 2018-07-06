@@ -26,6 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 public class UserProfileActivity extends AppCompatActivity {
     private FirebaseUser fbUser;
     private User user;
+    private ProUser proUser;
     private FirebaseAuth mAuth;
     private DatabaseReference database;
     private static boolean isRunning;
@@ -59,12 +60,13 @@ public class UserProfileActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 user = dataSnapshot.getValue(User.class);
-                if (isRunning) {
-                    iniciarUI();
-                }
-
                 //remover progress bar
                 progressBarContainer.setVisibility(View.GONE);
+                if (user == null || user.getIsPro()) {
+                    getProUser();
+                } else if (isRunning) {
+                    iniciarUI();
+                }
             }
 
             @Override
@@ -97,6 +99,29 @@ public class UserProfileActivity extends AppCompatActivity {
 
     }
 
+    private void getProUser() {
+        //Checking if its proUser
+        //Creacion del usuario
+        database.child(Constants.FIREBASE_USERS_CONTAINER_NAME).child(fbUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                proUser = dataSnapshot.getValue(ProUser.class);
+                if (isRunning) {
+                    iniciarUI();
+                }
+
+                //remover progress bar
+                progressBarContainer.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                goBack();
+            }
+        });
+    }
+
+
     private void logIn() {
         this.fbUser = mAuth.getCurrentUser();
         if (fbUser == null) {
@@ -116,17 +141,19 @@ public class UserProfileActivity extends AppCompatActivity {
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         Bundle bundle = new Bundle();
-        bundle.putSerializable("user", user);
+
         Fragment fragment;
         String id;
-        if (user.getIsPro()) {
+        if (user == null || user.getIsPro()) {
             convertirEnProIcon.setVisible(false);
             fragment = new ProUserFragment();
+            bundle.putSerializable("user", proUser);
             id = Constants.PRO_USER_FRAGMENT;
         } else {
             convertirEnProIcon.setVisible(true);
             fragment = new DefaultUserFragment();
             id = Constants.DEFAULT_USER_FRAGMENT;
+            bundle.putSerializable("user", user);
         }
         fragment.setArguments(bundle);
         transaction.replace(R.id.ContainerProfileFragments, fragment, id);
@@ -160,7 +187,10 @@ public class UserProfileActivity extends AppCompatActivity {
     private void convertirEnPro() {
         //Iniciar actividad para convertirse en pro
         Intent intent = new Intent(this, TurnProActivity.class);
+        intent.putExtra("user", user);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
+        finish();
     }
 
     @Override

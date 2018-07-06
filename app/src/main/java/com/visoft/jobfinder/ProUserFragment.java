@@ -23,12 +23,7 @@ public class ProUserFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        try {
-            user = (ProUser) getArguments().getSerializable("user");
-        } catch (ClassCastException e) {
-            getActivity().finish();
-            //No es usuario pro, no se pudo realizar el casteo
-        }
+        user = (ProUser) getArguments().getSerializable("user");
 
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_pro_user, container, false);
@@ -41,7 +36,7 @@ public class ProUserFragment extends Fragment {
         tvNumberReviews = view.findViewById(R.id.tvNumberReviews);
         tvUsername = view.findViewById(R.id.tvUsername);
         tvHrAtencion = view.findViewById(R.id.tvHrAtencion);
-        tvTelefono = view.findViewById(R.id.tvHrAtencion);
+        tvTelefono = view.findViewById(R.id.tvTelefono);
         ratingBar = view.findViewById(R.id.ratingBar);
 
         iniciarUI();
@@ -50,7 +45,7 @@ public class ProUserFragment extends Fragment {
     private void iniciarUI() {
         tvUsername.setText(user.getUsername());
         tvTelefono.setText(user.getTelefono1() + " / " + user.getTelefono2());
-        tvHrAtencion.setText(user.getHorarioAtencion());
+        tvHrAtencion.setText(user.getDiasAtencion() + " " + user.getHoraAtencion());
 
         if (user.getNumberReviews() > 0) {
             ratingBar.setRating(user.getRating());
