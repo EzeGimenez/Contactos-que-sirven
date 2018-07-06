@@ -13,7 +13,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.visoft.jobfinder.Constants;
 import com.visoft.jobfinder.R;
 import com.visoft.jobfinder.TurnProActivity;
 
@@ -32,6 +31,9 @@ public class RubroGeneralFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        TextView tvInfo = getActivity().findViewById(R.id.tvInfo);
+        tvInfo.setText("Selecciona un área de trabajo");
+
         listView = view.findViewById(R.id.listView);
 
         final String[] rubrosA = getResources().getStringArray(R.array.rubrosGenerales);
@@ -40,15 +42,9 @@ public class RubroGeneralFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                RubroEspecificoFragment rubroEspecificoFragment = new RubroEspecificoFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("RubroGeneral", rubrosA[position]);
-                rubroEspecificoFragment.setArguments(bundle);
-                ((TurnProActivity) getActivity()).getProUser().setRubroGeneral(rubrosA[position]);
-                getFragmentManager().beginTransaction()
-                        .add(R.id.ContainerTurnProFragments, rubroEspecificoFragment, Constants.RUBRO_ESPECIFICO_FRAGMENT_TAG)
-                        .addToBackStack(Constants.RUBRO_GENERAL_FRAGMENT_TAG)
-                        .commit();
+                ((TurnProActivity) getActivity()).onForthPressed(bundle);
             }
         });
     }

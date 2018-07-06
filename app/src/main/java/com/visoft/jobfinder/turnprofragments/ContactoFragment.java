@@ -4,20 +4,17 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
-import com.visoft.jobfinder.Constants;
 import com.visoft.jobfinder.ProUser;
 import com.visoft.jobfinder.R;
-import com.visoft.jobfinder.TurnProActivity;
 
 
 public class ContactoFragment extends Fragment {
@@ -37,6 +34,9 @@ public class ContactoFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        TextView tvInfo = getActivity().findViewById(R.id.tvInfo);
+        tvInfo.setText("Completa la informacion de contacto");
 
         cbEmail = view.findViewById(R.id.cbEmail);
         etTel1 = view.findViewById(R.id.etTel1);
@@ -65,31 +65,23 @@ public class ContactoFragment extends Fragment {
         sHora1.setSelection(8);
         sHora2.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, hrA));
         sHora2.setSelection(18);
+    }
 
-        Button btnNext = getActivity().findViewById(R.id.btnNext);
-        btnNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!etTel1.getText().toString().trim().equals("") && !etTel2.getText().toString().trim().equals("")) {
-                    ProUser user = ((TurnProActivity) getActivity()).getProUser();
-                    user.setShowEmail(cbEmail.isChecked());
-                    user.setTelefono1(etTel1.getText().toString());
-                    user.setTelefono2(etTel2.getText().toString());
-                    user.setDiasAtencion(
-                            "De " + sFecha1.getSelectedItem().toString() + " a " + sFecha2.getSelectedItem().toString());
-                    user.setHoraAtencion(
-                            sHora1.getSelectedItem().toString() + " a " + sHora2.getSelectedItem().toString());
+    public boolean isContactInfoOk() {
+        return !etTel1.getText().toString().trim().equals("") && !etTel2.getText().toString().trim().equals("");
+    }
 
-                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                    CVFragment fragment = new CVFragment();
-                    transaction
-                            .replace(R.id.ContainerTurnProFragments, fragment, Constants.CV_FRAGMENT_TAG)
-                            .addToBackStack(Constants.CONTACTO_FRAGMENT_TAG)
-                            .commit();
-                } else {
-                    //animate views
-                }
-            }
-        });
+    public void setContactInfo(ProUser user) {
+        user.setShowEmail(cbEmail.isChecked());
+        user.setTelefono1(etTel1.getText().toString());
+        user.setTelefono2(etTel2.getText().toString());
+        user.setDiasAtencion(
+                "De " + sFecha1.getSelectedItem().toString() + " a " + sFecha2.getSelectedItem().toString());
+        user.setHoraAtencion(
+                sHora1.getSelectedItem().toString() + " a " + sHora2.getSelectedItem().toString());
+    }
+
+    public void vibrate() {
+
     }
 }

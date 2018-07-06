@@ -3,9 +3,10 @@ package com.visoft.jobfinder;
 public class ProUser extends User {
     private String telefono1, telefono2;
     private String cvText;
-    private double mapBound1Lat, mapBound1Long, mapBound2Lat, mapBound2Long;
+    private double mapBound1Lat, mapBound1Long, mapBound2Lat, mapBound2Long, mapCenterLat, mapCenterLng;
     private String diasAtencion, horaAtencion, rubroGeneral, rubroEspecifico;
     private boolean showEmail;
+    private float mapZoom;
 
     public ProUser() {
         isPro = true;
@@ -91,7 +92,7 @@ public class ProUser extends User {
         this.mapBound2Lat = mapBound2Lat;
     }
 
-    public boolean isShowEmail() {
+    public boolean getShowEmail() {
         return showEmail;
     }
 
@@ -105,5 +106,29 @@ public class ProUser extends User {
 
     public void setHoraAtencion(String horaAtencion) {
         this.horaAtencion = horaAtencion;
+    }
+
+    public float getMapZoom() {
+        return mapZoom;
+    }
+
+    public void setMapZoom(float mapZoom) {
+        this.mapZoom = mapZoom;
+    }
+
+    public double getMapCenterLng() {
+        return mapCenterLng;
+    }
+
+    public void setMapCenterLng(double mapCenterLng) {
+        this.mapCenterLng = mapCenterLng;
+    }
+
+    public double getMapCenterLat() {
+        return mapCenterLat;
+    }
+
+    public void setMapCenterLat(double mapCenterLat) {
+        this.mapCenterLat = mapCenterLat;
     }
 }

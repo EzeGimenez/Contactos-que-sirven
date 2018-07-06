@@ -10,14 +10,12 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.visoft.jobfinder.Constants;
 import com.visoft.jobfinder.ProUser;
 import com.visoft.jobfinder.R;
-import com.visoft.jobfinder.TurnProActivity;
 
 
 public class CVFragment extends Fragment {
@@ -36,6 +34,9 @@ public class CVFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        TextView tvInfo = getActivity().findViewById(R.id.tvInfo);
+        tvInfo.setText("Y para finalizar, escriba una pequeña descripción sobre usted");
 
         tvCaracteres = view.findViewById(R.id.tvCaracteres);
         etCV = view.findViewById(R.id.etCV);
@@ -60,19 +61,13 @@ public class CVFragment extends Fragment {
 
             }
         });
+    }
 
-        Button btnNext = getActivity().findViewById(R.id.btnNext);
-        btnNext.setText("Finalizar");
-        btnNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String text = etCV.getText().toString();
-                if (text.length() <= Constants.MAX_CARACTERES) {
-                    ProUser user = ((TurnProActivity) getActivity()).getProUser();
-                    user.setCvText(text);
-                    ((TurnProActivity) getActivity()).saveProUser();
-                }
-            }
-        });
+    public boolean isInputOk() {
+        return etCV.getText().toString().length() <= Constants.MAX_CARACTERES;
+    }
+
+    public void setCv(ProUser user) {
+        user.setCvText(etCV.getText().toString());
     }
 }

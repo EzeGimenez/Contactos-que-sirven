@@ -13,5 +13,6 @@ public abstract class Constants {
     public static final String CV_FRAGMENT_TAG = "CVFragment";
     public static final String RUBRO_ESPECIFICO_FRAGMENT_TAG = "RubroEspecificoFragment";
     public static final String RUBRO_GENERAL_FRAGMENT_TAG = "RubroGeneralFragment";
-    public static int MAX_CARACTERES = 300;
+    public static final String FIREBASE_RUBRO_GENERAL_CONTAINER_NAME = "RubrosGenerales";
+    public static final int MAX_CARACTERES = 180;
 }

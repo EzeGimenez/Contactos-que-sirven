@@ -72,8 +72,13 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                                 registerNewUserFirebase(user.getUid(), username);
                                 UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                                         .setDisplayName(username).build();
-                                user.updateProfile(profileUpdates);
-                                getActivity().finish();
+                                user.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        getActivity().finish();
+                                    }
+                                });
+
                             } else {
                                 Toast.makeText(getContext(), "Unsuccessfull registration", Toast.LENGTH_SHORT).show();
                             }

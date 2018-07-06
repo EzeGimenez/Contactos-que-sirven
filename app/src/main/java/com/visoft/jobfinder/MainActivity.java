@@ -62,23 +62,23 @@ public class MainActivity extends AppCompatActivity {
      */
     private void updateUI(@Nullable FirebaseUser user) {
         MenuItem signOutItem = menu.findItem(R.id.signOut);
-        MenuItem goToProfileItem = menu.findItem(R.id.goToProfile);
+        final MenuItem goToProfileItem = menu.findItem(R.id.goToProfile);
         if (user != null) { // esta iniciado sesion
-
             signOutItem.setVisible(true);
-            goToProfileItem.setVisible(true);
+
             searchView.setVisibility(View.VISIBLE);
 
             View view = menu.findItem(R.id.goToProfile).getActionView();
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onOptionsItemSelected(menu.findItem(R.id.goToProfile));
+                    onOptionsItemSelected(goToProfileItem);
                 }
             });
             TextView tvusername = view.findViewById(R.id.tvUsername);
             tvusername.setText(user.getDisplayName());
-
+            tvusername.setVisibility(View.VISIBLE);
+            goToProfileItem.setVisible(true);
 
             MainPageFragment mainPageFragment = new MainPageFragment();
             getSupportFragmentManager()

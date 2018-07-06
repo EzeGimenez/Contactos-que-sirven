@@ -106,6 +106,7 @@ public class UserProfileActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 proUser = dataSnapshot.getValue(ProUser.class);
+                user = proUser;
                 if (isRunning) {
                     iniciarUI();
                 }
@@ -130,6 +131,12 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     private void iniciarUI() {
+        if (proUser == null && user == null) {
+            mAuth.signOut();
+            finish();
+            return;
+        }
+
         if (user.getNumberReviews() > 0) {
             buttonShowReviews.setVisibility(View.VISIBLE);
             buttonShowReviews.setText(user.getNumberReviews() + " Opiniones");
@@ -142,9 +149,11 @@ public class UserProfileActivity extends AppCompatActivity {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         Bundle bundle = new Bundle();
 
+
         Fragment fragment;
         String id;
         if (user == null || user.getIsPro()) {
+
             convertirEnProIcon.setVisible(false);
             fragment = new ProUserFragment();
             bundle.putSerializable("user", proUser);

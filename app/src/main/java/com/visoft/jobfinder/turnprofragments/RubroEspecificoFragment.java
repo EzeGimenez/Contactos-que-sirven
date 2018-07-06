@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.visoft.jobfinder.Constants;
 import com.visoft.jobfinder.R;
 import com.visoft.jobfinder.TurnProActivity;
 
@@ -36,6 +34,9 @@ public class RubroEspecificoFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        TextView tvInfo = getActivity().findViewById(R.id.tvInfo);
+        tvInfo.setText("Selecciona una especificación");
+
         rubroGeneral = getArguments().getString("RubroGeneral", null);
 
         int id = getResources().getIdentifier(
@@ -50,17 +51,14 @@ public class RubroEspecificoFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ((TurnProActivity) getActivity()).getProUser().setRubroEspecifico(rubroEspecificos[position]);
-                Fragment fragment = new WorkScopeFragment();
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.addToBackStack(Constants.RUBRO_ESPECIFICO_FRAGMENT_TAG)
-                        .replace(R.id.ContainerTurnProFragments, fragment, Constants.WORK_SCOPE_FRAGMENT_TAG)
-                        .commit();
+                Bundle bundle = new Bundle();
+                bundle.putString("rubroEspecifico", rubroEspecificos[position]);
+                ((TurnProActivity) getActivity()).onForthPressed(bundle);
             }
         });
 
         Button btnPrev = getActivity().findViewById(R.id.btnPrev);
-        btnPrev.setVisibility(View.VISIBLE);
+        btnPrev.setEnabled(true);
     }
 
     private class RubrosGeneralesAdapter extends ArrayAdapter<String> {
