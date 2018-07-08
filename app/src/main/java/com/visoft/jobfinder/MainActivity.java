@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         //Inicializacion de variables
-        fragmentContainer = findViewById(R.id.mainFragmentContainer);
+        fragmentContainer = findViewById(R.id.ContainerMainFragments);
         searchView = findViewById(R.id.searchView);
 
         //Creacion de toolbar_main
@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
             MainPageFragment mainPageFragment = new MainPageFragment();
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.mainFragmentContainer, mainPageFragment, Constants.MAIN_PAGE_FRAGMENT_TAG)
+                    .replace(R.id.ContainerMainFragments, mainPageFragment, Constants.MAIN_PAGE_FRAGMENT_TAG)
                     .commit();
         } else { // no esta iniciado sesion
             searchView.setVisibility(View.GONE);
@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
             SignInFragment signInFragment = new SignInFragment();
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.mainFragmentContainer, signInFragment, Constants.SIGNIN_FRAGMENT_TAG)
+                    .replace(R.id.ContainerMainFragments, signInFragment, Constants.SIGNIN_FRAGMENT_TAG)
                     .commit();
         }
     }

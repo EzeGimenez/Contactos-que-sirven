@@ -244,8 +244,7 @@ public class TurnProActivity extends AppCompatActivity {
     }
 
     private void saveInRubro() {
-        database.child(Constants.FIREBASE_RUBRO_GENERAL_CONTAINER_NAME)
-                .child(proUser.getRubroGeneral())
+        database.child(Constants.FIREBASE_RUBRO_CONTAINER_NAME)
                 .child(proUser.getRubroEspecifico())
                 .child(mAuth.getCurrentUser().getUid())
                 .setValue(true).addOnCompleteListener(new OnCompleteListener<Void>() {

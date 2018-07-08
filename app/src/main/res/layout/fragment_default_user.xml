@@ -12,7 +12,7 @@
         android:layout_width="111dp"
         android:layout_height="93dp"
         android:layout_marginTop="32dp"
-        android:src="@drawable/account_border"
+        android:src="@drawable/profile_pic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,7 +28,7 @@
         app:layout_constraintTop_toBottomOf="@+id/ivProfilePic">
 
         <TextView
-
+            android:textAllCaps="true"
             android:id="@+id/tvUsername"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

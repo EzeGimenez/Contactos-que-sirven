@@ -39,6 +39,8 @@
     <string name="viernes">Friday</string>
     <string name="sabado">Saturday</string>
     <string name="domingo">Sunday</string>
+    <string name="revisaConexion">Check your connection</string>
+    <string name="resultsFor">Search results for:</string>
 
     <!-- Rubros Especificos-->
     <string name="jardineria">Gardening</string>

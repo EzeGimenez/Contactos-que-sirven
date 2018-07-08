@@ -13,10 +13,17 @@
     </style>
 
     <style name="MainButtons">
+        <item name="android:background">@drawable/main_buttons_background</item>
         <item name="android:textColor">@color/colorPrimaryDark</item>
-        <item name="android:background">@color/primaryAccent</item>
-        <item name="android:layout_width">100dp</item>
-        <item name="android:layout_height">100dp</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">0dp</item>
+    </style>
+
+    <style name="SubRubroButtons">
+        <item name="android:background">@drawable/sub_rubro_buttons_background</item>
+        <item name="android:textColor">@color/colorPrimaryDark</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">0dp</item>
     </style>
 
 

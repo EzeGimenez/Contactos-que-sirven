@@ -39,6 +39,8 @@
     <string name="viernes">Viernes</string>
     <string name="sabado">Sábado</string>
     <string name="domingo">Domingo</string>
+    <string name="revisaConexion">Revisa tu conexión</string>
+    <string name="resultsFor">Resultados de búsqueda para:</string>
 
     <!-- Rubros Especificos-->
     <string name="jardineria">Jardinería</string>
@@ -93,5 +95,8 @@
     <string name="personalEventual">Personal Eventual</string>
     <string name="emergencias">Emergencias Médicas y vehiculares</string>
     <string name="otros">Otros</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
