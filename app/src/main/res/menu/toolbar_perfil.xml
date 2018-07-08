@@ -6,4 +6,9 @@
         android:icon="@drawable/trabajo"
         android:title="Transformar en perfil de trabajo"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/edit"
+        android:icon="@drawable/edit_24dp"
+        android:title="Editar Perfil"
+        app:showAsAction="ifRoom" />
 </menu>

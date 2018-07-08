@@ -1,10 +1,10 @@
-package com.visoft.jobfinder;
+package com.visoft.jobfinder.misc;
 
 public abstract class Constants {
-    public static final String LOGIN_FRAGMENT_TAG = "LogInFragment";
+    public static final String LOGIN_FRAGMENT_TAG = "SignInFragment";
     public static final String SIGNUP_FRAGMENT_TAG = "SignUpFragment";
     public static final String FIREBASE_USERS_CONTAINER_NAME = "users";
-    public static final String SIGNIN_FRAGMENT_TAG = "SignInFragment";
+    public static final String SIGNIN_FRAGMENT_TAG = "MainSignInFragment";
     public static final String MAIN_PAGE_FRAGMENT_TAG = "MainPageFragment";
     public static final String PRO_USER_FRAGMENT = "ProUserFragment";
     public static final String DEFAULT_USER_FRAGMENT = "DefaultUserFragment";

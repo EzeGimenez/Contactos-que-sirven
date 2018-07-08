@@ -14,10 +14,9 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
-import com.visoft.jobfinder.MapHighlighter;
 import com.visoft.jobfinder.ProUser;
 import com.visoft.jobfinder.R;
+import com.visoft.jobfinder.misc.MapHighlighter;
 
 public class WorkScopeFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap map;
@@ -28,6 +27,7 @@ public class WorkScopeFragment extends Fragment implements OnMapReadyCallback {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        getActivity().findViewById(R.id.btnNext).setEnabled(false);
         View view = inflater.inflate(R.layout.work_scope_fragment, container, false);
 
         mapView = view.findViewById(R.id.map);
@@ -57,30 +57,26 @@ public class WorkScopeFragment extends Fragment implements OnMapReadyCallback {
         savedInstance.putDouble("latStart", latStart);
         savedInstance.putDouble("lngStart", lngStart);
         savedInstance.putFloat("zoomStart", zoom);
-
     }
 
     private void iniciarUI() {
         MapHighlighter mapHighlighter = new MapHighlighter(getContext(), map);
-        mapHighlighter.highlightMap(getResources().getColor(R.color.primaryAccentTransparent));
+        mapHighlighter.highlightMap(null);
         if (savedInstance != null) {
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(
                     new LatLng(savedInstance.getDouble("latStart"),
                             savedInstance.getDouble("lngStart")),
                     savedInstance.getFloat("zoomStart")));
         }
+        getActivity().findViewById(R.id.btnNext).setEnabled(true);
     }
 
 
     public void setCameraBounds(ProUser user) {
-        LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
-        user.setMapBound1Lat(bounds.southwest.latitude);
-        user.setMapBound1Long(bounds.southwest.longitude);
-        user.setMapBound2Lat(bounds.northeast.latitude);
-        user.setMapBound2Long(bounds.northeast.longitude);
+        LatLng target = map.getCameraPosition().target;
         user.setMapZoom(map.getCameraPosition().zoom);
-        user.setMapCenterLat(bounds.getCenter().latitude);
-        user.setMapCenterLng(bounds.getCenter().longitude);
+        user.setMapCenterLat(target.latitude);
+        user.setMapCenterLng(target.longitude);
     }
 
     @Override

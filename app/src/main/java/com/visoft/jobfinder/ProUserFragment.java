@@ -15,8 +15,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.firebase.auth.FirebaseAuth;
+import com.visoft.jobfinder.misc.MapHighlighter;
 
 public class ProUserFragment extends Fragment implements OnMapReadyCallback {
     private ProUser user;
@@ -24,7 +24,7 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback {
 
     //Componentes graficas
     private TextView tvUsername, tvNumberReviews, tvTelefono, tvHrAtencion, tvEmail,
-            tvCV;
+            tvCV, tvRubro;
     private RatingBar ratingBar;
     private MapView mapView;
     //private ImageView ivProfilePic;
@@ -44,12 +44,17 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        if (user == null) {
+            user = (ProUser) getArguments().getSerializable("user");
+        }
+
         tvNumberReviews = view.findViewById(R.id.tvNumberReviews);
         tvUsername = view.findViewById(R.id.tvUsername);
         tvHrAtencion = view.findViewById(R.id.tvHrAtencion);
         tvTelefono = view.findViewById(R.id.tvTelefono);
         tvEmail = view.findViewById(R.id.tvEmail);
         tvCV = view.findViewById(R.id.tvCV);
+        tvRubro = view.findViewById(R.id.tvRubro);
         ratingBar = view.findViewById(R.id.ratingBar);
         mapView = view.findViewById(R.id.map);
 
@@ -61,8 +66,17 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback {
 
     private void iniciarUI() {
         tvUsername.setText(user.getUsername());
-        tvTelefono.setText(user.getTelefono1() + " / " + user.getTelefono2());
-        tvHrAtencion.setText(user.getDiasAtencion() + " " + user.getHoraAtencion());
+        String tel1 = user.getTelefono1();
+        String tel2 = user.getTelefono2();
+        tvRubro.setText(user.getRubroGeneral() + " - " + user.getRubroEspecifico());
+
+        if (tel2.length() > 0) {
+            tvTelefono.setText(tel1 + " / " + tel2);
+        } else {
+            tvTelefono.setText(tel1);
+        }
+
+        tvHrAtencion.setText(user.getDiasAtencion() + ", " + user.getHoraAtencion());
         if (user.getShowEmail()) {
             tvEmail.setVisibility(View.VISIBLE);
             FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -85,20 +99,20 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback {
             tvNumberReviews.setText("0 Reviews");
             ratingBar.setRating(0);
         }
+
+        ((UserProfileActivity) getActivity()).hideLoadingScreen();
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
 
-        //Map bounds
-        map.setLatLngBoundsForCameraTarget(new LatLngBounds(
-                new LatLng(user.getMapBound1Lat(), user.getMapBound1Long()),
-                new LatLng(user.getMapBound2Lat(), user.getMapBound2Long())
-        ));
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(
                 new LatLng(user.getMapCenterLat(), user.getMapCenterLng()),
                 user.getMapZoom()));
+
+        MapHighlighter mapHighlighter = new MapHighlighter(getContext(), map);
+        mapHighlighter.highlightMap(new LatLng(user.getMapCenterLat(), user.getMapCenterLng()));
     }
 
     @Override

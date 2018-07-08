@@ -7,14 +7,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-public class LoginActivity extends AppCompatActivity {
+import com.visoft.jobfinder.misc.Constants;
+
+public class SigninActivity extends AppCompatActivity {
+    private ConstraintLayout progressBarContainer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        Fragment fragment = new LogInFragment();
+        Fragment fragment = new SignInFragment();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragmentSignInSignUpContainer, fragment, Constants.LOGIN_FRAGMENT_TAG)
                 .commit();
@@ -24,6 +28,8 @@ public class LoginActivity extends AppCompatActivity {
         toolbar.setNavigationIcon(R.drawable.arrow_back);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        progressBarContainer = findViewById(R.id.progressBarContainer);
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -36,7 +42,15 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        ConstraintLayout progressBarContainer = findViewById(R.id.progressBarContainer);
+
+        hideLoadingScreen();
+    }
+
+    public void showLoadingScreen() {
+        progressBarContainer.setVisibility(View.VISIBLE);
+    }
+
+    public void hideLoadingScreen() {
         progressBarContainer.setVisibility(View.GONE);
     }
 }

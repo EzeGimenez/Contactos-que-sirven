@@ -15,6 +15,11 @@ import android.widget.TextView;
 
 import com.visoft.jobfinder.ProUser;
 import com.visoft.jobfinder.R;
+import com.visoft.jobfinder.misc.ErrorAnimator;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 public class ContactoFragment extends Fragment {
@@ -36,7 +41,8 @@ public class ContactoFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         TextView tvInfo = getActivity().findViewById(R.id.tvInfo);
-        tvInfo.setText("Completa la informacion de contacto");
+        tvInfo.setText("Complete la informacion de contacto");
+
 
         cbEmail = view.findViewById(R.id.cbEmail);
         etTel1 = view.findViewById(R.id.etTel1);
@@ -46,29 +52,33 @@ public class ContactoFragment extends Fragment {
         sHora1 = view.findViewById(R.id.sHora1);
         sHora2 = view.findViewById(R.id.sHora2);
 
-        String hrA[] = new String[24];
-        for (int i = 0; i < 24; i++) {
-            if (i < 10) {
-                hrA[i] = "0" + i + ":00";
-            } else {
-                hrA[i] = i + ":00";
-            }
-        }
+        List<String> hrL = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.horas)));
+        List<String> diasL = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.dias)));
 
-        String diasA[] = getResources().getStringArray(R.array.dias);
-
-        sFecha1.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, diasA));
-        sFecha2.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, diasA));
+        sFecha1.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, diasL));
+        sFecha2.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, diasL));
         sFecha2.setSelection(4);
 
-        sHora1.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, hrA));
+        sHora1.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, hrL));
         sHora1.setSelection(8);
-        sHora2.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, hrA));
+        sHora2.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, hrL));
         sHora2.setSelection(18);
+
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            etTel1.setText(bundle.getString("tel1"));
+            etTel2.setText(bundle.getString("tel2"));
+            cbEmail.setChecked(bundle.getBoolean("email"));
+            sFecha1.setSelection(diasL.indexOf(bundle.getString("fecha1")));
+            sFecha2.setSelection(diasL.indexOf(bundle.getString("fecha2")));
+            sHora1.setSelection(hrL.indexOf(bundle.getString("hr1")));
+            sHora2.setSelection(hrL.indexOf(bundle.getString("hr2")));
+        }
+
     }
 
     public boolean isContactInfoOk() {
-        return !etTel1.getText().toString().trim().equals("") && !etTel2.getText().toString().trim().equals("");
+        return !etTel1.getText().toString().trim().equals("");
     }
 
     public void setContactInfo(ProUser user) {
@@ -76,12 +86,12 @@ public class ContactoFragment extends Fragment {
         user.setTelefono1(etTel1.getText().toString());
         user.setTelefono2(etTel2.getText().toString());
         user.setDiasAtencion(
-                "De " + sFecha1.getSelectedItem().toString() + " a " + sFecha2.getSelectedItem().toString());
+                sFecha1.getSelectedItem().toString() + " a " + sFecha2.getSelectedItem().toString());
         user.setHoraAtencion(
                 sHora1.getSelectedItem().toString() + " a " + sHora2.getSelectedItem().toString());
     }
 
     public void vibrate() {
-
+        ErrorAnimator.shakeError(getContext(), etTel1);
     }
 }

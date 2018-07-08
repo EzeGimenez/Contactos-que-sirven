@@ -13,9 +13,10 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.visoft.jobfinder.Constants;
 import com.visoft.jobfinder.ProUser;
 import com.visoft.jobfinder.R;
+import com.visoft.jobfinder.misc.Constants;
+import com.visoft.jobfinder.misc.ErrorAnimator;
 
 
 public class CVFragment extends Fragment {
@@ -53,6 +54,8 @@ public class CVFragment extends Fragment {
                 tvCaracteres.setText(s.length() + "/" + Constants.MAX_CARACTERES);
                 if (s.length() > Constants.MAX_CARACTERES) {
                     tvCaracteres.setTextColor(Color.RED);
+                } else {
+                    tvCaracteres.setTextColor(Color.WHITE);
                 }
             }
 
@@ -61,6 +64,11 @@ public class CVFragment extends Fragment {
 
             }
         });
+
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            etCV.setText(bundle.getString("cv"));
+        }
     }
 
     public boolean isInputOk() {
@@ -69,5 +77,9 @@ public class CVFragment extends Fragment {
 
     public void setCv(ProUser user) {
         user.setCvText(etCV.getText().toString());
+    }
+
+    public void vibrate() {
+        ErrorAnimator.shakeError(getContext(), tvCaracteres);
     }
 }

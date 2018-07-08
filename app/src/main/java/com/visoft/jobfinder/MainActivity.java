@@ -14,6 +14,9 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
+import com.visoft.jobfinder.misc.Constants;
+import com.visoft.jobfinder.misc.Database;
 
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -28,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        FirebaseDatabase aux = Database.getDatabase();
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -90,10 +95,10 @@ public class MainActivity extends AppCompatActivity {
             signOutItem.setVisible(false);
             goToProfileItem.setVisible(false);
 
-            SignInFragment signInFragment = new SignInFragment();
+            MainSignInFragment mainSignInFragment = new MainSignInFragment();
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.mainFragmentContainer, signInFragment, Constants.SIGNIN_FRAGMENT_TAG)
+                    .replace(R.id.mainFragmentContainer, mainSignInFragment, Constants.SIGNIN_FRAGMENT_TAG)
                     .commit();
         }
     }

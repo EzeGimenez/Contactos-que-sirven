@@ -3,10 +3,11 @@ package com.visoft.jobfinder;
 public class ProUser extends User {
     private String telefono1, telefono2;
     private String cvText;
-    private double mapBound1Lat, mapBound1Long, mapBound2Lat, mapBound2Long, mapCenterLat, mapCenterLng;
+    private double mapCenterLat, mapCenterLng;
     private String diasAtencion, horaAtencion, rubroGeneral, rubroEspecifico;
     private boolean showEmail;
     private float mapZoom;
+    private int mapRadius;
 
     public ProUser() {
         isPro = true;
@@ -26,22 +27,6 @@ public class ProUser extends User {
 
     public void setCvText(String cvText) {
         this.cvText = cvText;
-    }
-
-    public double getMapBound1Long() {
-        return mapBound1Long;
-    }
-
-    public void setMapBound1Long(double mapBound1Long) {
-        this.mapBound1Long = mapBound1Long;
-    }
-
-    public double getMapBound1Lat() {
-        return mapBound1Lat;
-    }
-
-    public void setMapBound1Lat(double mapBound1Lat) {
-        this.mapBound1Lat = mapBound1Lat;
     }
 
     public String getTelefono2() {
@@ -74,22 +59,6 @@ public class ProUser extends User {
 
     public void setRubroEspecifico(String rubroEspecifico) {
         this.rubroEspecifico = rubroEspecifico;
-    }
-
-    public double getMapBound2Long() {
-        return mapBound2Long;
-    }
-
-    public void setMapBound2Long(double mapBound2Long) {
-        this.mapBound2Long = mapBound2Long;
-    }
-
-    public double getMapBound2Lat() {
-        return mapBound2Lat;
-    }
-
-    public void setMapBound2Lat(double mapBound2Lat) {
-        this.mapBound2Lat = mapBound2Lat;
     }
 
     public boolean getShowEmail() {
@@ -130,5 +99,13 @@ public class ProUser extends User {
 
     public void setMapCenterLat(double mapCenterLat) {
         this.mapCenterLat = mapCenterLat;
+    }
+
+    public int getMapRadius() {
+        return mapRadius;
+    }
+
+    public void setMapRadius(int mapRadius) {
+        this.mapRadius = mapRadius;
     }
 }

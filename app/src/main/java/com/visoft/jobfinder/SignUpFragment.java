@@ -3,13 +3,12 @@ package com.visoft.jobfinder;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -18,6 +17,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.FirebaseDatabase;
+import com.visoft.jobfinder.misc.Constants;
+import com.visoft.jobfinder.misc.ErrorAnimator;
 
 
 public class SignUpFragment extends Fragment implements View.OnClickListener {
@@ -54,20 +55,22 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.buttonAcceptSignUp:
                 signUp(etUsername.getText().toString(), etEmail.getText().toString(), etPassword.getText().toString(), etConfirmPassword.getText().toString());
-                ConstraintLayout progressBarContainer = getActivity().findViewById(R.id.progressBarContainer);
-                progressBarContainer.setVisibility(View.VISIBLE);
+
                 break;
         }
     }
 
     private void signUp(final String username, String email, String pw, String pw2) {
-        if (validateCredentials(username, email, pw, pw2)) {
+        if (checkCredentials(username, email, pw, pw2)) {
+
+            showLoadingScreen();
+
             mAuth.createUserWithEmailAndPassword(email, pw)
                     .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                Toast.makeText(getContext(), "Created Account successfully", Toast.LENGTH_SHORT).show();
+                                showSnackBar("Usuario Creado");
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 registerNewUserFirebase(user.getUid(), username);
                                 UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
@@ -80,13 +83,14 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                                 });
 
                             } else {
-                                Toast.makeText(getContext(), "Unsuccessfull registration", Toast.LENGTH_SHORT).show();
+                                showSnackBar("Error al registrarse");
                             }
+                            hideLoadingScreen();
                         }
                     });
+        } else {
+            showSnackBar("Credenciales Erróneas");
         }
-        ConstraintLayout progressBarContainer = getActivity().findViewById(R.id.progressBarContainer);
-        progressBarContainer.setVisibility(View.GONE);
     }
 
     private void registerNewUserFirebase(String uid, String username) {
@@ -111,15 +115,38 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
      * @param pw2   confirmacion de contraseña
      * @return true si son credenciales correctas, falso caso contrario
      */
-    private boolean validateCredentials(String username, String email, String pw, String pw2) {
+    private boolean checkCredentials(String username, String email, String pw, String pw2) {
         //TODO Mejorar validacion de credenciales de registrarse
-        if (email.trim().length() < 5 || pw.length() < 6 || username.trim().length() < 4) {
+        if (username.trim().length() < 4) {
+            ErrorAnimator.shakeError(getContext(), etUsername);
+            return false;
+        }
+        if (email.trim().length() < 5) {
+            ErrorAnimator.shakeError(getContext(), etEmail);
+            return false;
+        }
+        if (pw.length() < 6) {
+            ErrorAnimator.shakeError(getContext(), etPassword);
             return false;
         }
         if (!pw.equals(pw2)) {
+            ErrorAnimator.shakeError(getContext(), etConfirmPassword);
             return false;
         }
         return true;
+    }
+
+    private void showSnackBar(String msg) {
+        Snackbar.make(getActivity().findViewById(R.id.rootContainer),
+                msg, Snackbar.LENGTH_SHORT).show();
+    }
+
+    private void showLoadingScreen() {
+        ((SigninActivity) getActivity()).showLoadingScreen();
+    }
+
+    private void hideLoadingScreen() {
+        ((SigninActivity) getActivity()).hideLoadingScreen();
     }
 
 }

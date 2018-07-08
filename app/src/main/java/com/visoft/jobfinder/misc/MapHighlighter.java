@@ -1,10 +1,10 @@
-package com.visoft.jobfinder;
+package com.visoft.jobfinder.misc;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.Projection;
@@ -13,6 +13,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.visoft.jobfinder.R;
 
 public class MapHighlighter {
     private Context context;
@@ -33,15 +34,29 @@ public class MapHighlighter {
         return proj.fromScreenLocation(p);
     }
 
-    public void highlightMap(int fillColor) {
+    public void highlightMap(LatLng target) {
         if (map != null) {
-            double lat = map.getCameraPosition().target.latitude;
-            double lng = map.getCameraPosition().target.longitude;
 
-            MarkerOptions options = new MarkerOptions();
-            options.position(getCoords(lat, lng, map)).anchor(0.5f, 0.5f);
+            MarkerOptions options;
+            if (target == null) {
+                double lat = map.getCameraPosition().target.latitude;
+                double lng = map.getCameraPosition().target.longitude;
 
-            options.icon(BitmapDescriptorFactory.fromBitmap(getBitmap(fillColor)));
+                options = new MarkerOptions();
+                options.position(getCoords(lat, lng, map)).anchor(0.5f, 0.5f);
+            } else {
+                options = new MarkerOptions();
+                options.position(target).anchor(0.5f, 0.5f);
+            }
+
+            int px = context.getResources().getDimensionPixelSize(R.dimen.map_dot_marker_size);
+            Bitmap mapCircleBitmap = Bitmap.createBitmap(px, px, Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(mapCircleBitmap);
+            Drawable shape = context.getResources().getDrawable(R.drawable.map_circle);
+            shape.setBounds(0, 0, mapCircleBitmap.getWidth(), mapCircleBitmap.getHeight());
+            shape.draw(canvas);
+
+            options.icon(BitmapDescriptorFactory.fromBitmap(mapCircleBitmap));
             options.alpha(1);
 
             final Marker marker = map.addMarker(options);
@@ -57,31 +72,5 @@ public class MapHighlighter {
                 }
             });
         }
-    }
-
-    private Bitmap getBitmap(int fillColor) {
-
-        // fill color
-        Paint paint1 = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint1.setColor(fillColor);
-        paint1.setStyle(Paint.Style.FILL);
-
-        // stroke color
-        Paint paint2 = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint2.setColor(context.getResources().getColor(R.color.primaryAccent));
-        paint2.setStyle(Paint.Style.STROKE);
-
-        // circle radius - 200 meters
-        int radius = 300;
-
-        // create empty bitmap
-        Bitmap b = Bitmap
-                .createBitmap(radius * 2, radius * 2, Bitmap.Config.ARGB_8888);
-        Canvas c = new Canvas(b);
-
-        c.drawCircle(radius, radius, radius, paint1);
-        c.drawCircle(radius, radius, radius, paint2);
-
-        return b;
     }
 }

@@ -11,16 +11,15 @@
         android:id="@+id/ContainerProfilePic"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@+id/frameLayout"
         app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
             android:id="@+id/ivProfilePic"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_marginBottom="32dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginStart="50dp"
 
+            android:layout_marginBottom="32dp"
             android:layout_marginTop="32dp"
             android:src="@drawable/account_border"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -29,22 +28,47 @@
             app:layout_constraintTop_toTopOf="parent" />
     </android.support.constraint.ConstraintLayout>
 
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/ContainerProfilePic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/ContainerProfilePic"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/map" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:focusable="true" />
+    </FrameLayout>
+
     <android.support.constraint.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ContainerProfilePic">
+        app:layout_constraintTop_toBottomOf="@+id/tvRubro">
 
         <TextView
-
             android:id="@+id/tvUsername"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="50dp"
             android:layout_marginTop="16dp"
+            android:textAllCaps="true"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
 
@@ -60,10 +84,10 @@
         <RatingBar
             android:id="@+id/ratingBar"
             style="?android:attr/ratingBarStyleSmall"
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="86dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="37dp"
+            android:layout_marginTop="4dp"
             android:numStars="5"
             android:scaleX="2.0"
             android:scaleY="2.0"
@@ -75,7 +99,6 @@
             android:id="@+id/tvTelefono"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="50dp"
             android:layout_marginTop="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvUsername" />
@@ -84,7 +107,6 @@
             android:id="@+id/tvHrAtencion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="50dp"
             android:layout_marginTop="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvTelefono" />
@@ -93,7 +115,6 @@
             android:id="@+id/tvEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="50dp"
             android:layout_marginTop="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvHrAtencion" />
@@ -102,21 +123,25 @@
             android:id="@+id/tvCV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="50dp"
             android:layout_marginTop="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvEmail" />
 
     </android.support.constraint.ConstraintLayout>
 
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/map"
+    <TextView
+        android:id="@+id/tvRubro"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:src="@drawable/map"
-        app:layout_constraintBottom_toBottomOf="@+id/ContainerProfilePic"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="50dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="16dp"
+        android:text="BLALBLBA"
+        android:textAllCaps="true"
+        android:textColor="@color/primaryAccent"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/ContainerProfilePic"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ContainerProfilePic" />
 
 </android.support.constraint.ConstraintLayout>
