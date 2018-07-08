@@ -15,6 +15,8 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
+import com.visoft.jobfinder.mainpagefragments.MainPageFragment;
+import com.visoft.jobfinder.mainpagefragments.SignInFragment;
 import com.visoft.jobfinder.misc.Constants;
 import com.visoft.jobfinder.misc.Database;
 
@@ -95,10 +97,10 @@ public class MainActivity extends AppCompatActivity {
             signOutItem.setVisible(false);
             goToProfileItem.setVisible(false);
 
-            MainSignInFragment mainSignInFragment = new MainSignInFragment();
+            SignInFragment signInFragment = new SignInFragment();
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.mainFragmentContainer, mainSignInFragment, Constants.SIGNIN_FRAGMENT_TAG)
+                    .replace(R.id.mainFragmentContainer, signInFragment, Constants.SIGNIN_FRAGMENT_TAG)
                     .commit();
         }
     }
