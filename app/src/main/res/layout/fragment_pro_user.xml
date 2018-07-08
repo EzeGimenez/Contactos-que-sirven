@@ -136,7 +136,6 @@
         android:layout_marginEnd="50dp"
         android:layout_marginStart="50dp"
         android:layout_marginTop="16dp"
-        android:text="BLALBLBA"
         android:textAllCaps="true"
         android:textColor="@color/primaryAccent"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout"

@@ -1,6 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">JobFinder</string>
-    <string name="oauthId">421055195921-q7vcj31bcr0lmhe9s4p9176r44ndma8m.apps.googleusercontent.com</string>
     <string name="previo">Previo</string>
     <string name="siguiente">Siguiente</string>
     <string name="telefono_1">Telefono 1:</string>
@@ -14,7 +14,7 @@
     <string name="contrase_a">Contraseña</string>
     <string name="iniciar_sesi_n">Iniciar Sesión</string>
     <string name="crear_usuario">Crear Usuario</string>
-    <string name="email">email</string>
+    <string name="email">Email</string>
     <string name="confirmar_contrase_a">Confirmar Contraseña</string>
     <string name="usuario">Usuario</string>
     <string name="complete_info_contacto">Complete la información de contacto</string>
@@ -28,9 +28,9 @@
     <string name="credenciales_erroneas">Credenciales erróneas</string>
     <string name="sesion_iniciada">Sesión iniciada</string>
     <string name="error_al_iniciar_sesion">Error al iniciar sesión</string>
-    <string name="usuario_creado">Usuario Creado</string>
+    <string name="usuario_creado">Usuario creado satisfactoriamente</string>
     <string name="error_al_registrarse">Error al registrarse</string>
-    <string name="go_to_profile">Go to Profile</string>
+    <string name="go_to_profile">Ir al perfil</string>
     <string name="cerrar_sesi_n">Cerrar sesión</string>
     <string name="lunes">Lunes</string>
     <string name="martes">Martes</string>
@@ -39,6 +39,7 @@
     <string name="viernes">Viernes</string>
     <string name="sabado">Sábado</string>
     <string name="domingo">Domingo</string>
+
 
     <!-- Rubros Especificos-->
     <string name="jardineria">Jardinería</string>
@@ -93,5 +94,4 @@
     <string name="personalEventual">Personal Eventual</string>
     <string name="emergencias">Emergencias Médicas y vehiculares</string>
     <string name="otros">Otros</string>
-
 </resources>

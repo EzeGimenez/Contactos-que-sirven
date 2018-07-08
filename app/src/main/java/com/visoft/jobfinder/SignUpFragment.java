@@ -24,7 +24,7 @@ import com.visoft.jobfinder.misc.ErrorAnimator;
 public class SignUpFragment extends Fragment implements View.OnClickListener {
     private FirebaseAuth mAuth;
     private EditText etEmail, etPassword, etConfirmPassword, etUsername;
-
+    private boolean submitedRequest, storedInDatabase;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,6 +36,8 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        submitedRequest = storedInDatabase = false;
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -70,7 +72,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                showSnackBar("Usuario Creado");
+                                showSnackBar(getString(R.string.usuario_creado));
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 registerNewUserFirebase(user.getUid(), username);
                                 UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
@@ -78,18 +80,20 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                                 user.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
-                                        getActivity().finish();
+                                        submitedRequest = true;
+                                        finishActivity();
                                     }
                                 });
 
                             } else {
-                                showSnackBar("Error al registrarse");
+                                showSnackBar(getString(R.string.error_al_registrarse));
+                                hideLoadingScreen();
                             }
-                            hideLoadingScreen();
+
                         }
                     });
         } else {
-            showSnackBar("Credenciales Erróneas");
+            showSnackBar(getString(R.string.credenciales_erroneas));
         }
     }
 
@@ -104,7 +108,13 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                 .getReference()
                 .child(Constants.FIREBASE_USERS_CONTAINER_NAME)
                 .child(uid)
-                .setValue(user);
+                .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                storedInDatabase = true;
+                finishActivity();
+            }
+        });
     }
 
     /**
@@ -139,6 +149,13 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     private void showSnackBar(String msg) {
         Snackbar.make(getActivity().findViewById(R.id.rootContainer),
                 msg, Snackbar.LENGTH_SHORT).show();
+    }
+
+    private void finishActivity() {
+        if (storedInDatabase && submitedRequest) {
+            hideLoadingScreen();
+            getActivity().finish();
+        }
     }
 
     private void showLoadingScreen() {

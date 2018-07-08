@@ -4,14 +4,14 @@
 
     <item
         android:orderInCategory="50"
-        android:title="bla"
+        android:title="@string/go_to_profile"
         android:id="@+id/goToProfile"
         app:actionLayout="@layout/go_to_profile_icon_layout"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/signOut"
-        android:title="Cerrar sesión"
+        android:title="@string/cerrar_sesi_n"
         app:showAsAction="never" />
 
 </menu>

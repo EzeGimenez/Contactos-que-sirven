@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="rubrosGenerales">
-        <item>Hogar y Mantenimiento</item>
-        <item>Servicios de familia</item>
-        <item>Obra y construcción</item>
-        <item>Personal Eventual</item>
-        <item>Emergencias Médicas y Vehiculares</item>
-        <item>Otros</item>
+        <item>@string/hogarMantenimiento</item>
+        <item>@string/serviciosFamilia</item>
+        <item>@string/obraConstruccion</item>
+        <item>@string/personalEventual</item>
+        <item>@string/emergencias</item>
+        <item>@string/otros</item>
     </string-array>
 </resources>

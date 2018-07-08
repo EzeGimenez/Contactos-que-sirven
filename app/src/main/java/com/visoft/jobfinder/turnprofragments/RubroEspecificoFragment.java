@@ -35,24 +35,30 @@ public class RubroEspecificoFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         TextView tvInfo = getActivity().findViewById(R.id.tvInfo);
-        tvInfo.setText("Selecciona una especificación");
+        tvInfo.setText(R.string.selecciona_especificacion);
 
         rubroGeneral = getArguments().getString("RubroGeneral", null);
 
-        int id = getResources().getIdentifier(
-                rubroGeneral.toLowerCase().replaceAll(" ", ""),
+        int id = getResources().getIdentifier(rubroGeneral,
                 "array",
                 getActivity().getPackageName());
         final String[] rubroEspecificos = getResources().getStringArray(id);
 
+        id = getResources().getIdentifier(rubroGeneral + "ID",
+                "array",
+                getActivity().getPackageName());
+        final String[] rubroEspecificosID = getResources().getStringArray(id);
+
+
         listView = view.findViewById(R.id.listView);
         listView.setAdapter(new RubrosGeneralesAdapter(getContext(), rubroEspecificos));
 
+        //Guardar en un arraystring los ids y en otro los nombres posta
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Bundle bundle = new Bundle();
-                bundle.putString("rubroEspecifico", rubroEspecificos[position]);
+                bundle.putString("rubroEspecifico", rubroEspecificosID[position]);
                 ((TurnProActivity) getActivity()).onForthPressed(bundle);
             }
         });

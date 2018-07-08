@@ -32,18 +32,19 @@ public class RubroGeneralFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         TextView tvInfo = getActivity().findViewById(R.id.tvInfo);
-        tvInfo.setText("Selecciona un área de trabajo");
+        tvInfo.setText(R.string.selecciona_area_trabajo);
 
         listView = view.findViewById(R.id.listView);
 
         final String[] rubrosA = getResources().getStringArray(R.array.rubrosGenerales);
+        final String[] rubrosAID = getResources().getStringArray(R.array.rubrosGeneralesID);
         listView.setAdapter(new RubrosGeneralesAdapter(getContext(), rubrosA));
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Bundle bundle = new Bundle();
-                bundle.putString("RubroGeneral", rubrosA[position]);
+                bundle.putString("RubroGeneral", rubrosAID[position]);
                 ((TurnProActivity) getActivity()).onForthPressed(bundle);
             }
         });

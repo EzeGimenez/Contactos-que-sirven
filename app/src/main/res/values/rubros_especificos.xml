@@ -1,65 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="hogarymantenimiento">
-        <item>Jardinería</item>
-        <item>Servidumbre</item>
-        <item>Control de plagas</item>
-        <item>Arreglos Informáticos</item>
-        <item>Plomeria</item>
-        <item>Electricista</item>
-        <item>Cerrajería</item>
-        <item>Seguridad</item>
-        <item>Fiestas y Eventos</item>
-        <item>Cadetería</item>
-        <item>Viandas</item>
-        <item>Comida y delivery</item>
+    <string-array name="hogarMantenimiento">
+        <item>@string/jardineria</item>
+        <item>@string/servidumbre</item>
+        <item>@string/controlPlagas</item>
+        <item>@string/arreglosInformaticos</item>
+        <item>@string/plomeria</item>
+        <item>@string/electricista</item>
+        <item>@string/cerrajeria</item>
+        <item>@string/seguridad</item>
+        <item>@string/fiestasEventos</item>
+        <item>@string/cadeteria</item>
+        <item>@string/viandas</item>
+        <item>@string/comidaDelivery</item>
     </string-array>
 
-    <string-array name="serviciosdefamilia">
-        <item>Estética</item>
-        <item>Estética a domicilio</item>
-        <item>Profesor particular</item>
-        <item>Transporte</item>
-        <item>Cuidado de niños</item>
-        <item>Cuidado de mascotas</item>
-        <item>Veterinaria</item>
+    <string-array name="serviciosFamilia">
+        <item>@string/estetica</item>
+        <item>@string/esteticaDomicilio</item>
+        <item>@string/profesorParticular</item>
+        <item>@string/instructorado</item>
+        <item>@string/transporte</item>
+        <item>@string/cuidadoNiños</item>
+        <item>@string/cuidadoMascotas</item>
+        <item>@string/veterinaria</item>
     </string-array>
 
-    <string-array name="obrayconstrucción">
-        <item>Arquitectura</item>
-        <item>Ingeniería</item>
-        <item>Personal</item>
-        <item>Gasista</item>
-        <item>Abaliñería</item>
-        <item>Techista</item>
-        <item>Carpintería</item>
-        <item>Flete</item>
-        <item>Parquización</item>
-        <item>Picapedrería</item>
-        <item>Pintor</item>
-        <item>Movimientos Industriales</item>
-        <item>Electricista</item>
-        <item>Muebleria</item>
-        <item>Diseño gráfico</item>
-        <item>Plomería</item>
-        <item>Cerrajería</item>
+    <string-array name="obraConstruccion">
+        <item>@string/arquitectura</item>
+        <item>@string/ingenieria</item>
+        <item>@string/personal</item>
+        <item>@string/gasista</item>
+        <item>@string/albañil</item>
+        <item>@string/techista</item>
+        <item>@string/carpintero</item>
+        <item>@string/flete</item>
+        <item>@string/parquizacion</item>
+        <item>@string/picapedreria</item>
+        <item>@string/pintor</item>
+        <item>@string/movimientosIndustriales</item>
+        <item>@string/electricista</item>
+        <item>@string/muebleria</item>
+        <item>@string/diseñoGrafico</item>
+        <item>@string/plomeria</item>
+        <item>@string/cerrajeria</item>
     </string-array>
 
-    <string-array name="personaleventual">
-        <item>Se requiere fuerza</item>
-        <item>No se requiere fuerza</item>
+    <string-array name="personalEventual">
+        <item>@string/fuerza</item>
+        <item>@string/noFuerza</item>
     </string-array>
 
-    <string-array name="emergenciasmédicasyvehiculares">
-        <item>Grúa</item>
-        <item>Mecánico</item>
-        <item>Médica/Médico</item>
-        <item>Servicio para discapacitados</item>
-        <item>Cerrajería</item>
-        <item>Policía</item>
-        <item>Bomberos</item>
-        <item>Defensa Civil</item>
-        <item>Defensa de la mujer</item>
+    <string-array name="emergencias">
+        <item>@string/grua</item>
+        <item>@string/mecanico</item>
+        <item>@string/medico</item>
+        <item>@string/servicioDiscapacitados</item>
+        <item>@string/cerrajeria</item>
+        <item>@string/policia</item>
+        <item>@string/bomberos</item>
+        <item>@string/defensaCivil</item>
+        <item>@string/defensaMujer</item>
 
     </string-array>
 

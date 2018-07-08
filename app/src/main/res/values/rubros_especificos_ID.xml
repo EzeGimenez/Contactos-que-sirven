@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="hogarMantenimientoID">
+        <item>jardineria</item>
+        <item>servidumbre</item>
+        <item>controlDePlagas</item>
+        <item>arreglosInformáticos</item>
+        <item>plomeria</item>
+        <item>electricista</item>
+        <item>cerrajeria</item>
+        <item>seguridad</item>
+        <item>fiestasEventos</item>
+        <item>cadeteria</item>
+        <item>viandas</item>
+        <item>comidaDelivery</item>
+    </string-array>
+
+    <string-array name="serviciosFamiliaID">
+        <item>estetica</item>
+        <item>esteticaDomicilio</item>
+        <item>profesorParticular</item>
+        <item>instructorado</item>
+        <item>transporte</item>
+        <item>cuidadoNiños</item>
+        <item>cuidadoMascotas</item>
+        <item>veterinaria</item>
+    </string-array>
+
+    <string-array name="obraConstruccionID">
+        <item>arquitectura</item>
+        <item>ingenieria</item>
+        <item>personal</item>
+        <item>gasista</item>
+        <item>abaliñeria</item>
+        <item>techista</item>
+        <item>carpinteria</item>
+        <item>flete</item>
+        <item>parquizacion</item>
+        <item>picapedreria</item>
+        <item>pintor</item>
+        <item>movimientosIndustriales</item>
+        <item>electricista</item>
+        <item>muebleria</item>
+        <item>diseñoGrafico</item>
+        <item>plomeria</item>
+        <item>cerrajeria</item>
+    </string-array>
+
+    <string-array name="personalEventualID">
+        <item>fuerza</item>
+        <item>noFuerza</item>
+    </string-array>
+
+    <string-array name="emergenciasID">
+        <item>grua</item>
+        <item>mecanico</item>
+        <item>medico</item>
+        <item>servicioDiscapacitados</item>
+        <item>cerrajeria</item>
+        <item>policia</item>
+        <item>bomberos</item>
+        <item>defensaCivil</item>
+        <item>DefensaMujer</item>
+
+    </string-array>
+
+    <string-array name="otrosID">
+        <item></item>
+    </string-array>
+</resources>

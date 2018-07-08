@@ -41,7 +41,7 @@ public class ContactoFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         TextView tvInfo = getActivity().findViewById(R.id.tvInfo);
-        tvInfo.setText("Complete la informacion de contacto");
+        tvInfo.setText(R.string.complete_info_contacto);
 
 
         cbEmail = view.findViewById(R.id.cbEmail);
@@ -69,8 +69,8 @@ public class ContactoFragment extends Fragment {
             etTel1.setText(bundle.getString("tel1"));
             etTel2.setText(bundle.getString("tel2"));
             cbEmail.setChecked(bundle.getBoolean("email"));
-            sFecha1.setSelection(diasL.indexOf(bundle.getString("fecha1")));
-            sFecha2.setSelection(diasL.indexOf(bundle.getString("fecha2")));
+            sFecha1.setSelection(bundle.getInt("fecha1"));
+            sFecha2.setSelection(bundle.getInt("fecha2"));
             sHora1.setSelection(hrL.indexOf(bundle.getString("hr1")));
             sHora2.setSelection(hrL.indexOf(bundle.getString("hr2")));
         }
@@ -86,9 +86,9 @@ public class ContactoFragment extends Fragment {
         user.setTelefono1(etTel1.getText().toString());
         user.setTelefono2(etTel2.getText().toString());
         user.setDiasAtencion(
-                sFecha1.getSelectedItem().toString() + " a " + sFecha2.getSelectedItem().toString());
+                sFecha1.getSelectedItemPosition() * 10 + sFecha2.getSelectedItemPosition());
         user.setHoraAtencion(
-                sHora1.getSelectedItem().toString() + " a " + sHora2.getSelectedItem().toString());
+                sHora1.getSelectedItem().toString() + " - " + sHora2.getSelectedItem().toString());
     }
 
     public void vibrate() {

@@ -4,10 +4,10 @@ public class ProUser extends User {
     private String telefono1, telefono2;
     private String cvText;
     private double mapCenterLat, mapCenterLng;
-    private String diasAtencion, horaAtencion, rubroGeneral, rubroEspecifico;
+    private String horaAtencion, rubroGeneral, rubroEspecifico;
     private boolean showEmail;
     private float mapZoom;
-    private int mapRadius;
+    private int mapRadius, diasAtencion;
 
     public ProUser() {
         isPro = true;
@@ -37,11 +37,11 @@ public class ProUser extends User {
         this.telefono2 = telefono2;
     }
 
-    public String getDiasAtencion() {
+    public int getDiasAtencion() {
         return diasAtencion;
     }
 
-    public void setDiasAtencion(String diasAtencion) {
+    public void setDiasAtencion(int diasAtencion) {
         this.diasAtencion = diasAtencion;
     }
 

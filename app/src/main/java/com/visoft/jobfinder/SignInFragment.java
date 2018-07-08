@@ -113,7 +113,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
 
     private void signInWithEmail(String email, String password) {
         if (!checkCredentials(email, password)) {
-            showSnackBar("Credenciales erróneas");
+            showSnackBar(getString(R.string.credenciales_erroneas));
             return;
         }
         showLoadingScreen();
@@ -124,11 +124,11 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             //Correctly logged in
-                            showSnackBar("Sesión iniciada");
+                            showSnackBar(getString(R.string.sesion_iniciada));
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
                         } else {
-                            showSnackBar("Error al iniciar sesión");
+                            showSnackBar(getString(R.string.error_al_iniciar_sesion));
                             updateUI(null);
                         }
                         hideLoadingScreen();
@@ -177,7 +177,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
 
             } catch (ApiException e) {
                 //TODO arreglar excepción
-                showSnackBar("Error al iniciar sesión");
+                showSnackBar(getText(R.string.error_al_iniciar_sesion).toString());
                 updateUI(null);
 
                 hideLoadingScreen();
@@ -192,7 +192,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            showSnackBar("Sesión iniciada");
+                            showSnackBar(getText(R.string.sesion_iniciada).toString());
                             FirebaseUser userfb = mAuth.getCurrentUser();
                             if (task.getResult().getAdditionalUserInfo().isNewUser()) {
                                 User user = new User();
@@ -208,7 +208,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                             }
                             updateUI(userfb);
                         } else {
-                            showSnackBar("Error al iniciar sesión");
+                            showSnackBar(getText(R.string.error_al_iniciar_sesion).toString());
                             updateUI(null);
                         }
                     }

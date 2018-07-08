@@ -72,10 +72,10 @@ public class EditProfileActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         bundle.putString("tel1", proUser.getTelefono1());
         bundle.putString("tel2", proUser.getTelefono2());
-        bundle.putString("fecha1", proUser.getDiasAtencion().split(" a ")[0]);
-        bundle.putString("fecha2", proUser.getDiasAtencion().split(" a ")[1]);
-        bundle.putString("hr1", proUser.getHoraAtencion().split(" a ")[0]);
-        bundle.putString("hr2", proUser.getHoraAtencion().split(" a ")[1]);
+        bundle.putInt("fecha1", proUser.getDiasAtencion() / 10);
+        bundle.putInt("fecha2", proUser.getDiasAtencion() % 10);
+        bundle.putString("hr1", proUser.getHoraAtencion().split(" - ")[0]);
+        bundle.putString("hr2", proUser.getHoraAtencion().split(" - ")[1]);
         bundle.putBoolean("email", proUser.getShowEmail());
         fragment.setArguments(bundle);
         fragmentManager.beginTransaction()
@@ -83,7 +83,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 .commit();
         btnNext.setEnabled(true);
         btnPrev.setEnabled(true);
-        btnPrev.setText("Cancelar");
+        btnPrev.setText(R.string.cancelar);
     }
 
     private void onForthPressed() {
@@ -106,9 +106,9 @@ public class EditProfileActivity extends AppCompatActivity {
                         .commit();
 
                 btnPrev.setEnabled(true);
-                btnPrev.setText("previo");
+                btnPrev.setText(R.string.previo);
                 btnNext.setEnabled(true);
-                btnNext.setText("Finalizar");
+                btnNext.setText(R.string.finalizar);
 
             } else {
                 ((ContactoFragment) actualFragment).vibrate();
@@ -157,12 +157,16 @@ public class EditProfileActivity extends AppCompatActivity {
 
         } else if (actualFragment instanceof CVFragment) {
 
-            super.onBackPressed();
+            Fragment contactoFragment = fragmentManager.findFragmentByTag(Constants.CONTACTO_FRAGMENT_TAG);
+            fragmentManager.beginTransaction()
+                    .replace(R.id.ContainerTurnProFragments, contactoFragment, Constants.CONTACTO_FRAGMENT_TAG)
+                    .addToBackStack(Constants.CV_FRAGMENT_TAG)
+                    .commit();
 
             btnNext.setEnabled(true);
-            btnPrev.setText("Cancelar");
+            btnPrev.setText(R.string.cancelar);
             btnPrev.setEnabled(true);
-            btnNext.setText("Siguiente");
+            btnNext.setText(R.string.siguiente);
         }
     }
 

@@ -37,7 +37,7 @@ public class CVFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         TextView tvInfo = getActivity().findViewById(R.id.tvInfo);
-        tvInfo.setText("Y para finalizar, escriba una pequeña descripción sobre usted");
+        tvInfo.setText(R.string.escriba_descripcion);
 
         tvCaracteres = view.findViewById(R.id.tvCaracteres);
         etCV = view.findViewById(R.id.etCV);

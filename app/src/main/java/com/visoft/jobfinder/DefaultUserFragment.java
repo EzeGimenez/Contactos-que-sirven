@@ -49,7 +49,7 @@ public class DefaultUserFragment extends Fragment {
             ratingBar.setRating(user.getRating());
             tvNumberReviews.setText(user.getRating() + "");
         } else {
-            tvNumberReviews.setText("0 Reviews");
+            tvNumberReviews.setText("0 " + getText(R.string.reviews));
             ratingBar.setRating(0);
         }
     }

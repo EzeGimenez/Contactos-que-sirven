@@ -18,6 +18,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.visoft.jobfinder.misc.MapHighlighter;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class ProUserFragment extends Fragment implements OnMapReadyCallback {
     private ProUser user;
     private GoogleMap map;
@@ -68,7 +72,26 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback {
         tvUsername.setText(user.getUsername());
         String tel1 = user.getTelefono1();
         String tel2 = user.getTelefono2();
-        tvRubro.setText(user.getRubroGeneral() + " - " + user.getRubroEspecifico());
+
+        int id = getResources().getIdentifier(user.getRubroGeneral() + "ID",
+                "array",
+                getActivity().getPackageName());
+        final String[] rubroEspecificosID = getResources().getStringArray(id);
+        id = getResources().getIdentifier(user.getRubroGeneral(),
+                "array",
+                getActivity().getPackageName());
+        final String[] rubroEspecificos = getResources().getStringArray(id);
+
+        final String[] rubroGeneral = getResources().getStringArray(R.array.rubrosGenerales);
+        final String[] rubroGeneralID = getResources().getStringArray(R.array.rubrosGeneralesID);
+
+        List<String> aux1 = new ArrayList<>(Arrays.asList(rubroGeneralID));
+        List<String> aux2 = new ArrayList<>(Arrays.asList(rubroEspecificosID));
+
+        String rubroGral = rubroGeneral[aux1.indexOf(user.getRubroGeneral())];
+        String rubroEsp = rubroEspecificos[aux2.indexOf(user.getRubroEspecifico())];
+
+        tvRubro.setText(rubroGral + " - " + rubroEsp);
 
         if (tel2.length() > 0) {
             tvTelefono.setText(tel1 + " / " + tel2);
@@ -76,7 +99,15 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback {
             tvTelefono.setText(tel1);
         }
 
-        tvHrAtencion.setText(user.getDiasAtencion() + ", " + user.getHoraAtencion());
+        String[] diasL = getResources().getStringArray(R.array.dias);
+        String[] hrAtencion = user.getHoraAtencion().split(" - ");
+        String[] diasAtencion = new String[2];
+        diasAtencion[0] = diasL[user.getDiasAtencion() / 10];
+        diasAtencion[1] = diasL[user.getDiasAtencion() % 10];
+
+        tvHrAtencion.setText(diasAtencion[0] + " " + getString(R.string.a) + " " + diasAtencion[1]
+                + " , " + hrAtencion[0] + " " + getString(R.string.a) + " " + hrAtencion[1]);
+
         if (user.getShowEmail()) {
             tvEmail.setVisibility(View.VISIBLE);
             FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -96,7 +127,7 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback {
             ratingBar.setRating(user.getRating());
             tvNumberReviews.setText(user.getRating() + "");
         } else {
-            tvNumberReviews.setText("0 Reviews");
+            tvNumberReviews.setText("0 " + getText(R.string.reviews));
             ratingBar.setRating(0);
         }
 

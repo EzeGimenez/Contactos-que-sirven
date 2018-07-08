@@ -43,7 +43,7 @@ public class WorkScopeFragment extends Fragment implements OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState);
 
         TextView tvInfo = getActivity().findViewById(R.id.tvInfo);
-        tvInfo.setText("Selecciona el rango de trabajo");
+        tvInfo.setText(R.string.selecciona_rango_trabajo);
     }
 
     @Override

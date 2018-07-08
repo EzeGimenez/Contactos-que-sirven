@@ -132,7 +132,7 @@ public class TurnProActivity extends AppCompatActivity {
 
             btnNext.setEnabled(true);
             btnPrev.setEnabled(true);
-            btnNext.setText("Siguiente");
+            btnNext.setText(R.string.siguiente);
 
         }
     }
@@ -206,7 +206,7 @@ public class TurnProActivity extends AppCompatActivity {
 
                 btnPrev.setEnabled(true);
                 btnNext.setEnabled(true);
-                btnNext.setText("Finalizar");
+                btnNext.setText(R.string.finalizar);
 
             } else {
                 ((ContactoFragment) actualFragment).vibrate();

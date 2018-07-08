@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="rubrosGeneralesID">
+        <item>hogarMantenimiento</item>
+        <item>serviciosFamilia</item>
+        <item>obraConstruccion</item>
+        <item>personalEventual</item>
+        <item>emergencias</item>
+        <item>otros</item>
+    </string-array>
+</resources>

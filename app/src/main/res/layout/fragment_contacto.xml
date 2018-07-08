@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Telefono 1:"
+        android:text="@string/telefono_1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cbEmail" />
@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Telefono 2:"
+        android:text="@string/telefono_2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etTel1" />
@@ -32,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="Incluir dirección de mail"
+        android:text="@string/incluir_direcci_n_de_mail"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -65,7 +65,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Horario Atención"
+        android:text="@string/horario_atenci_n"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etTel2" />
@@ -93,7 +93,7 @@
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="a"
+        android:text="@string/a"
         app:layout_constraintBottom_toBottomOf="@+id/sFecha1"
         app:layout_constraintEnd_toStartOf="@+id/sFecha2"
         app:layout_constraintStart_toEndOf="@+id/sFecha1"
@@ -103,11 +103,14 @@
         android:id="@+id/textView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="26dp"
-        android:text="De"
+        android:layout_marginStart="8dp"
+        android:text="@string/de"
         app:layout_constraintBottom_toBottomOf="@+id/sFecha1"
+        app:layout_constraintEnd_toStartOf="@+id/sFecha1"
+        app:layout_constraintHorizontal_bias="0.23"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/sFecha1" />
+        app:layout_constraintTop_toTopOf="@+id/sFecha1"
+        app:layout_constraintVertical_bias="0.466" />
 
     <Spinner
         android:id="@+id/sHora1"
@@ -131,7 +134,7 @@
         android:id="@+id/textView9"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="a"
+        android:text="@string/a"
         app:layout_constraintBottom_toBottomOf="@+id/sHora1"
         app:layout_constraintEnd_toStartOf="@+id/sHora2"
         app:layout_constraintStart_toEndOf="@+id/sHora1"

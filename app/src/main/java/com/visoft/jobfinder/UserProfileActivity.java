@@ -144,7 +144,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
             if (user.getNumberReviews() > 0) {
                 buttonShowReviews.setVisibility(View.VISIBLE);
-                buttonShowReviews.setText(user.getNumberReviews() + " Opiniones");
+                buttonShowReviews.setText(user.getNumberReviews() + getString(R.string.reviews));
             } else {
                 buttonShowReviews.setVisibility(View.GONE);
             }
@@ -247,11 +247,16 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        if (timer != null)
+            timer.cancel();
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
         super.onSaveInstanceState(outState, outPersistentState);
         isRunning = false;
-        if (timer != null)
-            timer.cancel();
     }
 
     public void showLoadingScreen() {
