@@ -1,6 +1,8 @@
 package com.visoft.jobfinder.Objects;
 
-public class Review {
+import java.io.Serializable;
+
+public class Review implements Serializable {
     private String reviewerUsername, msg, reviewerUID;
     private float rating, atencion, tiempoResp, calidad;
 

@@ -87,6 +87,11 @@
     <string name="defensaCivil">Defensa Civil</string>
     <string name="defensaMujer">Defensa de la Mujer</string>
     <string name="instructorado">Instructorado</string>
+    <string name="tiempoRespReview">¿Cómo evaluaría el tiempo  de respuesta?</string>
+    <string name="calidadTrabajoReview">¿Cómo evaluaría la calidad de servicio brindada?</string>
+    <string name="atencionReview">¿Cómo evaluaría la atención recibida?</string>
+    <string name="calificacionFinalReview">¿Cómo calificaría en general al profesional?</string>
+    <string name="pequeñaDescripcion">Escriba una reseña corta</string>
 
     <!-- Rubros Generales-->
     <string name="hogarMantenimiento">Hogar y Mantenimiento</string>
@@ -99,5 +104,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="calificar_profesional">Calificar Profesional</string>
+    <string name="transformar_en_perfil_de_trabajo">Transformar en perfil de trabajo</string>
+    <string name="editar_perfil">Editar Perfil</string>
 
 </resources>

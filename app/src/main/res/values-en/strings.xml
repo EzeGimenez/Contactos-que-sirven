@@ -42,6 +42,11 @@
     <string name="revisaConexion">Check your connection</string>
     <string name="resultsFor">Search results for:</string>
     <string name="calificar_profesional">Review Professional</string>
+    <string name="tiempoRespReview">How would you rate the punctuality?</string>
+    <string name="calidadTrabajoReview">How would you rate the quality of service received?</string>
+    <string name="atencionReview">How would you rate the attention?</string>
+    <string name="calificacionFinalReview">Finally, a general review</string>
+    <string name="pequeñaDescripcion">Write a short review</string>
 
     <!-- Rubros Especificos-->
     <string name="jardineria">Gardening</string>
@@ -96,5 +101,7 @@
     <string name="personalEventual">Casual staff</string>
     <string name="emergencias">Medical &amp; vehicular emergency</string>
     <string name="otros">Others</string>
+    <string name="transformar_en_perfil_de_trabajo">Make Professional profile</string>
+    <string name="editar_perfil">Edit Profile</string>
 
 </resources>

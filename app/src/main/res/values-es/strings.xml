@@ -42,6 +42,11 @@
     <string name="revisaConexion">Revisa tu conexión</string>
     <string name="resultsFor">Resultados de búsqueda para:</string>
     <string name="calificar_profesional">Calificar Profesional</string>
+    <string name="tiempoRespReview">¿Cómo evaluaría la puntualidad?</string>
+    <string name="calidadTrabajoReview">¿Cómo evaluaría la calidad de servicio brindada?</string>
+    <string name="atencionReview">¿Cómo evaluaría la atención recibida?</string>
+    <string name="calificacionFinalReview">¿Cómo calificaría en general al profesional?</string>
+    <string name="pequeñaDescripcion">Escriba una reseña corta</string>
 
     <!-- Rubros Especificos-->
     <string name="jardineria">Jardinería</string>
@@ -96,4 +101,6 @@
     <string name="personalEventual">Personal Eventual</string>
     <string name="emergencias">Emergencias Médicas y vehiculares</string>
     <string name="otros">Otros</string>
+    <string name="transformar_en_perfil_de_trabajo">Transformar en perfil de trabajo</string>
+    <string name="editar_perfil">Editar Perfil</string>
 </resources>

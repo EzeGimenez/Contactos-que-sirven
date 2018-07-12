@@ -29,16 +29,15 @@ public abstract class Constants {
     public static final String FIREBASE_RUBRO_CONTAINER_NAME = "RubrosGenerales";
     public static final String FIREBASE_USERS_CONTAINER_NAME = "users";
     public static final String FIREBASE_QUALITY_CONTAINER_NAME = "userQuality";
+    public static final String FIREBASE_REVIEWS_CONTAINER_NAME = "reviews";
 
     /**
      * Constants
      */
     public static final int MAX_CARACTERES = 210;
     public static final int MIN_DISTANCE = 50 * 1000;
-    public static final int MIN_CALIDAD_INSIGNIA = 50;
-    public static final int MIN_TIEMPO_RESP_INSIGNIA = 50;
+    public static final int MIN_CALIDAD_INSIGNIA = 30;
+    public static final int MIN_TIEMPO_RESP_INSIGNIA = 30;
     public static final int MIN_ATENCION_INSIGNIA = 50;
     public static final String SHARED_PREF_NAME = "SharedPref";
-
-
 }

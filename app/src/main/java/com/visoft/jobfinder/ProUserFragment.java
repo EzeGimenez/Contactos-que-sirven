@@ -122,7 +122,7 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback {
         diasAtencion[1] = diasL[user.getDiasAtencion() % 10];
 
         tvHrAtencion.setText(diasAtencion[0] + " " + getString(R.string.a) + " " + diasAtencion[1]
-                + " , " + hrAtencion[0] + " " + getString(R.string.a) + " " + hrAtencion[1]);
+                + ", " + hrAtencion[0] + " " + getString(R.string.a) + " " + hrAtencion[1]);
 
         if (user.getShowEmail()) {
             tvEmail.setVisibility(View.VISIBLE);
@@ -161,6 +161,7 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback {
         }
 
         getInsignias();
+        getComments();
     }
 
     private void getInsignias() {
@@ -178,6 +179,11 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback {
 
             }
         });
+    }
+
+    public Object getComments() {
+
+        return null;
     }
 
     @Override
