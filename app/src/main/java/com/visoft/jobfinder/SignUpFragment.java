@@ -17,6 +17,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.FirebaseDatabase;
+import com.visoft.jobfinder.Objects.User;
 import com.visoft.jobfinder.misc.Constants;
 import com.visoft.jobfinder.misc.ErrorAnimator;
 
@@ -74,7 +75,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                             if (task.isSuccessful()) {
                                 showSnackBar(getString(R.string.usuario_creado));
                                 FirebaseUser user = mAuth.getCurrentUser();
-                                registerNewUserFirebase(user.getUid(), username);
+                                registerNewUserFirebase(user.getUid(), username, user.getEmail());
                                 UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                                         .setDisplayName(username).build();
                                 user.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -97,12 +98,14 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private void registerNewUserFirebase(String uid, String username) {
+    private void registerNewUserFirebase(String uid, String username, String mail) {
         User user = new User();
         user.setUsername(username);
         user.setRating(-1);
         user.setNumberReviews(0);
         user.setPro(false);
+        user.setUid(uid);
+        user.setEmail(mail);
         FirebaseDatabase
                 .getInstance()
                 .getReference()

@@ -11,7 +11,7 @@
     <Button
         android:id="@+id/button1"
         style="@style/MainButtons"
-        android:tag="button1"
+        android:tag="hogarMantenimiento"
         android:text="@string/hogarMantenimiento"
         app:layout_constraintBottom_toTopOf="@+id/button3"
         app:layout_constraintEnd_toStartOf="@+id/button2"
@@ -21,7 +21,7 @@
     <Button
         android:id="@+id/button2"
         style="@style/MainButtons"
-        android:tag="button2"
+        android:tag="serviciosFamilia"
         android:text="@string/serviciosFamilia"
         app:layout_constraintBottom_toTopOf="@+id/button4"
         app:layout_constraintEnd_toEndOf="parent"
@@ -31,7 +31,7 @@
     <Button
         android:id="@+id/button3"
         style="@style/MainButtons"
-        android:tag="button3"
+        android:tag="obraConstruccion"
         android:text="@string/obraConstruccion"
         app:layout_constraintBottom_toTopOf="@+id/button5"
         app:layout_constraintEnd_toStartOf="@+id/button4"
@@ -41,7 +41,7 @@
     <Button
         android:id="@+id/button4"
         style="@style/MainButtons"
-        android:tag="button4"
+        android:tag="personalEventual"
         android:text="@string/personalEventual"
         app:layout_constraintBottom_toTopOf="@+id/button6"
         app:layout_constraintEnd_toEndOf="parent"
@@ -51,7 +51,7 @@
     <Button
         android:id="@+id/button5"
         style="@style/MainButtons"
-        android:tag="button5"
+        android:tag="emergencias"
         android:text="@string/emergencias"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button6"
@@ -61,7 +61,7 @@
     <Button
         android:id="@+id/button6"
         style="@style/MainButtons"
-        android:tag="button6"
+        android:tag="otros"
         android:text="@string/otros"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

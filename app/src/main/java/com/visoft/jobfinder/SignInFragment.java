@@ -25,6 +25,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.FirebaseDatabase;
+import com.visoft.jobfinder.Objects.User;
 import com.visoft.jobfinder.misc.Constants;
 import com.visoft.jobfinder.misc.ErrorAnimator;
 
@@ -200,6 +201,8 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                                 user.setRating(-1);
                                 user.setNumberReviews(0);
                                 user.setPro(false);
+                                user.setUid(userfb.getUid());
+                                user.setEmail(userfb.getEmail());
                                 FirebaseDatabase.getInstance()
                                         .getReference()
                                         .child(Constants.FIREBASE_USERS_CONTAINER_NAME)

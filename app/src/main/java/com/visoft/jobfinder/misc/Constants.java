@@ -12,7 +12,7 @@ public abstract class Constants {
     public static final String SIGNUP_FRAGMENT_TAG = "SignUpFragment";
     public static final String SIGNIN_FRAGMENT_TAG = "SignInFragment";
     public static final String MAIN_PAGE_FRAGMENT_TAG = "MainPageFragment";
-    public static final String PRO_USER_FRAGMENT = "ProUserFragment";
+    public static final String PRO_USER_FRAGMENT_TAG = "ProUserFragment";
     public static final String DEFAULT_USER_FRAGMENT = "DefaultUserFragment";
     public static final String WORK_SCOPE_FRAGMENT_TAG = "WorkScopeFragment";
     public static final String CONTACTO_FRAGMENT_TAG = "ContactoFragment";
@@ -28,10 +28,17 @@ public abstract class Constants {
      */
     public static final String FIREBASE_RUBRO_CONTAINER_NAME = "RubrosGenerales";
     public static final String FIREBASE_USERS_CONTAINER_NAME = "users";
+    public static final String FIREBASE_QUALITY_CONTAINER_NAME = "userQuality";
 
     /**
      * Constants
      */
     public static final int MAX_CARACTERES = 210;
+    public static final int MIN_DISTANCE = 50 * 1000;
+    public static final int MIN_CALIDAD_INSIGNIA = 50;
+    public static final int MIN_TIEMPO_RESP_INSIGNIA = 50;
+    public static final int MIN_ATENCION_INSIGNIA = 50;
+    public static final String SHARED_PREF_NAME = "SharedPref";
+
 
 }

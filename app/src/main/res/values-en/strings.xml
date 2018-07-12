@@ -41,11 +41,12 @@
     <string name="domingo">Sunday</string>
     <string name="revisaConexion">Check your connection</string>
     <string name="resultsFor">Search results for:</string>
+    <string name="calificar_profesional">Review Professional</string>
 
     <!-- Rubros Especificos-->
     <string name="jardineria">Gardening</string>
     <string name="servidumbre">House keeper</string>
-    <string name="controlPlagas">Pest Control</string>
+    <string name="controlDePlagas">Pest Control</string>
     <string name="arreglosInformaticos">Tech service</string>
     <string name="plomeria">Plumbing</string>
     <string name="electricista">Electrical technician</string>
@@ -65,7 +66,7 @@
     <string name="ingenieria">Engineering</string>
     <string name="personal">Personal</string>
     <string name="gasista">Gas</string>
-    <string name="albañil">Masonry</string>
+    <string name="albañileria">Masonry</string>
     <string name="techista">Roof service</string>
     <string name="carpintero">Carpenter</string>
     <string name="flete">Freight</string>
@@ -95,4 +96,5 @@
     <string name="personalEventual">Casual staff</string>
     <string name="emergencias">Medical &amp; vehicular emergency</string>
     <string name="otros">Others</string>
+
 </resources>

@@ -1,4 +1,4 @@
-package com.visoft.jobfinder;
+package com.visoft.jobfinder.Objects;
 
 public class ProUser extends User {
     private String telefono1, telefono2;

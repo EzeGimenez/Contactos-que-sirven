@@ -7,8 +7,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RatingBar;
 import android.widget.TextView;
+
+import com.iarcuschin.simpleratingbar.SimpleRatingBar;
+import com.visoft.jobfinder.Objects.User;
 
 
 public class DefaultUserFragment extends Fragment {
@@ -16,7 +18,7 @@ public class DefaultUserFragment extends Fragment {
 
     //Componentes gráficas
     private TextView tvUsername, tvNumberReviews;
-    private RatingBar ratingBar;
+    private SimpleRatingBar ratingBar;
     //private ImageView ivProfilePic;
 
 
@@ -34,7 +36,7 @@ public class DefaultUserFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ((UserProfileActivity) getActivity()).hideLoadingScreen();
+        ((OwnUserProfileActivity) getActivity()).hideLoadingScreen();
 
         tvNumberReviews = view.findViewById(R.id.tvNumberReviews);
         tvUsername = view.findViewById(R.id.tvUsername);

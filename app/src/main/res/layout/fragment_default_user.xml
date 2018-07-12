@@ -28,12 +28,12 @@
         app:layout_constraintTop_toBottomOf="@+id/ivProfilePic">
 
         <TextView
-            android:textAllCaps="true"
             android:id="@+id/tvUsername"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
             android:layout_marginTop="8dp"
+            android:textAllCaps="true"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -41,27 +41,28 @@
             android:id="@+id/tvNumberReviews"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="60dp"
+            android:layout_marginStart="16dp"
             app:layout_constraintBottom_toBottomOf="@+id/ratingBar"
             app:layout_constraintStart_toEndOf="@+id/ratingBar"
             app:layout_constraintTop_toTopOf="@+id/ratingBar" />
 
-        <RatingBar
+        <com.iarcuschin.simpleratingbar.SimpleRatingBar
             android:id="@+id/ratingBar"
-            style="?android:attr/ratingBarStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:layout_marginStart="36dp"
             android:layout_marginTop="16dp"
             android:numStars="5"
-            android:scaleX="2.0"
-            android:scaleY="2.0"
-            android:theme="@style/RatingBar"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/tvUsername"
             app:layout_constraintTop_toBottomOf="@+id/tvUsername"
-            app:layout_constraintVertical_bias="0.0" />
+            app:srb_drawBorderEnabled="false"
+            app:srb_isIndicator="true"
+            app:srb_numberOfStars="5"
+            app:srb_starBackgroundColor="@color/transparent"
+            app:srb_starCornerRadius="3"
+            app:srb_starSize="30dp" />
+
 
     </android.support.constraint.ConstraintLayout>
 

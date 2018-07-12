@@ -52,38 +52,22 @@ public class SubRubrosFragment extends Fragment {
 
     private void setup() {
         TextView tvSubRubro = getView().findViewById(R.id.tvSubRubro);
-        switch (tag) {
-            case "button1":
-                tvSubRubro.setText(getString(R.string.hogarMantenimiento));
-                subRubrosID = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.hogarMantenimientoID)));
-                subRubros = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.hogarMantenimiento)));
-                break;
-            case "button2":
-                tvSubRubro.setText(getString(R.string.serviciosFamilia));
-                subRubrosID = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.serviciosFamiliaID)));
-                subRubros = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.serviciosFamilia)));
-                break;
-            case "button3":
-                tvSubRubro.setText(getString(R.string.obraConstruccion));
-                subRubrosID = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.obraConstruccionID)));
-                subRubros = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.obraConstruccion)));
-                break;
-            case "button4":
-                tvSubRubro.setText(getString(R.string.personalEventual));
-                subRubrosID = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.personalEventualID)));
-                subRubros = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.personalEventual)));
-                break;
-            case "button5":
-                tvSubRubro.setText(getString(R.string.emergencias));
-                subRubrosID = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.emergenciasID)));
-                subRubros = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.emergencias)));
-                break;
-            case "button6":
-                tvSubRubro.setText(getString(R.string.otros));
-                subRubrosID = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.otrosID)));
-                subRubros = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.otros)));
-                break;
-        }
+
+        int id = getResources().getIdentifier(tag,
+                "array",
+                getActivity().getPackageName());
+
+        subRubros = new ArrayList<>(Arrays.asList(getResources().getStringArray(id)));
+
+        id = getResources().getIdentifier(tag + "ID",
+                "array",
+                getActivity().getPackageName());
+        subRubrosID = new ArrayList<>(Arrays.asList(getResources().getStringArray(id)));
+
+        id = getResources().getIdentifier(tag,
+                "string",
+                getActivity().getPackageName());
+        tvSubRubro.setText(getString(id));
     }
 
     private class FragmentViewPagerAdapter extends FragmentPagerAdapter {

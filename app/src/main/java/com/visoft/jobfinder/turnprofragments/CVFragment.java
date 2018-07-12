@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.visoft.jobfinder.ProUser;
+import com.visoft.jobfinder.Objects.ProUser;
 import com.visoft.jobfinder.R;
 import com.visoft.jobfinder.misc.Constants;
 import com.visoft.jobfinder.misc.ErrorAnimator;

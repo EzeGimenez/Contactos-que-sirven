@@ -16,6 +16,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
+import com.visoft.jobfinder.Objects.ProUser;
+import com.visoft.jobfinder.Objects.QualityInfo;
+import com.visoft.jobfinder.Objects.User;
 import com.visoft.jobfinder.misc.Constants;
 import com.visoft.jobfinder.misc.Database;
 import com.visoft.jobfinder.misc.DatabaseTimer;
@@ -89,7 +92,7 @@ public class TurnProActivity extends AppCompatActivity {
         Fragment actualFragment = fragmentManager.findFragmentById(R.id.ContainerTurnProFragments);
         if (actualFragment instanceof RubroGeneralFragment) {
 
-            Intent intent = new Intent(this, UserProfileActivity.class);
+            Intent intent = new Intent(this, OwnUserProfileActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             finish();
@@ -231,6 +234,8 @@ public class TurnProActivity extends AppCompatActivity {
         proUser.setPro(true);
         proUser.setUsername(user.getUsername());
         proUser.setRating(user.getRating());
+        proUser.setEmail(user.getEmail());
+        proUser.setUid(user.getUid());
         proUser.setNumberReviews(user.getNumberReviews());
 
         showLoadingScreen();
@@ -250,10 +255,26 @@ public class TurnProActivity extends AppCompatActivity {
                 .setValue(true).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                Intent intent = new Intent(getApplication(), UserProfileActivity.class);
+                Intent intent = new Intent(getApplication(), OwnUserProfileActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 timer.cancel();
+                saveInQuality();
+            }
+        });
+    }
+
+    private void saveInQuality() {
+        QualityInfo qualityInfo = new QualityInfo();
+        database.child(Constants.FIREBASE_QUALITY_CONTAINER_NAME)
+                .child(mAuth.getCurrentUser().getUid())
+                .setValue(qualityInfo).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Intent intent = new Intent(getApplication(), OwnUserProfileActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+
                 hideLoadingScreen();
                 finish();
             }

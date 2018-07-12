@@ -12,7 +12,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ProgressBar;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,17 +20,19 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.visoft.jobfinder.Objects.ProUser;
+import com.visoft.jobfinder.Objects.User;
 import com.visoft.jobfinder.misc.Constants;
 import com.visoft.jobfinder.misc.Database;
 import com.visoft.jobfinder.misc.DatabaseTimer;
 
-public class UserProfileActivity extends AppCompatActivity {
+public class OwnUserProfileActivity extends AppCompatActivity {
+    private static boolean isRunning;
     private FirebaseUser fbUser;
     private User user;
     private ProUser proUser;
     private FirebaseAuth mAuth;
     private DatabaseReference usersDatabaseUID;
-    private static boolean isRunning;
     private DatabaseTimer timer;
 
     //Componentes gráficas
@@ -39,7 +40,6 @@ public class UserProfileActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private Toolbar toolbar;
     private Menu menu;
-    private Button buttonShowReviews;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +47,10 @@ public class UserProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
 
         this.mAuth = FirebaseAuth.getInstance();
+        if (mAuth.getCurrentUser() == null) {
+            mAuth.signOut();
+            finish();
+        }
         this.usersDatabaseUID = Database.getDatabase()
                 .getReference(
                         Constants.FIREBASE_USERS_CONTAINER_NAME + "/" +
@@ -58,7 +62,6 @@ public class UserProfileActivity extends AppCompatActivity {
         //Inicializacion de componentes gráficas
         progressBarContainer = findViewById(R.id.progressBarContainer);
         progressBar = findViewById(R.id.progressBar);
-        buttonShowReviews = findViewById(R.id.buttonShowReviews);
 
         showLoadingScreen();
 
@@ -80,13 +83,6 @@ public class UserProfileActivity extends AppCompatActivity {
             }
         });
         timer = new DatabaseTimer(8, this, true);
-
-        buttonShowReviews.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                buttonShowReviews.setVisibility(View.GONE);
-            }
-        });
 
 
         //Toolbar
@@ -136,25 +132,11 @@ public class UserProfileActivity extends AppCompatActivity {
     private void iniciarUI() {
 
         if (menu != null && (user != null || proUser != null)) {
-            if (proUser == null && user == null) {
-                mAuth.signOut();
-                finish();
-                return;
-            }
-
-            if (user.getNumberReviews() > 0) {
-                buttonShowReviews.setVisibility(View.VISIBLE);
-                buttonShowReviews.setText(user.getNumberReviews() + getString(R.string.reviews));
-            } else {
-                buttonShowReviews.setVisibility(View.GONE);
-            }
-
             MenuItem convertirEnProIcon = menu.findItem(R.id.convertirEnPro);
             MenuItem editarPerfil = menu.findItem(R.id.edit);
 
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             Bundle bundle = new Bundle();
-
             Fragment fragment;
             String id;
             if ((user == null || user.getIsPro()) && proUser != null) {
@@ -162,7 +144,7 @@ public class UserProfileActivity extends AppCompatActivity {
                 convertirEnProIcon.setVisible(false);
                 fragment = new ProUserFragment();
                 bundle.putSerializable("user", proUser);
-                id = Constants.PRO_USER_FRAGMENT;
+                id = Constants.PRO_USER_FRAGMENT_TAG;
             } else {
                 editarPerfil.setVisible(false);
                 convertirEnProIcon.setVisible(true);
@@ -192,6 +174,10 @@ public class UserProfileActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.signOut:
+                mAuth.signOut();
+                finish();
+                return true;
             case R.id.convertirEnPro:
                 convertirEnPro();
                 return true;

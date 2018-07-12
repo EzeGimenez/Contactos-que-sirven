@@ -67,7 +67,7 @@ public class RubroEspecificoMainFragment extends Fragment {
                     bundle.putString("subRubro", subRubros.get(finalI));
                     fragment.setArguments(bundle);
                     (getActivity()).getSupportFragmentManager().beginTransaction()
-                            .addToBackStack(Constants.RUBRO_ESPECIFICO_MAIN_FRAGMENT_TAG)
+                            .addToBackStack(Constants.SUB_RUBROS_FRAGMENT_TAG)
                             .replace(R.id.ContainerMainFragments, fragment, Constants.SEARCH_RESULT_FRAGMENT_TAG)
                             .commit();
                 }

@@ -3,7 +3,7 @@
     <string-array name="hogarMantenimiento">
         <item>@string/jardineria</item>
         <item>@string/servidumbre</item>
-        <item>@string/controlPlagas</item>
+        <item>@string/controlDePlagas</item>
         <item>@string/arreglosInformaticos</item>
         <item>@string/plomeria</item>
         <item>@string/electricista</item>
@@ -31,7 +31,7 @@
         <item>@string/ingenieria</item>
         <item>@string/personal</item>
         <item>@string/gasista</item>
-        <item>@string/albañil</item>
+        <item>@string/albañileria</item>
         <item>@string/techista</item>
         <item>@string/carpintero</item>
         <item>@string/flete</item>

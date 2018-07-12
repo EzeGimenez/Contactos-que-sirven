@@ -41,12 +41,12 @@
     <string name="domingo">Domingo</string>
     <string name="revisaConexion">Revisa tu conexión</string>
     <string name="resultsFor">Resultados de búsqueda para:</string>
-
+    <string name="calificar_profesional">Calificar Profesional</string>
 
     <!-- Rubros Especificos-->
     <string name="jardineria">Jardinería</string>
     <string name="servidumbre">Servidumbre</string>
-    <string name="controlPlagas">Control de Plagas</string>
+    <string name="controlDePlagas">Control de Plagas</string>
     <string name="arreglosInformaticos">Arreglos Informáticos</string>
     <string name="plomeria">Plomería</string>
     <string name="electricista">Electricista</string>
@@ -66,7 +66,7 @@
     <string name="ingenieria">Ingeniería</string>
     <string name="personal">Personal</string>
     <string name="gasista">Gasista</string>
-    <string name="albañil">Albañilería</string>
+    <string name="albañileria">Albañilería</string>
     <string name="techista">Techista</string>
     <string name="carpintero">Carpintería</string>
     <string name="flete">Flete</string>

@@ -4,7 +4,7 @@
         <item>jardineria</item>
         <item>servidumbre</item>
         <item>controlDePlagas</item>
-        <item>arreglosInformáticos</item>
+        <item>arreglosInformaticos</item>
         <item>plomeria</item>
         <item>electricista</item>
         <item>cerrajeria</item>
@@ -60,7 +60,7 @@
         <item>policia</item>
         <item>bomberos</item>
         <item>defensaCivil</item>
-        <item>DefensaMujer</item>
+        <item>defensaMujer</item>
 
     </string-array>
 

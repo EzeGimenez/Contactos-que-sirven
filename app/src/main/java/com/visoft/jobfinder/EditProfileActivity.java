@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
+import com.visoft.jobfinder.Objects.ProUser;
 import com.visoft.jobfinder.misc.Constants;
 import com.visoft.jobfinder.misc.Database;
 import com.visoft.jobfinder.misc.DatabaseTimer;
@@ -135,7 +136,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 .setValue(proUser).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                Intent intent = new Intent(getApplication(), UserProfileActivity.class);
+                Intent intent = new Intent(getApplication(), OwnUserProfileActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 hideLoadingScreen();
@@ -150,7 +151,7 @@ public class EditProfileActivity extends AppCompatActivity {
         Fragment actualFragment = fragmentManager.findFragmentById(R.id.ContainerTurnProFragments);
         if (actualFragment instanceof ContactoFragment) {
 
-            Intent intent = new Intent(this, UserProfileActivity.class);
+            Intent intent = new Intent(this, OwnUserProfileActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             finish();

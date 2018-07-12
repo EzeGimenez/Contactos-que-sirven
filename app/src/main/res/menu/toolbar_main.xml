@@ -9,9 +9,4 @@
         app:actionLayout="@layout/go_to_profile_icon_layout"
         app:showAsAction="always" />
 
-    <item
-        android:id="@+id/signOut"
-        android:title="@string/cerrar_sesi_n"
-        app:showAsAction="never" />
-
 </menu>
