@@ -2,6 +2,7 @@ package com.visoft.jobfinder;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
@@ -23,6 +24,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.iarcuschin.simpleratingbar.SimpleRatingBar;
+import com.visoft.jobfinder.Objects.ProUser;
 import com.visoft.jobfinder.Objects.QualityInfo;
 import com.visoft.jobfinder.Objects.Review;
 import com.visoft.jobfinder.misc.Constants;
@@ -36,7 +38,7 @@ public class UserReviewActivity extends AppCompatActivity {
     private Review review;
     private DatabaseReference database;
     private QualityInfo qualityInfo;
-    private String uidReviewed;
+    private ProUser proUserReviewed;
     private Map<Integer, View> mapPage;
     private FirebaseAuth mAuth;
 
@@ -53,10 +55,10 @@ public class UserReviewActivity extends AppCompatActivity {
         database = Database.getDatabase().getReference();
         mAuth = FirebaseAuth.getInstance();
         mapPage = new HashMap<Integer, View>();
-        uidReviewed = getIntent().getStringExtra("UID");
+        proUserReviewed = (ProUser) getIntent().getSerializableExtra("user");
 
         database.child(Constants.FIREBASE_QUALITY_CONTAINER_NAME)
-                .child(uidReviewed)
+                .child(proUserReviewed.getUid())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -65,6 +67,18 @@ public class UserReviewActivity extends AppCompatActivity {
                             qualityInfo = new QualityInfo();
                         }
                         setup();
+                        btnNext.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                onForthPressed();
+                            }
+                        });
+                        btnPrev.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                onBackPressed();
+                            }
+                        });
                     }
 
                     @Override
@@ -83,54 +97,6 @@ public class UserReviewActivity extends AppCompatActivity {
             }
         });
 
-        btnNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onForthPressed();
-            }
-        });
-        btnPrev.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-    }
-
-    private void onForthPressed() {
-        int shown = viewPager.getCurrentItem();
-
-        SimpleRatingBar ratingBar = mapPage.get(shown).findViewById(R.id.ratingBar);
-        switch (shown) {
-            case 0:
-
-                viewPager.setCurrentItem(shown + 1);
-                btnPrev.setText(getString(R.string.previo));
-                review.setTiempoResp(ratingBar.getRating());
-
-                break;
-            case 1:
-
-                viewPager.setCurrentItem(shown + 1);
-                review.setAtencion(ratingBar.getRating());
-
-                break;
-            case 2:
-
-                viewPager.setCurrentItem(shown + 1);
-                review.setCalidad(ratingBar.getRating());
-                btnNext.setText(getString(R.string.finalizar));
-
-                break;
-            case 3:
-
-                EditText et = mapPage.get(0).findViewById(R.id.editText);
-                review.setMsg(et.getText().toString());
-                review.setRating(ratingBar.getRating());
-                saveReview();
-
-                break;
-        }
 
     }
 
@@ -163,8 +129,8 @@ public class UserReviewActivity extends AppCompatActivity {
 
         showLoadingScreen();
         database.child(Constants.FIREBASE_REVIEWS_CONTAINER_NAME)
-                .child(uidReviewed)
-                .child(mAuth.getCurrentUser().getUid())
+                .child(proUserReviewed.getUid())
+                .child(proUserReviewed.getNumberReviews() + "")
                 .setValue(review).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -176,32 +142,110 @@ public class UserReviewActivity extends AppCompatActivity {
     private void saveQualityInfo() {
         database
                 .child(Constants.FIREBASE_QUALITY_CONTAINER_NAME)
-                .child(uidReviewed)
+                .child(proUserReviewed.getUid())
                 .setValue(qualityInfo).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                hideLoadingScreen();
-                finish();
+                updateProUserRating();
             }
         });
+    }
+
+    private void updateProUserRating() {
+        final float valueToAdd = review.getRating();
+        float newRating;
+        if (proUserReviewed.getNumberReviews() > 0) {
+            newRating = proUserReviewed.getRating() +
+                    ((valueToAdd - proUserReviewed.getRating()) / proUserReviewed.getNumberReviews());
+        } else {
+            newRating = valueToAdd;
+        }
+        proUserReviewed.setRating(newRating);
+        proUserReviewed.setNumberReviews(proUserReviewed.getNumberReviews() + 1);
+        saveProUser(proUserReviewed);
+    }
+
+    private void saveProUser(ProUser user) {
+        database.child(Constants.FIREBASE_USERS_CONTAINER_NAME)
+                .child(proUserReviewed.getUid())
+                .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                hideLoadingScreen();
+                goBack();
+            }
+        });
+    }
+
+    public void goBack() {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        intent.putExtra("user", proUserReviewed);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
+    }
+
+    private void onForthPressed() {
+        int shown = viewPager.getCurrentItem();
+
+        SimpleRatingBar ratingBar = mapPage.get(shown).findViewById(R.id.ratingBar);
+        switch (shown) {
+            case 0:
+
+                viewPager.setCurrentItem(shown + 1);
+                btnPrev.setText(getString(R.string.previo));
+                review.setTiempoResp(ratingBar.getRating());
+
+                break;
+            case 1:
+
+                viewPager.setCurrentItem(shown + 1);
+                review.setAtencion(ratingBar.getRating());
+
+                break;
+            case 2:
+
+                viewPager.setCurrentItem(shown + 1);
+                review.setCalidad(ratingBar.getRating());
+                btnNext.setText(getString(R.string.finalizar));
+
+                break;
+            case 3:
+
+                EditText et = mapPage.get(shown).findViewById(R.id.editText);
+                review.setMsg(et.getText().toString());
+                review.setRating(ratingBar.getRating());
+                saveReview();
+
+                break;
+        }
+
     }
 
     @Override
     public void onBackPressed() {
         int shown = viewPager.getCurrentItem();
 
+
+        SimpleRatingBar ratingBar = null;
+        if (shown > 0) {
+            ratingBar = mapPage.get(shown - 1).findViewById(R.id.ratingBar);
+        }
         switch (shown) {
             case 0:
-                finish();
+                goBack();
                 break;
             case 1:
+                ratingBar.setRating(review.getTiempoResp());
                 btnPrev.setText(getString(R.string.cancelar));
                 viewPager.setCurrentItem(shown - 1);
                 break;
             case 2:
+                ratingBar.setRating(review.getAtencion());
                 viewPager.setCurrentItem(shown - 1);
                 break;
             case 3:
+                ratingBar.setRating(review.getCalidad());
                 btnNext.setText(getString(R.string.siguiente));
                 viewPager.setCurrentItem(shown - 1);
                 break;

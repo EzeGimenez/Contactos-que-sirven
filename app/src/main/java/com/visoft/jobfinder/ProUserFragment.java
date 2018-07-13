@@ -1,9 +1,11 @@
 package com.visoft.jobfinder;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -13,7 +15,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -27,6 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.iarcuschin.simpleratingbar.SimpleRatingBar;
 import com.visoft.jobfinder.Objects.ProUser;
 import com.visoft.jobfinder.Objects.QualityInfo;
+import com.visoft.jobfinder.Objects.Review;
 import com.visoft.jobfinder.misc.Constants;
 import com.visoft.jobfinder.misc.Database;
 import com.visoft.jobfinder.misc.MapHighlighter;
@@ -46,7 +51,7 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback {
             tvCV, tvRubro;
     private SimpleRatingBar ratingBar;
     private MapView mapView;
-    private Button btnCalificar;
+    private Button btnCalificar, btnShowReviews;
     //private ImageView ivProfilePic;
 
 
@@ -55,7 +60,7 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback {
                              Bundle savedInstanceState) {
 
         user = (ProUser) getArguments().getSerializable("user");
-        database = Database.getDatabase().getReference(Constants.FIREBASE_QUALITY_CONTAINER_NAME);
+        database = Database.getDatabase().getReference();
 
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_pro_user, container, false);
@@ -75,6 +80,7 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback {
         ratingBar = view.findViewById(R.id.ratingBar);
         mapView = view.findViewById(R.id.map);
         btnCalificar = view.findViewById(R.id.btnReviewUser);
+        btnShowReviews = view.findViewById(R.id.btnShowReviews);
 
         isRunning = true;
 
@@ -140,9 +146,9 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback {
 
         if (user.getNumberReviews() > 0) {
             ratingBar.setRating(user.getRating());
-            tvNumberReviews.setText(user.getRating() + "");
+            tvNumberReviews.setText(String.format("%.1f", user.getRating()));
         } else {
-            tvNumberReviews.setText("0 " + getText(R.string.reviews));
+            tvNumberReviews.setText("0");
             ratingBar.setRating(0);
         }
 
@@ -154,18 +160,30 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getContext(), UserReviewActivity.class);
-                    intent.putExtra("UID", user.getUid());
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.putExtra("user", user);
                     startActivity(intent);
+                    getActivity().finish();
                 }
             });
         }
 
+        if (user.getNumberReviews() > 0) {
+            btnShowReviews.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showComments();
+                }
+            });
+        } else {
+            btnShowReviews.setVisibility(View.INVISIBLE);
+        }
+
         getInsignias();
-        getComments();
     }
 
     private void getInsignias() {
-        database.child(user.getUid()).addValueEventListener(new ValueEventListener() {
+        database.child(Constants.FIREBASE_QUALITY_CONTAINER_NAME).child(user.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 QualityInfo qualityInfo = dataSnapshot.getValue(QualityInfo.class);
@@ -181,9 +199,66 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback {
         });
     }
 
-    public Object getComments() {
+    public void showComments() {
 
-        return null;
+        final CountDownTimer timer = new CountDownTimer(8000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                Toast.makeText(getContext(), "Revisa tu conexión", Toast.LENGTH_SHORT).show();
+                getActivity().onBackPressed();
+            }
+        }.start();
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+        final View view = getLayoutInflater().inflate(R.layout.reviews_alert_dialog, null);
+        final List<Review> reviews = new ArrayList<Review>();
+
+        final LinearLayout containerReviews = view.findViewById(R.id.ContainerReviews);
+
+        builder.setView(view);
+        builder.setPositiveButton(R.string.aceptar, null);
+        builder.create().show();
+
+        database
+                .child(Constants.FIREBASE_REVIEWS_CONTAINER_NAME)
+                .child(user.getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        timer.cancel();
+                        for (DataSnapshot d : dataSnapshot.getChildren()) {
+                            Review r = d.getValue(Review.class);
+                            if (r != null) {
+                                reviews.add(r);
+                            }
+                        }
+
+                        for (Review r : reviews) {
+                            View comment = getLayoutInflater().inflate(R.layout.comment, null);
+                            TextView tvUsername = comment.findViewById(R.id.tvUsername);
+                            TextView msg = comment.findViewById(R.id.tvMessage);
+                            SimpleRatingBar ratingBar = comment.findViewById(R.id.ratingBar);
+
+                            tvUsername.setText(r.getReviewerUsername());
+                            msg.setText(r.getMsg());
+                            ratingBar.setRating(r.getRating());
+
+                            containerReviews.addView(comment);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
     }
 
     @Override

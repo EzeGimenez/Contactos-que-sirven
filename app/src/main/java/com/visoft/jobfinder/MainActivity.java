@@ -15,11 +15,11 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,9 +38,6 @@ import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity implements LocationListener {
     private FirebaseAuth mAuth;
-    private Toolbar toolbar;
-    private Menu menu;
-    private ConstraintLayout fragmentContainer;
     private LocationManager locationManager;
     private Location location;
     private boolean hasSearched;
@@ -48,7 +45,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private DatabaseReference database;
 
     //Componentes graficas
+    private Toolbar toolbar;
+    private Menu menu;
     private SearchView searchView;
+    private ConstraintLayout fragmentContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +80,41 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
             }
         }
+        final SearchResultFragment fragment = new SearchResultFragment();
 
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (newText.length() > 0) {
+                    Fragment fragment1 = getSupportFragmentManager().findFragmentById(R.id.ContainerMainFragments);
+                    if (!(fragment1 instanceof SearchResultFragment) || !fragment.isVisible()) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("searchQuery", newText);
+                        fragment.setArguments(bundle);
+                        fragment.resetSearch();
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.ContainerMainFragments, fragment, Constants.SEARCH_RESULT_FRAGMENT_TAG)
+                                .addToBackStack(Constants.MAIN_PAGE_FRAGMENT_TAG)
+                                .commit();
+                    } else {
+                        fragment.searchForQuery(newText);
+                    }
+                    return true;
+                }
+                Fragment fragment1 = getSupportFragmentManager().findFragmentByTag(Constants.MAIN_PAGE_FRAGMENT_TAG);
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.ContainerMainFragments, fragment1, Constants.MAIN_PAGE_FRAGMENT_TAG)
+                        .addToBackStack(null)
+                        .commit();
+
+                return false;
+            }
+        });
     }
 
     @Override
@@ -174,15 +208,20 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
             if (hasSearched) {
                 String searchRequest = getSharedPreferences(Constants.SHARED_PREF_NAME, MODE_PRIVATE).getString("searchRequest", "");
+                boolean isRubro = getSharedPreferences(Constants.SHARED_PREF_NAME, MODE_PRIVATE).getBoolean("isRubro", true);
                 Fragment searchResultFragment = new SearchResultFragment();
 
                 Bundle bundle = new Bundle();
-                bundle.putString("subRubroID", searchRequest);
-                int id = getResources().getIdentifier(searchRequest,
-                        "string",
-                        getPackageName());
-                String subRubro = getResources().getString(id);
-                bundle.putString("subRubro", subRubro);
+                if (isRubro) {
+                    bundle.putString("subRubroID", searchRequest);
+                    int id = getResources().getIdentifier(searchRequest,
+                            "string",
+                            getPackageName());
+                    String subRubro = getResources().getString(id);
+                    bundle.putString("subRubro", subRubro);
+                } else {
+                    bundle.putString("searchQuery", searchRequest);
+                }
 
                 searchResultFragment.setArguments(bundle);
                 getSupportFragmentManager().beginTransaction()

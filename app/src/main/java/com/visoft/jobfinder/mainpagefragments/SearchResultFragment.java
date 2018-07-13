@@ -19,7 +19,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -27,14 +29,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.iarcuschin.simpleratingbar.SimpleRatingBar;
 import com.visoft.jobfinder.MainActivity;
 import com.visoft.jobfinder.Objects.ProUser;
+import com.visoft.jobfinder.Objects.User;
 import com.visoft.jobfinder.ProfileActivity;
 import com.visoft.jobfinder.R;
 import com.visoft.jobfinder.misc.Constants;
+import com.visoft.jobfinder.misc.Database;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,7 +47,7 @@ import java.util.List;
 
 public class SearchResultFragment extends Fragment {
     private FirebaseAuth mAuth;
-    private String subRubroID, subRubro;
+    private String subRubroID, subRubro, searchQuery;
     private DatabaseReference database;
     private DatabaseReference databaseUsers;
     private ArrayList<ProUser> results;
@@ -54,6 +57,7 @@ public class SearchResultFragment extends Fragment {
     private int i = 0;
     private int j = 0;
     private SharedPreferences sharedPref;
+    private SearchableAdapter adapter;
 
     //UI components
     private ListView listView;
@@ -81,28 +85,68 @@ public class SearchResultFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         mAuth = FirebaseAuth.getInstance();
-        database = FirebaseDatabase.getInstance().getReference();
+        database = Database.getDatabase().getReference();
         databaseUsers = database.child(Constants.FIREBASE_USERS_CONTAINER_NAME);
+
 
         Bundle args = getArguments();
         if (args != null) {
             subRubroID = args.getString("subRubroID");
             subRubro = args.getString("subRubro");
+            searchQuery = args.getString("searchQuery");
         }
-
 
         //UI comoponents initialization
         listView = view.findViewById(R.id.ListViewResult);
         tvResultsFor = view.findViewById(R.id.tvResultsFor);
 
-        tvResultsFor.setText(getString(R.string.resultsFor) + " " + subRubro);
 
-        if (results == null && subRubroID != null) {
-            getResults();
+        if (subRubroID != null) {
+            getResultsFromSubArea();
+            tvResultsFor.setText(getString(R.string.resultsFor) + " " + subRubro);
+        } else if (searchQuery != null) {
+            searchForQuery(searchQuery);
         }
     }
 
-    private void getResults() {
+    public void resetSearch() {
+        adapter = null;
+    }
+
+    public void searchForQuery(final String a) {
+        tvResultsFor.setText(getString(R.string.resultsFor) + " " + a);
+
+        sharedPref.edit().putString("searchRequest", a).putBoolean("isRubro", false).commit();
+
+        if (adapter == null) {
+            results = new ArrayList<ProUser>();
+            databaseUsers.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                        User user = ds.getValue(User.class);
+                        if (user == null || user.getIsPro()) {
+                            ProUser proUser = ds.getValue(ProUser.class);
+                            if (proUser != null && proUser.getUsername().toLowerCase().contains(a.toLowerCase())) {
+                                results.add(proUser);
+                            }
+                        }
+                    }
+                    i = j = 0;
+                    setAdapter();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        } else {
+            adapter.getFilter().filter(a);
+        }
+    }
+
+    private void getResultsFromSubArea() {
         results = new ArrayList<>();
         showLoadingScreen();
         timer = new CountDownTimer(10 * 1000, 1000) {
@@ -165,11 +209,14 @@ public class SearchResultFragment extends Fragment {
     private void setAdapter() {
         if (i == j) {
             if (results.size() > 0) {
-                if (results.size() > 1) {
-                    Collections.sort(results, new ProUserComparator());
+                Collections.sort(results, new ProUserComparator());
+                if (subRubroID != null) {
+                    sharedPref.edit().putString("searchRequest", subRubroID).putBoolean("isRubro", true).commit();
+                } else {
+                    sharedPref.edit().putString("searchRequest", searchQuery).putBoolean("isRubro", false).commit();
                 }
-                sharedPref.edit().putString("searchRequest", subRubroID).commit();
-                listView.setAdapter(new ListViewSearchAdapter(getContext(), R.layout.profile_search_result_row, results));
+                adapter = new SearchableAdapter(getContext(), results);
+                listView.setAdapter(adapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -190,6 +237,18 @@ public class SearchResultFragment extends Fragment {
             timer.cancel();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        Bundle args = getArguments();
+        if (args != null) {
+            subRubroID = args.getString("subRubroID");
+            subRubro = args.getString("subRubro");
+            searchQuery = args.getString("searchQuery");
+        }
+    }
+
     private void showLoadingScreen() {
         ConstraintLayout progressBar = getView().findViewById(R.id.progressBarContainer);
         progressBar.setVisibility(View.VISIBLE);
@@ -203,34 +262,6 @@ public class SearchResultFragment extends Fragment {
     private void showSnackBar(String msg) {
         Snackbar.make(getActivity().findViewById(R.id.rootContainer),
                 msg, Snackbar.LENGTH_SHORT).show();
-    }
-
-    private class ListViewSearchAdapter extends ArrayAdapter<ProUser> {
-
-
-        public ListViewSearchAdapter(@NonNull Context context, int resource, @NonNull List<ProUser> objects) {
-            super(context, resource, objects);
-        }
-
-        @NonNull
-        @Override
-        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-            LayoutInflater inflater = getLayoutInflater();
-            View view = inflater.inflate(R.layout.profile_search_result_row, null);
-            TextView tvUsername = view.findViewById(R.id.tvUsername);
-            TextView tvRubro = view.findViewById(R.id.tvRubro);
-            TextView tvNumReviews = view.findViewById(R.id.tvNumReviews);
-            SimpleRatingBar ratingBar = view.findViewById(R.id.ratingBar);
-
-            ProUser user = results.get(position);
-
-            tvUsername.setText(user.getUsername());
-            tvRubro.setText(subRubro);
-            tvNumReviews.setText(user.getNumberReviews() + " " + getString(R.string.reviews));
-            ratingBar.setRating(user.getRating());
-
-            return view;
-        }
     }
 
     private class ProUserComparator implements Comparator<ProUser> {
@@ -278,6 +309,118 @@ public class SearchResultFragment extends Fragment {
 
 
             //return (int) ((p1.getNumberReviews() - p2.getNumberReviews()) + 5 * (p1.getCalidad() - p2.getCalidad()));
+        }
+    }
+
+    private class SearchableAdapter extends BaseAdapter implements Filterable {
+
+        private List<ProUser> originalData;
+        private List<ProUser> filteredData;
+        private LayoutInflater inflater;
+        private ItemFilter mFilter = new ItemFilter();
+
+        public SearchableAdapter(Context context, List<ProUser> data) {
+            this.filteredData = data;
+            this.originalData = data;
+            inflater = LayoutInflater.from(context);
+        }
+
+        public int getCount() {
+            return filteredData.size();
+        }
+
+        public Object getItem(int position) {
+            return filteredData.get(position);
+        }
+
+        public long getItemId(int position) {
+            return position;
+        }
+
+        public View getView(int position, View convertView, ViewGroup parent) {
+            // A ViewHolder keeps references to children views to avoid unnecessary calls
+            // to findViewById() on each row.
+            ViewHolder holder;
+
+            // When convertView is not null, we can reuse it directly, there is no need
+            // to reinflate it. We only inflate a new View when the convertView supplied
+            // by ListView is null.
+            if (convertView == null) {
+                convertView = inflater.inflate(R.layout.profile_search_result_row, null);
+
+                // Creates a ViewHolder and store references to the two children views
+                // we want to bind data to.
+                holder = new ViewHolder();
+                holder.tvUsername = convertView.findViewById(R.id.tvUsername);
+                holder.tvRubro = convertView.findViewById(R.id.tvRubro);
+                holder.tvNumReviews = convertView.findViewById(R.id.tvNumReviews);
+                holder.ratingBar = convertView.findViewById(R.id.ratingBar);
+                // Bind the data efficiently with the holder.
+
+                convertView.setTag(holder);
+            } else {
+                // Get the ViewHolder back to get fast access to the TextView
+                // and the ImageView.
+                holder = (ViewHolder) convertView.getTag();
+            }
+
+            ProUser user = results.get(position);
+            int id = getResources().getIdentifier(user.getRubroEspecifico(),
+                    "string",
+                    getActivity().getPackageName());
+            String subRubro = getResources().getString(id);
+            holder.tvUsername.setText(user.getUsername());
+            holder.tvRubro.setText(subRubro);
+            holder.tvNumReviews.setText(user.getNumberReviews() + " " + getString(R.string.reviews));
+            holder.ratingBar.setRating(user.getRating());
+
+            return convertView;
+        }
+
+        public Filter getFilter() {
+            return mFilter;
+        }
+
+        private class ViewHolder {
+            TextView tvUsername, tvRubro, tvNumReviews;
+            SimpleRatingBar ratingBar;
+        }
+
+        private class ItemFilter extends Filter {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+
+                String filterString = constraint.toString().toLowerCase();
+
+                FilterResults results = new FilterResults();
+
+                final List<ProUser> list = originalData;
+
+                int count = list.size();
+                final ArrayList<ProUser> nlist = new ArrayList<ProUser>(count);
+
+                String filterableString;
+
+                for (int i = 0; i < count; i++) {
+                    filterableString = list.get(i).getUsername();
+                    if (filterableString.toLowerCase().contains(filterString)) {
+                        nlist.add(list.get(i));
+                    }
+                }
+
+                results.values = nlist;
+                results.count = nlist.size();
+
+                return results;
+            }
+
+            @SuppressWarnings("unchecked")
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                filteredData = (ArrayList<ProUser>) results.values;
+                notifyDataSetChanged();
+            }
+
         }
     }
 }

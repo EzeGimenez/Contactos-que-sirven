@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
@@ -24,6 +25,15 @@
         <item name="android:textColor">@color/colorPrimaryDark</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">0dp</item>
+    </style>
+
+    <style name="SearchView" parent="Widget.AppCompat.SearchView">
+        <!-- Gets rid of the search icon
+        <item name="searchIcon">@drawable/ic_search</item>-->
+        <!-- Gets rid of the "underline" in the text -->
+        <item name="queryBackground">@color/colorPrimary</item>
+        <!-- The hint text that appears when the user has not typed anything -->
+        <item name="queryHint">@string/search_view_hint</item>
     </style>
 
 
