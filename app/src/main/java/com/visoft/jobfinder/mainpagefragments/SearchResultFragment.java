@@ -127,7 +127,7 @@ public class SearchResultFragment extends Fragment {
                         User user = ds.getValue(User.class);
                         if (user == null || user.getIsPro()) {
                             ProUser proUser = ds.getValue(ProUser.class);
-                            if (proUser != null && proUser.getUsername().toLowerCase().contains(a.toLowerCase())) {
+                            if (!proUser.getUid().equals(mAuth.getCurrentUser().getUid()) && proUser != null && proUser.getUsername().toLowerCase().contains(a.toLowerCase())) {
                                 results.add(proUser);
                             }
                         }
@@ -338,33 +338,23 @@ public class SearchResultFragment extends Fragment {
         }
 
         public View getView(int position, View convertView, ViewGroup parent) {
-            // A ViewHolder keeps references to children views to avoid unnecessary calls
-            // to findViewById() on each row.
             ViewHolder holder;
 
-            // When convertView is not null, we can reuse it directly, there is no need
-            // to reinflate it. We only inflate a new View when the convertView supplied
-            // by ListView is null.
             if (convertView == null) {
                 convertView = inflater.inflate(R.layout.profile_search_result_row, null);
 
-                // Creates a ViewHolder and store references to the two children views
-                // we want to bind data to.
                 holder = new ViewHolder();
                 holder.tvUsername = convertView.findViewById(R.id.tvUsername);
                 holder.tvRubro = convertView.findViewById(R.id.tvRubro);
                 holder.tvNumReviews = convertView.findViewById(R.id.tvNumReviews);
                 holder.ratingBar = convertView.findViewById(R.id.ratingBar);
-                // Bind the data efficiently with the holder.
 
                 convertView.setTag(holder);
             } else {
-                // Get the ViewHolder back to get fast access to the TextView
-                // and the ImageView.
                 holder = (ViewHolder) convertView.getTag();
             }
 
-            ProUser user = results.get(position);
+            ProUser user = filteredData.get(position);
             int id = getResources().getIdentifier(user.getRubroEspecifico(),
                     "string",
                     getActivity().getPackageName());
