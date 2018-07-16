@@ -1,9 +1,11 @@
 package com.visoft.jobfinder;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
@@ -24,10 +26,14 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.iarcuschin.simpleratingbar.SimpleRatingBar;
 import com.visoft.jobfinder.Objects.ProUser;
 import com.visoft.jobfinder.Objects.QualityInfo;
@@ -47,11 +53,11 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback {
     private boolean isRunning;
 
     //Componentes graficas
-    private TextView tvUsername, tvNumberReviews, tvTelefono, tvHrAtencion, tvEmail,
-            tvCV, tvRubro;
+    private TextView tvUsername, tvNumberReviews, tvHrAtencion, tvRubro;
     private SimpleRatingBar ratingBar;
     private MapView mapView;
-    private Button btnCalificar, btnShowReviews;
+    private Button btnMsg, btnShowReviews, btnCV, btnShowContactInfo;
+    private ImageView ivProfilePic;
     //private ImageView ivProfilePic;
 
 
@@ -73,14 +79,14 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback {
         tvNumberReviews = view.findViewById(R.id.tvNumberReviews);
         tvUsername = view.findViewById(R.id.tvUsername);
         tvHrAtencion = view.findViewById(R.id.tvHrAtencion);
-        tvTelefono = view.findViewById(R.id.tvTelefono);
-        tvEmail = view.findViewById(R.id.tvEmail);
-        tvCV = view.findViewById(R.id.tvCV);
+        btnCV = view.findViewById(R.id.btnCV);
         tvRubro = view.findViewById(R.id.tvRubro);
         ratingBar = view.findViewById(R.id.ratingBar);
         mapView = view.findViewById(R.id.map);
-        btnCalificar = view.findViewById(R.id.btnReviewUser);
         btnShowReviews = view.findViewById(R.id.btnShowReviews);
+        btnMsg = view.findViewById(R.id.button);
+        btnShowContactInfo = view.findViewById(R.id.btnShowContactInfo);
+        ivProfilePic = view.findViewById(R.id.ivProfilePic);
 
         isRunning = true;
 
@@ -90,10 +96,9 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback {
         iniciarUI();
     }
 
+    @SuppressLint("SetTextI18n")
     private void iniciarUI() {
         tvUsername.setText(user.getUsername());
-        String tel1 = user.getTelefono1();
-        String tel2 = user.getTelefono2();
 
         int id = getResources().getIdentifier(user.getRubroGeneral() + "ID",
                 "array",
@@ -115,12 +120,6 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback {
 
         tvRubro.setText(rubroGral + " - " + rubroEsp);
 
-        if (tel2.length() > 0) {
-            tvTelefono.setText(tel1 + " / " + tel2);
-        } else {
-            tvTelefono.setText(tel1);
-        }
-
         String[] diasL = getResources().getStringArray(R.array.dias);
         String[] hrAtencion = user.getHoraAtencion().split(" - ");
         String[] diasAtencion = new String[2];
@@ -128,47 +127,36 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback {
         diasAtencion[1] = diasL[user.getDiasAtencion() % 10];
 
         tvHrAtencion.setText(diasAtencion[0] + " " + getString(R.string.a) + " " + diasAtencion[1]
-                + ", " + hrAtencion[0] + " " + getString(R.string.a) + " " + hrAtencion[1]);
+                + "\n " + hrAtencion[0] + " " + getString(R.string.a) + " " + hrAtencion[1]);
 
-        if (user.getShowEmail()) {
-            tvEmail.setVisibility(View.VISIBLE);
-            tvEmail.setText(user.getEmail());
-        } else {
-            tvEmail.setVisibility(View.GONE);
-        }
-        String cv = user.getCvText();
+        btnShowContactInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showContactInfo();
+            }
+        });
+
+        final String cv = user.getCvText();
         if (cv.trim().length() > 0) {
-            tvCV.setVisibility(View.VISIBLE);
-            tvCV.setText(cv);
+            btnCV.setVisibility(View.VISIBLE);
+            btnCV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setMessage(cv);
+                    builder.setTitle(R.string.descripcion_personal);
+                    builder.setPositiveButton(getString(R.string.aceptar), null);
+                    builder.create().show();
+                }
+            });
         } else {
-            tvCV.setVisibility(View.GONE);
+            btnCV.setVisibility(View.GONE);
         }
 
         if (user.getNumberReviews() > 0) {
             ratingBar.setRating(user.getRating());
             tvNumberReviews.setText(String.format("%.1f", user.getRating()));
-        } else {
-            tvNumberReviews.setText("0");
-            ratingBar.setRating(0);
-        }
-
-        if (getActivity() instanceof OwnUserProfileActivity) {
-            ((OwnUserProfileActivity) getActivity()).hideLoadingScreen();
-            btnCalificar.setVisibility(View.GONE);
-        } else {
-            btnCalificar.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(getContext(), UserReviewActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    intent.putExtra("user", user);
-                    startActivity(intent);
-                    getActivity().finish();
-                }
-            });
-        }
-
-        if (user.getNumberReviews() > 0) {
+            btnShowReviews.setText(user.getNumberReviews() + "");
             btnShowReviews.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -176,10 +164,41 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback {
                 }
             });
         } else {
-            btnShowReviews.setVisibility(View.INVISIBLE);
+            tvNumberReviews.setText("0");
+            ratingBar.setRating(0);
+            btnShowReviews.setVisibility(View.GONE);
         }
 
+        if (getActivity() instanceof OwnUserProfileActivity) {
+            ((OwnUserProfileActivity) getActivity()).hideLoadingScreen();
+            btnMsg.setVisibility(View.GONE);
+        }
+        getProfilePic();
         getInsignias();
+    }
+
+    private void getProfilePic() {
+        if (user.getHasPic()) {
+            StorageReference storage = FirebaseStorage.getInstance().getReference();
+
+            StorageReference userRef = storage.child(Constants.FIREBASE_USERS_CONTAINER_NAME + "/" + user.getUid() + ".jpg");
+
+            userRef.getBytes(1024 * 1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+                    Bitmap bm = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+
+                    ivProfilePic.setImageBitmap(bm);
+                    ivProfilePic.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    Toast.makeText(getContext(), "onFailure", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
     }
 
     private void getInsignias() {
@@ -197,6 +216,47 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback {
 
             }
         });
+    }
+
+    private void showContactInfo() {
+        View view = getLayoutInflater().inflate(R.layout.contact_info, null);
+        View containerTel2 = view.findViewById(R.id.containerTel2);
+        View containerEmail = view.findViewById(R.id.containerMail);
+
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO call number
+            }
+        };
+
+        view.findViewById(R.id.btnCall1).setOnClickListener(listener);
+        TextView tvTel1 = view.findViewById(R.id.tvTel1);
+        tvTel1.setText(user.getTelefono1());
+
+        if (user.getTelefono2().isEmpty()) {
+            containerTel2.setVisibility(View.GONE);
+
+        } else {
+            TextView tvTel2 = view.findViewById(R.id.tvTel2);
+            tvTel2.setText(user.getTelefono2());
+            view.findViewById(R.id.btnCall2).setOnClickListener(listener);
+        }
+
+        if (!user.getShowEmail()) {
+            containerEmail.setVisibility(View.GONE);
+
+        } else {
+            TextView tvEmail = view.findViewById(R.id.tvEmail);
+            tvEmail.setText(user.getEmail());
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setView(view);
+        builder.setTitle(R.string.contact_info);
+        builder.setPositiveButton(R.string.aceptar, null);
+        builder.create().show();
+
     }
 
     public void showComments() {

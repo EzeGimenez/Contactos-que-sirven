@@ -22,6 +22,7 @@ public abstract class Constants {
     public static final String RUBRO_GENERAL_FRAGMENT_TAG = "RubroGeneralFragment";
     public static final String SUB_RUBROS_FRAGMENT_TAG = "SubRubrosFragment";
     public static final String SEARCH_RESULT_FRAGMENT_TAG = "SearchResultFragment";
+    public static final String CHOOSE_PIC_FRAGMENT_TAG = "ChoosePicFragment";
 
     /**
      * Firebase database
@@ -40,4 +41,5 @@ public abstract class Constants {
     public static final int MIN_TIEMPO_RESP_INSIGNIA = 30;
     public static final int MIN_ATENCION_INSIGNIA = 50;
     public static final String SHARED_PREF_NAME = "SharedPref";
+
 }

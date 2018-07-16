@@ -1,10 +1,13 @@
 package com.visoft.jobfinder;
 
+import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.visoft.jobfinder.Objects.ProUser;
@@ -47,5 +50,34 @@ public class ProfileActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.black_transparent)));
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.calificar:
+                Intent intent = new Intent(ProfileActivity.this, UserReviewActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra("user", shownUser);
+                startActivity(intent);
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.toolbar_perfil, menu);
+        this.menu = menu;
+        menu.findItem(R.id.edit).setVisible(false);
+        menu.findItem(R.id.convertirEnPro).setVisible(false);
+        menu.findItem(R.id.signOut).setVisible(false);
+        return true;
     }
 }

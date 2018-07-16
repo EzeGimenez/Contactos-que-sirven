@@ -107,6 +107,13 @@
     <string name="show_reviews">Mostrar Reseñas</string>
     <string name="registrarse">Registrarse</string>
     <string name="search_view_hint">Buscar por Nombre</string>
+    <string name="descripcion_personal">Descripción personal</string>
+    <string name="contact_info">Información de Contacto</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="selecciona_foto">Añade una foto</string>
+    <string name="calificar">Hacer una reseña</string>
 
 
 </resources>

@@ -107,5 +107,9 @@
     <string name="show_reviews">Show Reviews</string>
     <string name="registrarse">Sign Up</string>
     <string name="search_view_hint">Search Name</string>
+    <string name="descripcion_personal">Personal description</string>
+    <string name="contact_info">Contact Info</string>
+    <string name="selecciona_foto">Add a picture</string>
+    <string name="calificar">Review user</string>
 
 </resources>

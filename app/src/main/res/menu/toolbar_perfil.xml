@@ -16,4 +16,9 @@
         android:id="@+id/signOut"
         android:title="@string/cerrar_sesi_n"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/calificar"
+        android:title="@string/calificar"
+        app:showAsAction="never" />
 </menu>

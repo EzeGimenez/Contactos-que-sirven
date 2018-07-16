@@ -127,7 +127,7 @@ public class SearchResultFragment extends Fragment {
                         User user = ds.getValue(User.class);
                         if (user == null || user.getIsPro()) {
                             ProUser proUser = ds.getValue(ProUser.class);
-                            if (!proUser.getUid().equals(mAuth.getCurrentUser().getUid()) && proUser != null && proUser.getUsername().toLowerCase().contains(a.toLowerCase())) {
+                            if (proUser != null && !proUser.getUid().equals(mAuth.getCurrentUser().getUid()) && proUser.getUsername().toLowerCase().contains(a.toLowerCase())) {
                                 results.add(proUser);
                             }
                         }

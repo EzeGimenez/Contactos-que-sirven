@@ -83,10 +83,9 @@
         android:id="@+id/sFecha1"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toStartOf="@+id/sFecha2"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/textView7"
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
     <TextView
@@ -116,18 +115,20 @@
         android:id="@+id/sHora1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:layout_marginTop="24dp"
-        app:layout_constraintEnd_toStartOf="@+id/sHora2"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/sFecha1"
+        app:layout_constraintStart_toStartOf="@+id/sFecha1"
         app:layout_constraintTop_toBottomOf="@+id/sFecha1" />
 
     <Spinner
         android:id="@+id/sHora2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/sHora1"
+        app:layout_constraintEnd_toEndOf="@+id/sFecha2"
+        app:layout_constraintStart_toStartOf="@+id/sFecha2"
         app:layout_constraintTop_toBottomOf="@+id/sFecha2" />
 
     <TextView

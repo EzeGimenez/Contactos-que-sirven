@@ -1,6 +1,7 @@
 package com.visoft.jobfinder;
 
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
@@ -98,7 +99,6 @@ public class OwnUserProfileActivity extends AppCompatActivity {
                 goBack();
             }
         });
-
     }
 
     private void getProUser() {
@@ -130,7 +130,7 @@ public class OwnUserProfileActivity extends AppCompatActivity {
     }
 
     private void iniciarUI() {
-
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.black_transparent)));
         if (menu != null && (user != null || proUser != null)) {
             MenuItem convertirEnProIcon = menu.findItem(R.id.convertirEnPro);
             MenuItem editarPerfil = menu.findItem(R.id.edit);
@@ -222,6 +222,7 @@ public class OwnUserProfileActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.toolbar_perfil, menu);
         this.menu = menu;
+        menu.findItem(R.id.calificar).setVisible(false);
         iniciarUI();
         return true;
     }

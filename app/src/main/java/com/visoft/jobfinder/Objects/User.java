@@ -9,7 +9,7 @@ public class User implements Serializable {
     protected String username, email, uid;
     protected float rating;
     protected int numberReviews;
-    protected boolean isPro;
+    protected boolean isPro, hasPic;
 
     /**
      * Constructor de la clase
@@ -63,5 +63,13 @@ public class User implements Serializable {
 
     public void setUid(String uid) {
         this.uid = uid;
+    }
+
+    public boolean getHasPic() {
+        return this.hasPic;
+    }
+
+    public void setHasPic(boolean p) {
+        this.hasPic = p;
     }
 }
