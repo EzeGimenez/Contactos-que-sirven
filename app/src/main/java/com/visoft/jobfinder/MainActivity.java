@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -67,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         //Creacion de toolbar_main
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.black_transparent)));
 
         //Getting one location
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -115,6 +116,16 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 return false;
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.ContainerMainFragments);
+        if (fragment instanceof MainPageFragment) {
+            finish();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override
@@ -185,7 +196,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private void updateUI(@Nullable FirebaseUser user) {
         final MenuItem goToProfileItem = menu.findItem(R.id.goToProfile);
         if (user != null) { // esta iniciado sesion
-
             searchView.setVisibility(View.VISIBLE);
 
             View view = menu.findItem(R.id.goToProfile).getActionView();

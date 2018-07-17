@@ -111,5 +111,7 @@
     <string name="contact_info">Contact Info</string>
     <string name="selecciona_foto">Add a picture</string>
     <string name="calificar">Review user</string>
+    <string name="eliminar_cuenta">Delete account</string>
+    <string name="seguro_eliminar">Are you sure you want to delete your account?</string>
 
 </resources>

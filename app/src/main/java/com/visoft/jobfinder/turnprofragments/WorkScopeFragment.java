@@ -67,6 +67,14 @@ public class WorkScopeFragment extends Fragment implements OnMapReadyCallback {
                     new LatLng(savedInstance.getDouble("latStart"),
                             savedInstance.getDouble("lngStart")),
                     savedInstance.getFloat("zoomStart")));
+        } else {
+            Bundle args = getArguments();
+            if (args != null) {
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                        new LatLng(args.getDouble("latStart"),
+                                args.getDouble("lngStart")),
+                        args.getFloat("zoomStart")));
+            }
         }
         getActivity().findViewById(R.id.btnNext).setEnabled(true);
     }

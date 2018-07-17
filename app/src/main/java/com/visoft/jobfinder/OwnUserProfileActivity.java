@@ -1,5 +1,6 @@
 package com.visoft.jobfinder;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -21,6 +23,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.visoft.jobfinder.Objects.ProUser;
 import com.visoft.jobfinder.Objects.User;
 import com.visoft.jobfinder.misc.Constants;
@@ -84,7 +88,6 @@ public class OwnUserProfileActivity extends AppCompatActivity {
             }
         });
         timer = new DatabaseTimer(8, this, true);
-
 
         //Toolbar
         toolbar = findViewById(R.id.toolbar);
@@ -184,9 +187,60 @@ public class OwnUserProfileActivity extends AppCompatActivity {
             case R.id.edit:
                 editarPerfil();
                 return true;
+            case R.id.eliminarCuenta:
+                eliminarCuenta();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void eliminarCuenta() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.seguro_eliminar);
+        builder.setNegativeButton(R.string.cancelar, null);
+        builder.setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                DatabaseReference rootRef = Database.getDatabase().getReference();
+
+                //removing from users;
+                rootRef.child(Constants.FIREBASE_USERS_CONTAINER_NAME).child(user.getUid()).removeValue();
+
+                //proUser removing
+                if (user.getIsPro() && proUser != null) {
+                    //Removing from rubros
+                    rootRef
+                            .child(Constants.FIREBASE_RUBRO_CONTAINER_NAME)
+                            .child(proUser.getRubroEspecifico())
+                            .child(proUser.getUid())
+                            .removeValue();
+                    //removing reviews
+                    rootRef
+                            .child(Constants.FIREBASE_REVIEWS_CONTAINER_NAME)
+                            .child(proUser.getUid())
+                            .removeValue();
+                    //removing user Quality
+                    rootRef
+                            .child(Constants.FIREBASE_QUALITY_CONTAINER_NAME)
+                            .child(proUser.getUid())
+                            .removeValue();
+                }
+
+                //Removing image
+                StorageReference storage = FirebaseStorage.getInstance().getReference();
+                StorageReference userRef = storage.child(Constants.FIREBASE_USERS_CONTAINER_NAME + "/" + user.getUid() + ".jpg");
+                userRef.delete();
+
+                //Removing from Firebase Auth
+                fbUser.delete();
+
+                mAuth.signOut();
+                goBack();
+            }
+        });
+
+        builder.create().show();
     }
 
     /**
@@ -205,7 +259,7 @@ public class OwnUserProfileActivity extends AppCompatActivity {
      * Muestra pantalla de edicion del perfil
      */
     private void editarPerfil() {
-        Intent intent = new Intent(this, EditProfileActivity.class);
+        Intent intent = new Intent(this, TurnProActivity.class);
         intent.putExtra("proUser", proUser);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);

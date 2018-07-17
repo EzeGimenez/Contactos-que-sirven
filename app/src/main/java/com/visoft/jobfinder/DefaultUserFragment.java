@@ -12,7 +12,6 @@ import android.widget.TextView;
 import com.iarcuschin.simpleratingbar.SimpleRatingBar;
 import com.visoft.jobfinder.Objects.User;
 
-
 public class DefaultUserFragment extends Fragment {
     private User user;
 

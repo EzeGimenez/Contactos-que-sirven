@@ -43,7 +43,6 @@ public class ContactoFragment extends Fragment {
         TextView tvInfo = getActivity().findViewById(R.id.tvInfo);
         tvInfo.setText(R.string.complete_info_contacto);
 
-
         cbEmail = view.findViewById(R.id.cbEmail);
         etTel1 = view.findViewById(R.id.etTel1);
         etTel2 = view.findViewById(R.id.etTel2);

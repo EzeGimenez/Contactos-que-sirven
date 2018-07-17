@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -56,10 +57,9 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback {
     private TextView tvUsername, tvNumberReviews, tvHrAtencion, tvRubro;
     private SimpleRatingBar ratingBar;
     private MapView mapView;
-    private Button btnMsg, btnShowReviews, btnCV, btnShowContactInfo;
+    private ImageButton btnCV, btnShowContactInfo;
+    private Button btnShowReviews, btnMsg;
     private ImageView ivProfilePic;
-    //private ImageView ivProfilePic;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -194,7 +194,6 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback {
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception exception) {
-                    Toast.makeText(getContext(), "onFailure", Toast.LENGTH_SHORT).show();
                 }
             });
         }

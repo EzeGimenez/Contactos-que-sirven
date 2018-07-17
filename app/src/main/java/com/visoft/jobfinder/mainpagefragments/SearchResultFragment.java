@@ -58,6 +58,7 @@ public class SearchResultFragment extends Fragment {
     private int j = 0;
     private SharedPreferences sharedPref;
     private SearchableAdapter adapter;
+    private boolean isRunning;
 
     //UI components
     private ListView listView;
@@ -88,6 +89,7 @@ public class SearchResultFragment extends Fragment {
         database = Database.getDatabase().getReference();
         databaseUsers = database.child(Constants.FIREBASE_USERS_CONTAINER_NAME);
 
+        isRunning = true;
 
         Bundle args = getArguments();
         if (args != null) {
@@ -226,7 +228,9 @@ public class SearchResultFragment extends Fragment {
                     }
                 });
             }
-            hideLoadingScreen();
+            if (isRunning) {
+                hideLoadingScreen();
+            }
         }
     }
 
@@ -235,6 +239,12 @@ public class SearchResultFragment extends Fragment {
         super.onPause();
         if (timer != null)
             timer.cancel();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        isRunning = false;
     }
 
     @Override

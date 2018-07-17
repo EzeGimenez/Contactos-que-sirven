@@ -44,6 +44,7 @@ public class TurnProActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseTimer timer;
     private Uri filePath;
+    private boolean isEditing = true;
 
     //Componentes gráficas
     private Button btnPrev, btnNext;
@@ -63,20 +64,41 @@ public class TurnProActivity extends AppCompatActivity {
         tvInfo = findViewById(R.id.tvInfo);
         containerProgressBar = findViewById(R.id.progressBarContainer);
 
-        proUser = new ProUser();
+        proUser = (ProUser) getIntent().getSerializableExtra("proUser");
+
+        if (proUser == null) {
+            proUser = new ProUser();
+            isEditing = false;
+            user = (User) getIntent().getSerializableExtra("user");
+        }
 
         database = Database.getDatabase().getReference();
         mAuth = FirebaseAuth.getInstance();
-        user = (User) getIntent().getSerializableExtra("user");
+
         iniciarUI();
     }
 
     private void iniciarUI() {
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        RubroGeneralFragment rubroGeneralFragment = new RubroGeneralFragment();
+        if (!isEditing) {
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            RubroGeneralFragment rubroGeneralFragment = new RubroGeneralFragment();
 
-        transaction.add(R.id.ContainerTurnProFragments, rubroGeneralFragment, Constants.RUBRO_GENERAL_FRAGMENT_TAG);
-        transaction.commit();
+            transaction.add(R.id.ContainerTurnProFragments, rubroGeneralFragment, Constants.RUBRO_GENERAL_FRAGMENT_TAG);
+            transaction.commit();
+            btnNext.setEnabled(false);
+        } else {
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            WorkScopeFragment fragment = new WorkScopeFragment();
+
+            Bundle bundle = new Bundle();
+            bundle.putDouble("latStart", proUser.getMapCenterLat());
+            bundle.putDouble("lngStart", proUser.getMapCenterLng());
+            bundle.putFloat("zoomStart", proUser.getMapZoom());
+            fragment.setArguments(bundle);
+
+            transaction.add(R.id.ContainerTurnProFragments, fragment, Constants.WORK_SCOPE_FRAGMENT_TAG);
+            transaction.commit();
+        }
 
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,8 +113,9 @@ public class TurnProActivity extends AppCompatActivity {
             }
         });
 
-        btnNext.setEnabled(false);
-        btnPrev.setEnabled(false);
+
+        btnPrev.setEnabled(true);
+        btnPrev.setText(R.string.cancelar);
 
     }
 
@@ -125,6 +148,7 @@ public class TurnProActivity extends AppCompatActivity {
             if (fragment == null) {
                 fragment = new WorkScopeFragment();
             }
+
             FragmentTransaction transaction = fragmentManager.beginTransaction();
             transaction
                     .addToBackStack(Constants.RUBRO_ESPECIFICO_FRAGMENT_TAG)
@@ -148,6 +172,7 @@ public class TurnProActivity extends AppCompatActivity {
 
             btnNext.setEnabled(true);
             btnPrev.setEnabled(true);
+            btnPrev.setText(R.string.previo);
 
         } else if (actualFragment instanceof ProfilePicFragment) {
 
@@ -157,9 +182,22 @@ public class TurnProActivity extends AppCompatActivity {
             if (fragment == null) {
                 fragment = new ContactoFragment();
             }
+
+            if (isEditing) {
+                Bundle bundle = new Bundle();
+                bundle.putString("tel1", proUser.getTelefono1());
+                bundle.putString("tel2", proUser.getTelefono2());
+                bundle.putInt("fecha1", proUser.getDiasAtencion() / 10);
+                bundle.putInt("fecha2", proUser.getDiasAtencion() % 10);
+                bundle.putString("hr1", proUser.getHoraAtencion().split(" - ")[0]);
+                bundle.putString("hr2", proUser.getHoraAtencion().split(" - ")[1]);
+                bundle.putBoolean("email", proUser.getShowEmail());
+                fragment.setArguments(bundle);
+            }
+
             transaction
                     .replace(R.id.ContainerTurnProFragments, fragment, Constants.CONTACTO_FRAGMENT_TAG)
-                    .addToBackStack(Constants.WORK_SCOPE_FRAGMENT_TAG)
+                    .addToBackStack(Constants.CHOOSE_PIC_FRAGMENT_TAG)
                     .commit();
 
             btnNext.setEnabled(true);
@@ -174,6 +212,12 @@ public class TurnProActivity extends AppCompatActivity {
                 if (fragment == null) {
                     fragment = new CVFragment();
                 }
+                if (isEditing) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("cv", proUser.getCvText());
+                    fragment.setArguments(bundle);
+                }
+
                 transaction
                         .replace(R.id.ContainerTurnProFragments, fragment, Constants.CV_FRAGMENT_TAG)
                         .addToBackStack(Constants.CONTACTO_FRAGMENT_TAG)
@@ -221,13 +265,20 @@ public class TurnProActivity extends AppCompatActivity {
 
         } else if (actualFragment instanceof WorkScopeFragment) {
 
-            Fragment rubroEspecificoFragment = fragmentManager.findFragmentByTag(Constants.RUBRO_ESPECIFICO_FRAGMENT_TAG);
-            fragmentManager.beginTransaction()
-                    .replace(R.id.ContainerTurnProFragments, rubroEspecificoFragment, Constants.RUBRO_ESPECIFICO_FRAGMENT_TAG)
-                    .commit();
+            if (!isEditing) {
+                Fragment rubroEspecificoFragment = fragmentManager.findFragmentByTag(Constants.RUBRO_ESPECIFICO_FRAGMENT_TAG);
+                fragmentManager.beginTransaction()
+                        .replace(R.id.ContainerTurnProFragments, rubroEspecificoFragment, Constants.RUBRO_ESPECIFICO_FRAGMENT_TAG)
+                        .commit();
 
-            btnNext.setEnabled(false);
-            btnPrev.setEnabled(false);
+                btnNext.setEnabled(false);
+                btnPrev.setEnabled(false);
+            } else {
+                Intent intent = new Intent(this, OwnUserProfileActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
+            }
 
         } else if (actualFragment instanceof ProfilePicFragment) {
 
@@ -236,6 +287,9 @@ public class TurnProActivity extends AppCompatActivity {
                     .replace(R.id.ContainerTurnProFragments, workScopeFragment, Constants.WORK_SCOPE_FRAGMENT_TAG)
                     .commit();
 
+            if (isEditing) {
+                btnPrev.setText(getString(R.string.cancelar));
+            }
 
         } else if (actualFragment instanceof ContactoFragment) {
 
@@ -256,7 +310,6 @@ public class TurnProActivity extends AppCompatActivity {
             btnNext.setEnabled(true);
             btnPrev.setEnabled(true);
             btnNext.setText(R.string.siguiente);
-
         }
     }
 
@@ -265,12 +318,14 @@ public class TurnProActivity extends AppCompatActivity {
         showLoadingScreen();
         timer = new DatabaseTimer(16, this, false);
 
-        proUser.setPro(true);
-        proUser.setUsername(user.getUsername());
-        proUser.setRating(user.getRating());
-        proUser.setEmail(user.getEmail());
-        proUser.setUid(user.getUid());
-        proUser.setNumberReviews(user.getNumberReviews());
+        if (!isEditing) {
+            proUser.setPro(true);
+            proUser.setUsername(user.getUsername());
+            proUser.setRating(user.getRating());
+            proUser.setEmail(user.getEmail());
+            proUser.setUid(user.getUid());
+            proUser.setNumberReviews(user.getNumberReviews());
+        }
 
         saveInPic();
     }
@@ -287,20 +342,20 @@ public class TurnProActivity extends AppCompatActivity {
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             proUser.setHasPic(true);
                             saveInUser();
-                            Toast.makeText(TurnProActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             proUser.setHasPic(false);
+                            Toast.makeText(TurnProActivity.this, "bla", Toast.LENGTH_SHORT).show();
                             saveInUser();
-                            Toast.makeText(TurnProActivity.this, "failed", Toast.LENGTH_SHORT).show();
                         }
                     });
         } else {
-            Toast.makeText(TurnProActivity.this, "false2", Toast.LENGTH_SHORT).show();
-            proUser.setHasPic(false);
+            if (!isEditing) {
+                proUser.setHasPic(false);
+            }
             saveInUser();
         }
     }
@@ -326,7 +381,11 @@ public class TurnProActivity extends AppCompatActivity {
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 timer.cancel();
-                saveInQuality();
+                if (!isEditing) {
+                    saveInQuality();
+                } else {
+                    goBack();
+                }
             }
         });
     }

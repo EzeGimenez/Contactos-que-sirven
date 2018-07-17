@@ -111,4 +111,6 @@
     <string name="contact_info">Información de Contacto</string>
     <string name="selecciona_foto">Añade una foto</string>
     <string name="calificar">Hacer una reseña</string>
+    <string name="eliminar_cuenta">Eliminar cuenta</string>
+    <string name="seguro_eliminar">Estás seguro de querer eliminar la cuenta?</string>
 </resources>

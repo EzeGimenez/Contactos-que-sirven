@@ -78,6 +78,7 @@ public class ProfileActivity extends AppCompatActivity {
         menu.findItem(R.id.edit).setVisible(false);
         menu.findItem(R.id.convertirEnPro).setVisible(false);
         menu.findItem(R.id.signOut).setVisible(false);
+        menu.findItem(R.id.eliminarCuenta).setVisible(false);
         return true;
     }
 }

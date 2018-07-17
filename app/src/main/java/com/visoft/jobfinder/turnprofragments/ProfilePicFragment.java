@@ -60,7 +60,6 @@ public class ProfilePicFragment extends Fragment {
                 startActivityForResult(chooserIntent, PICK_IMAGE);
             }
         });
-
     }
 
     @Override
@@ -79,8 +78,6 @@ public class ProfilePicFragment extends Fragment {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-
         }
     }
 

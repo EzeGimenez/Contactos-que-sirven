@@ -114,6 +114,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="selecciona_foto">Añade una foto</string>
     <string name="calificar">Hacer una reseña</string>
+    <string name="eliminar_cuenta">Eliminar cuenta</string>
+    <string name="seguro_eliminar">Estás seguro de querer eliminar la cuenta?</string>
 
 
 </resources>
