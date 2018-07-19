@@ -127,10 +127,21 @@ public class SearchResultFragment extends Fragment {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     for (DataSnapshot ds : dataSnapshot.getChildren()) {
                         User user = ds.getValue(User.class);
+
                         if (user == null || user.getIsPro()) {
                             ProUser proUser = ds.getValue(ProUser.class);
-                            if (proUser != null && !proUser.getUid().equals(mAuth.getCurrentUser().getUid()) && proUser.getUsername().toLowerCase().contains(a.toLowerCase())) {
-                                results.add(proUser);
+                            if (proUser != null) {
+                                int id = getResources().getIdentifier(proUser.getRubroEspecifico(),
+                                        "string",
+                                        getActivity().getPackageName());
+                                String rubro = getString(id).toLowerCase();
+
+                                boolean noUsuario = !proUser.getUid().equals(mAuth.getCurrentUser().getUid());
+                                boolean contieneNombre = proUser.getUsername().toLowerCase().contains(a.toLowerCase());
+                                boolean contieneRubro = rubro.contains(a.toLowerCase());
+                                if (noUsuario && (contieneNombre || contieneRubro)) {
+                                    results.add(proUser);
+                                }
                             }
                         }
                     }
@@ -399,11 +410,17 @@ public class SearchResultFragment extends Fragment {
                 int count = list.size();
                 final ArrayList<ProUser> nlist = new ArrayList<ProUser>(count);
 
-                String filterableString;
+                String username, rubro;
+                int rubroID;
 
                 for (int i = 0; i < count; i++) {
-                    filterableString = list.get(i).getUsername();
-                    if (filterableString.toLowerCase().contains(filterString)) {
+                    username = list.get(i).getUsername();
+                    rubro = list.get(i).getRubroEspecifico();
+                    rubroID = getResources().getIdentifier(rubro,
+                            "string",
+                            getActivity().getPackageName());
+                    rubro = getResources().getString(rubroID).toLowerCase();
+                    if (username.toLowerCase().contains(filterString) || rubro.toLowerCase().contains(filterString)) {
                         nlist.add(list.get(i));
                     }
                 }

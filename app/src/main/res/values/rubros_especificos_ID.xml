@@ -13,6 +13,7 @@
         <item>cadeteria</item>
         <item>viandas</item>
         <item>comidaDelivery</item>
+        <item>mantpiscinas</item>
     </string-array>
 
     <string-array name="serviciosFamiliaID">

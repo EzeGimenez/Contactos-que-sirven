@@ -204,22 +204,25 @@ public class OwnUserProfileActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 DatabaseReference rootRef = Database.getDatabase().getReference();
 
-                //removing from users;
+                //Removing from users;
                 rootRef.child(Constants.FIREBASE_USERS_CONTAINER_NAME).child(user.getUid()).removeValue();
 
                 //proUser removing
                 if (user.getIsPro() && proUser != null) {
+
                     //Removing from rubros
                     rootRef
                             .child(Constants.FIREBASE_RUBRO_CONTAINER_NAME)
                             .child(proUser.getRubroEspecifico())
                             .child(proUser.getUid())
                             .removeValue();
+
                     //removing reviews
                     rootRef
                             .child(Constants.FIREBASE_REVIEWS_CONTAINER_NAME)
                             .child(proUser.getUid())
                             .removeValue();
+
                     //removing user Quality
                     rootRef
                             .child(Constants.FIREBASE_QUALITY_CONTAINER_NAME)
@@ -235,6 +238,7 @@ public class OwnUserProfileActivity extends AppCompatActivity {
                 //Removing from Firebase Auth
                 fbUser.delete();
 
+                //Signing out
                 mAuth.signOut();
                 goBack();
             }

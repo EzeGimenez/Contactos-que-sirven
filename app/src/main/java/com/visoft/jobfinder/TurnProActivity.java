@@ -139,7 +139,7 @@ public class TurnProActivity extends AppCompatActivity {
                     .addToBackStack(Constants.RUBRO_GENERAL_FRAGMENT_TAG)
                     .commit();
 
-            btnPrev.setEnabled(true);
+            btnPrev.setText(R.string.previo);
 
         } else if (actualFragment instanceof RubroEspecificoFragment) {
 
@@ -260,8 +260,9 @@ public class TurnProActivity extends AppCompatActivity {
                     .replace(R.id.ContainerTurnProFragments, rubroGeneralFragment, Constants.RUBRO_GENERAL_FRAGMENT_TAG)
                     .commit();
 
+            btnPrev.setText(R.string.cancelar);
             btnNext.setEnabled(false);
-            btnPrev.setEnabled(false);
+            btnPrev.setEnabled(true);
 
         } else if (actualFragment instanceof WorkScopeFragment) {
 
@@ -271,6 +272,7 @@ public class TurnProActivity extends AppCompatActivity {
                         .replace(R.id.ContainerTurnProFragments, rubroEspecificoFragment, Constants.RUBRO_ESPECIFICO_FRAGMENT_TAG)
                         .commit();
 
+                btnPrev.setText(R.string.previo);
                 btnNext.setEnabled(false);
                 btnPrev.setEnabled(false);
             } else {

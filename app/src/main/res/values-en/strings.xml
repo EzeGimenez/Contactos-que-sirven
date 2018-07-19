@@ -45,6 +45,7 @@
     <string name="defensaCivil">Civil defense</string>
     <string name="defensaMujer">Women defense</string>
     <string name="instructorado">Instructor</string>
+    <string name="mantpiscinas">Pool maintenance</string>
 
     <!-- Rubros Generales-->
     <string name="hogarMantenimiento">Home &amp; Maintenance</string>
