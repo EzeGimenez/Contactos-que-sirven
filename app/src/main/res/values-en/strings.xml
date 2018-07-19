@@ -107,12 +107,16 @@
     <string name="pequeñaDescripcion">Write a short review</string>
     <string name="show_reviews">Show Reviews</string>
     <string name="registrarse">Sign Up</string>
-    <string name="search_view_hint">Search Name</string>
+    <string name="search_view_hint">Search Name or Area</string>
     <string name="descripcion_personal">Personal description</string>
     <string name="contact_info">Contact Info</string>
     <string name="selecciona_foto">Add a picture</string>
     <string name="calificar">Review user</string>
     <string name="eliminar_cuenta">Delete account</string>
     <string name="seguro_eliminar">Are you sure you want to delete your account?</string>
+    <string name="añadirContacto">Add to Contacts</string>
+    <string name="removerContacto">Remove Contact</string>
+    <string name="ir_a_contactos">Go to Contacts</string>
+    <string name="Contactos">Contacts</string>
 
 </resources>

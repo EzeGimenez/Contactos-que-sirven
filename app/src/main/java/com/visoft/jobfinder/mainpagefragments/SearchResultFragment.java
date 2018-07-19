@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -22,14 +24,18 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.iarcuschin.simpleratingbar.SimpleRatingBar;
 import com.visoft.jobfinder.MainActivity;
 import com.visoft.jobfinder.Objects.ProUser;
@@ -327,9 +333,6 @@ public class SearchResultFragment extends Fragment {
                 }
             }
             return score;
-
-
-            //return (int) ((p1.getNumberReviews() - p2.getNumberReviews()) + 5 * (p1.getCalidad() - p2.getCalidad()));
         }
     }
 
@@ -359,12 +362,13 @@ public class SearchResultFragment extends Fragment {
         }
 
         public View getView(int position, View convertView, ViewGroup parent) {
-            ViewHolder holder;
+            final ViewHolder holder;
 
             if (convertView == null) {
                 convertView = inflater.inflate(R.layout.profile_search_result_row, null);
 
                 holder = new ViewHolder();
+                holder.ivPic = convertView.findViewById(R.id.ivProfilePic);
                 holder.tvUsername = convertView.findViewById(R.id.tvUsername);
                 holder.tvRubro = convertView.findViewById(R.id.tvRubro);
                 holder.tvNumReviews = convertView.findViewById(R.id.tvNumReviews);
@@ -385,6 +389,21 @@ public class SearchResultFragment extends Fragment {
             holder.tvNumReviews.setText(user.getNumberReviews() + " " + getString(R.string.reviews));
             holder.ratingBar.setRating(user.getRating());
 
+            if (user.getHasPic()) {
+                StorageReference storage = FirebaseStorage.getInstance().getReference();
+
+                StorageReference userRef = storage.child(Constants.FIREBASE_USERS_CONTAINER_NAME + "/" + user.getUid() + ".jpg");
+
+                userRef.getBytes(1024 * 1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                    @Override
+                    public void onSuccess(byte[] bytes) {
+                        Bitmap bm = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+
+                        holder.ivPic.setImageBitmap(bm);
+                    }
+                });
+            }
+
             return convertView;
         }
 
@@ -393,6 +412,7 @@ public class SearchResultFragment extends Fragment {
         }
 
         private class ViewHolder {
+            ImageView ivPic;
             TextView tvUsername, tvRubro, tvNumReviews;
             SimpleRatingBar ratingBar;
         }

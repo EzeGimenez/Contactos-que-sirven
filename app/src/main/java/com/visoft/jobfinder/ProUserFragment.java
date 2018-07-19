@@ -150,7 +150,7 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback {
                 }
             });
         } else {
-            btnCV.setVisibility(View.GONE);
+            btnCV.setVisibility(View.INVISIBLE);
         }
 
         if (user.getNumberReviews() > 0) {
@@ -166,7 +166,7 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback {
         } else {
             tvNumberReviews.setText("0");
             ratingBar.setRating(0);
-            btnShowReviews.setVisibility(View.GONE);
+            btnShowReviews.setVisibility(View.INVISIBLE);
         }
 
         if (getActivity() instanceof OwnUserProfileActivity) {
@@ -317,7 +317,6 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback {
 
                     }
                 });
-
     }
 
     @Override

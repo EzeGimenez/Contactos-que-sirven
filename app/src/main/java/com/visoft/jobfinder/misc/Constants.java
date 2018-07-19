@@ -31,6 +31,7 @@ public abstract class Constants {
     public static final String FIREBASE_USERS_CONTAINER_NAME = "users";
     public static final String FIREBASE_QUALITY_CONTAINER_NAME = "userQuality";
     public static final String FIREBASE_REVIEWS_CONTAINER_NAME = "reviews";
+    public static final String FIREBASE_CONTACTS_CONTAINER_NAME = "contacts";
 
     /**
      * Constants

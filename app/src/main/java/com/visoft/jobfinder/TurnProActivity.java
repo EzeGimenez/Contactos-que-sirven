@@ -1,7 +1,7 @@
 package com.visoft.jobfinder;
 
 import android.content.Intent;
-import android.net.Uri;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
@@ -36,6 +36,8 @@ import com.visoft.jobfinder.turnprofragments.RubroEspecificoFragment;
 import com.visoft.jobfinder.turnprofragments.RubroGeneralFragment;
 import com.visoft.jobfinder.turnprofragments.WorkScopeFragment;
 
+import java.io.ByteArrayOutputStream;
+
 public class TurnProActivity extends AppCompatActivity {
     private FragmentManager fragmentManager;
     private ProUser proUser;
@@ -43,7 +45,7 @@ public class TurnProActivity extends AppCompatActivity {
     private DatabaseReference database;
     private FirebaseAuth mAuth;
     private DatabaseTimer timer;
-    private Uri filePath;
+    private Bitmap bitmap;
     private boolean isEditing = true;
 
     //Componentes gráficas
@@ -176,7 +178,7 @@ public class TurnProActivity extends AppCompatActivity {
 
         } else if (actualFragment instanceof ProfilePicFragment) {
 
-            filePath = ((ProfilePicFragment) actualFragment).getFilePath();
+            bitmap = ((ProfilePicFragment) actualFragment).getFilePath();
             FragmentTransaction transaction = fragmentManager.beginTransaction();
             Fragment fragment = fragmentManager.findFragmentByTag(Constants.CONTACTO_FRAGMENT_TAG);
             if (fragment == null) {
@@ -337,8 +339,12 @@ public class TurnProActivity extends AppCompatActivity {
 
         StorageReference userRef = storage.child(Constants.FIREBASE_USERS_CONTAINER_NAME + "/" + proUser.getUid() + ".jpg");
 
-        if (filePath != null) {
-            userRef.putFile(filePath)
+        if (bitmap != null) {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] data = baos.toByteArray();
+
+            userRef.putBytes(data)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {

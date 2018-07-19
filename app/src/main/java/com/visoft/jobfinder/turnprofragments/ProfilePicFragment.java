@@ -1,13 +1,10 @@
 package com.visoft.jobfinder.turnprofragments;
 
-import android.content.ComponentName;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Parcelable;
+import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,18 +15,16 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.visoft.jobfinder.Objects.ImagePicker;
 import com.visoft.jobfinder.R;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import static android.app.Activity.RESULT_OK;
+import static android.app.Activity.RESULT_CANCELED;
 
 
 public class ProfilePicFragment extends Fragment {
     private static final int PICK_IMAGE = 1;
     private Uri filePath;
+    private Bitmap bitmap;
 
     //Componentes gráficas
     private ImageButton btnChoosePic;
@@ -55,78 +50,39 @@ public class ProfilePicFragment extends Fragment {
         btnChoosePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openImageIntent();
+                Intent chooseImageIntent = ImagePicker.getPickImageIntent(getContext());
+                StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+                StrictMode.setVmPolicy(builder.build());
+                startActivityForResult(chooseImageIntent, PICK_IMAGE);
             }
         });
     }
 
-    private void openImageIntent() {
-        // Determine Uri of camera image to save.
-        final File root = new File(Environment.getExternalStorageDirectory() + File.separator + "MyDir" + File.separator);
-        root.mkdirs();
-        final String fname = "img_" + System.currentTimeMillis() + ".jpg";
-        final File sdImageMainDirectory = new File(root, fname);
-        outputFileUri = Uri.fromFile(sdImageMainDirectory);
-
-        // Camera.
-        final List<Intent> cameraIntents = new ArrayList<Intent>();
-        final Intent captureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        final PackageManager packageManager = getContext().getPackageManager();
-        final List<ResolveInfo> listCam = packageManager.queryIntentActivities(captureIntent, 0);
-        for (ResolveInfo res : listCam) {
-            final String packageName = res.activityInfo.packageName;
-            final Intent intent = new Intent(captureIntent);
-            intent.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
-            intent.setPackage(packageName);
-            cameraIntents.add(intent);
-        }
-
-        // Filesystem.
-        final Intent galleryIntent = new Intent();
-        galleryIntent.setType("image/*");
-        galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
-
-        // Chooser of filesystem options.
-        final Intent chooserIntent = Intent.createChooser(galleryIntent, "Select Source");
-
-        // Add the camera options.
-        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, cameraIntents.toArray(new Parcelable[cameraIntents.size()]));
-
-        startActivityForResult(chooserIntent, PICK_IMAGE);
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RESULT_CANCELED) {
             if (requestCode == PICK_IMAGE) {
-                final boolean isCamera;
-                if (data == null) {
-                    isCamera = true;
-                } else {
-                    final String action = data.getAction();
-                    if (action == null) {
-                        isCamera = false;
-                    } else {
-                        isCamera = action.equals(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                    }
-                }
 
-                if (isCamera) {
-                    filePath = outputFileUri;
+                if (data.getExtras() == null) {
+                    bitmap = ImagePicker.getImageFromResult(getContext(), resultCode, data);
                 } else {
-                    filePath = data == null ? null : data.getData();
+                    bitmap = (Bitmap) data.getExtras().get("data");
                 }
 
                 ImageView ivPic = getView().findViewById(R.id.ivPic);
-                btnChoosePic.setVisibility(View.GONE);
                 ivPic.setVisibility(View.VISIBLE);
-                ivPic.setImageURI(filePath);
+                btnChoosePic.setVisibility(View.GONE);
+                ivPic.setImageBitmap(bitmap);
+
             }
+
         }
+
     }
 
-    public Uri getFilePath() {
-        return filePath;
+    public Bitmap getFilePath() {
+        return bitmap;
     }
 
 }

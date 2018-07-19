@@ -9,7 +9,6 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -90,14 +89,6 @@ public class UserReviewActivity extends AppCompatActivity {
         btnNext = findViewById(R.id.btnNext);
         btnPrev = findViewById(R.id.btnPrev);
         viewPager = findViewById(R.id.viewPager);
-        viewPager.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return true;
-            }
-        });
-
-
     }
 
     private void saveReview() {
@@ -225,7 +216,6 @@ public class UserReviewActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         int shown = viewPager.getCurrentItem();
-
 
         SimpleRatingBar ratingBar = null;
         if (shown > 0) {

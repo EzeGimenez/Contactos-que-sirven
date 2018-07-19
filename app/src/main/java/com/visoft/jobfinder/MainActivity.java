@@ -75,9 +75,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 0);
         } else {
             location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-            if (location != null && location.getTime() > Calendar.getInstance().getTimeInMillis() - 2 * 60 * 1000) {
-
-            } else {
+            if (location == null || location.getTime() <= Calendar.getInstance().getTimeInMillis() - 2 * 60 * 1000) {
                 locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
             }
         }
@@ -195,6 +193,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
      */
     private void updateUI(@Nullable FirebaseUser user) {
         final MenuItem goToProfileItem = menu.findItem(R.id.goToProfile);
+        final MenuItem goToContactsItem = menu.findItem(R.id.goToContacts);
         if (user != null) { // esta iniciado sesion
             searchView.setVisibility(View.VISIBLE);
 
@@ -209,6 +208,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             tvusername.setText(user.getDisplayName());
             tvusername.setVisibility(View.VISIBLE);
             goToProfileItem.setVisible(true);
+            goToContactsItem.setVisible(true);
 
             MainPageFragment mainPageFragment = new MainPageFragment();
             getSupportFragmentManager()
@@ -242,6 +242,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         } else { // no esta iniciado sesion
             searchView.setVisibility(View.GONE);
             goToProfileItem.setVisible(false);
+            goToContactsItem.setVisible(false);
 
             SignInFragment signInFragment = new SignInFragment();
             getSupportFragmentManager()
@@ -264,6 +265,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 Intent intent = new Intent(this, OwnUserProfileActivity.class);
                 startActivity(intent);
                 return true;
+            case R.id.goToContacts:
+                Intent intent2 = new Intent(this, ContactsActivity.class);
+                startActivity(intent2);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -271,7 +276,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        updateLogIn();
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -280,6 +284,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.toolbar_main, menu);
         this.menu = menu;
+        updateLogIn();
         return true;
     }
 

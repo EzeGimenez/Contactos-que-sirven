@@ -26,4 +26,9 @@
         android:id="@+id/calificar"
         android:title="@string/calificar"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/addContact"
+        android:title="@string/añadirContacto"
+        app:showAsAction="never" />
 </menu>

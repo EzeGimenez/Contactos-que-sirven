@@ -107,7 +107,7 @@
     <string name="editar_perfil">Editar Perfil</string>
     <string name="show_reviews">Mostrar Reseñas</string>
     <string name="registrarse">Registrarse</string>
-    <string name="search_view_hint">Buscar por Nombre</string>
+    <string name="search_view_hint">Buscar por Nombre o Rubro</string>
     <string name="descripcion_personal">Descripción personal</string>
     <string name="contact_info">Información de Contacto</string>
 
@@ -117,6 +117,10 @@
     <string name="calificar">Hacer una reseña</string>
     <string name="eliminar_cuenta">Eliminar cuenta</string>
     <string name="seguro_eliminar">Estás seguro de querer eliminar la cuenta?</string>
+    <string name="añadirContacto">Añadir a agenda</string>
+    <string name="removerContacto">Remover Contacto</string>
+    <string name="ir_a_contactos">Ir a Agenda</string>
+    <string name="Contactos">Agenda</string>
 
 
 </resources>

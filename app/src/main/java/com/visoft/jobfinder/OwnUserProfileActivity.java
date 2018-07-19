@@ -281,6 +281,7 @@ public class OwnUserProfileActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.toolbar_perfil, menu);
         this.menu = menu;
         menu.findItem(R.id.calificar).setVisible(false);
+        menu.findItem(R.id.addContact).setVisible(false);
         iniciarUI();
         return true;
     }
