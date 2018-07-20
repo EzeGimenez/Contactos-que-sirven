@@ -2,8 +2,6 @@ package com.visoft.jobfinder;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -19,14 +17,11 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.iarcuschin.simpleratingbar.SimpleRatingBar;
 import com.visoft.jobfinder.Objects.ProUser;
 import com.visoft.jobfinder.misc.Constants;
@@ -177,21 +172,6 @@ public class ContactsActivity extends AppCompatActivity {
             holder.tvRubro.setText(subRubro);
             holder.tvNumReviews.setText(user.getNumberReviews() + " " + getString(R.string.reviews));
             holder.ratingBar.setRating(user.getRating());
-
-            if (user.getHasPic()) {
-                StorageReference storage = FirebaseStorage.getInstance().getReference();
-
-                StorageReference userRef = storage.child(Constants.FIREBASE_USERS_CONTAINER_NAME + "/" + user.getUid() + ".jpg");
-
-                userRef.getBytes(1024 * 1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                    @Override
-                    public void onSuccess(byte[] bytes) {
-                        Bitmap bm = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-
-                        holder.ivPic.setImageBitmap(bm);
-                    }
-                });
-            }
 
             return convertView;
         }

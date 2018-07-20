@@ -1,22 +1,22 @@
 package com.visoft.jobfinder.mainpagefragments;
 
 import android.Manifest;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,11 +24,9 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -44,12 +42,15 @@ import com.visoft.jobfinder.ProfileActivity;
 import com.visoft.jobfinder.R;
 import com.visoft.jobfinder.misc.Constants;
 import com.visoft.jobfinder.misc.Database;
+import com.visoft.jobfinder.misc.GlideApp;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class SearchResultFragment extends Fragment {
     private FirebaseAuth mAuth;
@@ -167,7 +168,6 @@ public class SearchResultFragment extends Fragment {
 
     private void getResultsFromSubArea() {
         results = new ArrayList<>();
-        showLoadingScreen();
         timer = new CountDownTimer(10 * 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -176,7 +176,6 @@ public class SearchResultFragment extends Fragment {
 
             @Override
             public void onFinish() {
-                hideLoadingScreen();
                 showSnackBar(getString(R.string.revisaConexion));
                 getActivity().onBackPressed();
             }
@@ -241,12 +240,18 @@ public class SearchResultFragment extends Fragment {
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Intent intent = new Intent(getContext(), ProfileActivity.class);
                         intent.putExtra("user", results.get(position));
-                        startActivity(intent);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+                            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity(),
+                                    Pair.create(view.findViewById(R.id.ratingBar), "ratingBar"),
+                                    Pair.create(view.findViewById(R.id.tvUsername), "username"));
+
+                            startActivity(intent, options.toBundle());
+                        } else {
+                            startActivity(intent);
+                        }
                     }
                 });
-            }
-            if (isRunning) {
-                hideLoadingScreen();
             }
         }
     }
@@ -274,16 +279,6 @@ public class SearchResultFragment extends Fragment {
             subRubro = args.getString("subRubro");
             searchQuery = args.getString("searchQuery");
         }
-    }
-
-    private void showLoadingScreen() {
-        ConstraintLayout progressBar = getView().findViewById(R.id.progressBarContainer);
-        progressBar.setVisibility(View.VISIBLE);
-    }
-
-    private void hideLoadingScreen() {
-        ConstraintLayout progressBar = getView().findViewById(R.id.progressBarContainer);
-        progressBar.setVisibility(View.GONE);
     }
 
     private void showSnackBar(String msg) {
@@ -327,9 +322,9 @@ public class SearchResultFragment extends Fragment {
                 }
 
                 if (distanceP2[0] - 5 * 1000 > distanceP1[0]) {
-                    score--;
+                    score -= 2;
                 } else if (distanceP1[0] - 5 * 1000 > distanceP2[0]) {
-                    score++;
+                    score += 2;
                 }
             }
             return score;
@@ -363,7 +358,6 @@ public class SearchResultFragment extends Fragment {
 
         public View getView(int position, View convertView, ViewGroup parent) {
             final ViewHolder holder;
-
             if (convertView == null) {
                 convertView = inflater.inflate(R.layout.profile_search_result_row, null);
 
@@ -393,15 +387,9 @@ public class SearchResultFragment extends Fragment {
                 StorageReference storage = FirebaseStorage.getInstance().getReference();
 
                 StorageReference userRef = storage.child(Constants.FIREBASE_USERS_CONTAINER_NAME + "/" + user.getUid() + ".jpg");
-
-                userRef.getBytes(1024 * 1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                    @Override
-                    public void onSuccess(byte[] bytes) {
-                        Bitmap bm = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-
-                        holder.ivPic.setImageBitmap(bm);
-                    }
-                });
+                GlideApp.with(getContext())
+                        .load(userRef)
+                        .into(holder.ivPic);
             }
 
             return convertView;
@@ -412,7 +400,7 @@ public class SearchResultFragment extends Fragment {
         }
 
         private class ViewHolder {
-            ImageView ivPic;
+            CircleImageView ivPic;
             TextView tvUsername, tvRubro, tvNumReviews;
             SimpleRatingBar ratingBar;
         }

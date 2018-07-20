@@ -38,6 +38,7 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
+                        android:scaleType="centerCrop"
                         android:id="@+id/ivProfilePic"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -45,6 +46,7 @@
                         android:src="@drawable/profile_pic" />
 
                     <TextView
+                        android:transitionName="username"
                         android:id="@+id/tvUsername"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -114,6 +116,7 @@
                     </LinearLayout>
 
                     <com.iarcuschin.simpleratingbar.SimpleRatingBar
+                        android:transitionName="ratingBar"
                         android:id="@+id/ratingBar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -124,7 +127,7 @@
                         app:srb_drawBorderEnabled="false"
                         app:srb_isIndicator="true"
                         app:srb_numberOfStars="5"
-                        app:srb_starBackgroundColor="@color/transparent"
+                        app:srb_starBackgroundColor="@color/semi_transparent"
                         app:srb_starCornerRadius="3"
                         app:srb_starSize="30dp" />
 
@@ -233,10 +236,8 @@
                     android:id="@+id/frameLayout"
                     android:layout_width="0dp"
                     android:layout_height="200dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
-                    app:layout_constraintEnd_toStartOf="@id/ReviewStats"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/ContainerSocialMedia">
 
@@ -253,16 +254,6 @@
                         android:focusable="true" />
                 </FrameLayout>
 
-                <RelativeLayout
-                    android:id="@+id/ReviewStats"
-                    android:layout_width="0dp"
-                    android:layout_height="200dp"
-                    android:layout_margin="8dp"
-                    android:background="@color/colorPrimaryDark"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/frameLayout"
-                    app:layout_constraintTop_toBottomOf="@id/ContainerSocialMedia" />
-
                 <Button
                     android:id="@+id/btnShowReviews"
                     android:layout_width="75dp"
@@ -271,7 +262,7 @@
                     android:layout_marginTop="32dp"
                     android:drawableStart="@drawable/comment"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@id/frameLayout"
+                    app:layout_constraintEnd_toStartOf="@+id/btnCV"
                     app:layout_constraintStart_toStartOf="@id/frameLayout"
                     app:layout_constraintTop_toBottomOf="@id/frameLayout" />
 
@@ -283,9 +274,9 @@
                     android:layout_marginTop="32dp"
                     android:src="@drawable/curriculum"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@id/ReviewStats"
-                    app:layout_constraintStart_toStartOf="@id/ReviewStats"
-                    app:layout_constraintTop_toBottomOf="@id/ReviewStats" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/btnShowReviews"
+                    app:layout_constraintTop_toBottomOf="@+id/frameLayout" />
 
             </android.support.constraint.ConstraintLayout>
 

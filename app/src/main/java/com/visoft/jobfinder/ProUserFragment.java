@@ -3,9 +3,9 @@ package com.visoft.jobfinder;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
@@ -27,8 +27,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -41,11 +39,14 @@ import com.visoft.jobfinder.Objects.QualityInfo;
 import com.visoft.jobfinder.Objects.Review;
 import com.visoft.jobfinder.misc.Constants;
 import com.visoft.jobfinder.misc.Database;
+import com.visoft.jobfinder.misc.GlideApp;
 import com.visoft.jobfinder.misc.MapHighlighter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProUserFragment extends Fragment implements OnMapReadyCallback {
     private ProUser user;
@@ -173,6 +174,7 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback {
             ((OwnUserProfileActivity) getActivity()).hideLoadingScreen();
             btnMsg.setVisibility(View.GONE);
         }
+
         getProfilePic();
         getInsignias();
     }
@@ -182,20 +184,9 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback {
             StorageReference storage = FirebaseStorage.getInstance().getReference();
 
             StorageReference userRef = storage.child(Constants.FIREBASE_USERS_CONTAINER_NAME + "/" + user.getUid() + ".jpg");
-
-            userRef.getBytes(1024 * 1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                @Override
-                public void onSuccess(byte[] bytes) {
-                    Bitmap bm = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-
-                    ivProfilePic.setImageBitmap(bm);
-                    ivProfilePic.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                }
-            });
+            GlideApp.with(getContext())
+                    .load(userRef)
+                    .into(ivProfilePic);
         }
 
     }
@@ -225,7 +216,19 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback {
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO call number
+                String uri = "";
+                switch (v.getId()) {
+                    case R.id.btnCall1:
+                        uri = "tel:" + user.getTelefono1();
+                        break;
+
+                    case R.id.btnCall2:
+                        uri = "tel:" + user.getTelefono2();
+                        break;
+                }
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse(uri));
+                startActivity(intent);
             }
         };
 
@@ -235,7 +238,6 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback {
 
         if (user.getTelefono2().isEmpty()) {
             containerTel2.setVisibility(View.GONE);
-
         } else {
             TextView tvTel2 = view.findViewById(R.id.tvTel2);
             tvTel2.setText(user.getTelefono2());
@@ -298,17 +300,25 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback {
                             }
                         }
 
+                        StorageReference userRef;
+                        StorageReference storage = FirebaseStorage.getInstance().getReference();
                         for (Review r : reviews) {
                             View comment = getLayoutInflater().inflate(R.layout.comment, null);
                             TextView tvUsername = comment.findViewById(R.id.tvUsername);
                             TextView msg = comment.findViewById(R.id.tvMessage);
                             SimpleRatingBar ratingBar = comment.findViewById(R.id.ratingBar);
+                            CircleImageView ivPic = comment.findViewById(R.id.ivImage);
 
                             tvUsername.setText(r.getReviewerUsername());
                             msg.setText(r.getMsg());
                             ratingBar.setRating(r.getRating());
 
                             containerReviews.addView(comment);
+
+                            userRef = storage.child(Constants.FIREBASE_USERS_CONTAINER_NAME + "/" + r.getReviewerUID() + ".jpg");
+                            GlideApp.with(getContext())
+                                    .load(userRef)
+                                    .into(ivPic);
                         }
                     }
 

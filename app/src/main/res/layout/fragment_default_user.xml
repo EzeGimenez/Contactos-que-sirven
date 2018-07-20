@@ -59,7 +59,7 @@
             app:srb_drawBorderEnabled="false"
             app:srb_isIndicator="true"
             app:srb_numberOfStars="5"
-            app:srb_starBackgroundColor="@color/transparent"
+            app:srb_starBackgroundColor="@color/semi_transparent"
             app:srb_starCornerRadius="3"
             app:srb_starSize="30dp" />
 

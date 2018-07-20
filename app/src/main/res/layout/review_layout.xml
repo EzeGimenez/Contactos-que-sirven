@@ -32,7 +32,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvQuery"
         app:srb_drawBorderEnabled="false"
-        app:srb_starBackgroundColor="@color/transparent"
+        app:srb_starBackgroundColor="@color/semi_transparent"
         app:srb_starSize="40dp" />
 
     <EditText
@@ -43,7 +43,7 @@
         android:layout_marginTop="80dp"
         android:ems="10"
         android:hint="@string/pequeñaDescripcion"
-        android:inputType="textPersonName"
+        android:inputType="textCapSentences"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

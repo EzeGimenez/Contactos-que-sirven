@@ -12,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -341,7 +340,7 @@ public class TurnProActivity extends AppCompatActivity {
 
         if (bitmap != null) {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 130, baos);
             byte[] data = baos.toByteArray();
 
             userRef.putBytes(data)
@@ -356,7 +355,6 @@ public class TurnProActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             proUser.setHasPic(false);
-                            Toast.makeText(TurnProActivity.this, "bla", Toast.LENGTH_SHORT).show();
                             saveInUser();
                         }
                     });

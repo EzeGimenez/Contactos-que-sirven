@@ -2,7 +2,6 @@ package com.visoft.jobfinder.turnprofragments;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
@@ -15,15 +14,14 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.visoft.jobfinder.Objects.ImagePicker;
 import com.visoft.jobfinder.R;
+import com.visoft.jobfinder.misc.ImagePicker;
 
 import static android.app.Activity.RESULT_CANCELED;
 
 
 public class ProfilePicFragment extends Fragment {
     private static final int PICK_IMAGE = 1;
-    private Uri filePath;
     private Bitmap bitmap;
 
     //Componentes gráficas
@@ -35,8 +33,6 @@ public class ProfilePicFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_profile_pic, container, false);
     }
-
-    private Uri outputFileUri;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
