@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -22,20 +21,27 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.iarcuschin.simpleratingbar.SimpleRatingBar;
 import com.visoft.jobfinder.Objects.ProUser;
 import com.visoft.jobfinder.misc.Constants;
 import com.visoft.jobfinder.misc.Database;
+import com.visoft.jobfinder.misc.GlideApp;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ContactsActivity extends AppCompatActivity {
     private ArrayList<ProUser> contacts;
     private FirebaseAuth mAuth;
     private DatabaseReference contactsRef, userRef;
     private int j, i;
+    StorageReference storage;
+    private ListViewAdapter adapter;
 
     //Componentes gráficas
     private ListView listView;
@@ -58,7 +64,7 @@ public class ContactsActivity extends AppCompatActivity {
         userRef = Database.getDatabase()
                 .getReference(Constants.FIREBASE_USERS_CONTAINER_NAME);
 
-        populateContacts();
+        storage = FirebaseStorage.getInstance().getReference();
 
         Toolbar toolbar = findViewById(R.id.ToolbarContacts);
         setSupportActionBar(toolbar);
@@ -95,10 +101,20 @@ public class ContactsActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (contacts != null && adapter != null) {
+            contacts.clear();
+            adapter.notifyDataSetChanged();
+        }
+        populateContacts();
+    }
+
     private void setAdapter() {
         if (i == j) {
             if (contacts.size() > 0) {
-                ListViewAdapter adapter = new ListViewAdapter(this, R.layout.profile_search_result_row, contacts);
+                adapter = new ListViewAdapter(this, R.layout.profile_search_result_row, contacts);
                 listView.setAdapter(adapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
@@ -173,11 +189,19 @@ public class ContactsActivity extends AppCompatActivity {
             holder.tvNumReviews.setText(user.getNumberReviews() + " " + getString(R.string.reviews));
             holder.ratingBar.setRating(user.getRating());
 
+            if (user.getHasPic()) {
+                StorageReference userRefStorage = storage.child(Constants.FIREBASE_USERS_CONTAINER_NAME + "/" + user.getUid() + user.getImgVersion() + ".jpg");
+                GlideApp.with(getContext())
+                        .load(userRefStorage)
+                        .into(holder.ivPic);
+            }
+
+
             return convertView;
         }
 
         private class ViewHolder {
-            ImageView ivPic;
+            CircleImageView ivPic;
             TextView tvUsername, tvRubro, tvNumReviews;
             SimpleRatingBar ratingBar;
         }

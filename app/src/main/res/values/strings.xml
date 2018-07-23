@@ -121,6 +121,7 @@
     <string name="removerContacto">Remover Contacto</string>
     <string name="ir_a_contactos">Ir a Agenda</string>
     <string name="Contactos">Agenda</string>
+    <string name="shareUser">Compartir Usuario</string>
 
 
 </resources>

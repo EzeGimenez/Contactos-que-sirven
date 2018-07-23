@@ -2,6 +2,7 @@ package com.visoft.jobfinder.turnprofragments;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
@@ -14,7 +15,12 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.visoft.jobfinder.R;
+import com.visoft.jobfinder.misc.Constants;
+import com.visoft.jobfinder.misc.GlideApp;
 import com.visoft.jobfinder.misc.ImagePicker;
 
 import static android.app.Activity.RESULT_CANCELED;
@@ -40,7 +46,6 @@ public class ProfilePicFragment extends Fragment {
 
         TextView tvInfo = getActivity().findViewById(R.id.tvInfo);
         tvInfo.setText(R.string.selecciona_foto);
-
         btnChoosePic = view.findViewById(R.id.btnChoosePic);
 
         btnChoosePic.setOnClickListener(new View.OnClickListener() {
@@ -52,6 +57,32 @@ public class ProfilePicFragment extends Fragment {
                 startActivityForResult(chooseImageIntent, PICK_IMAGE);
             }
         });
+
+
+        Bundle args = getArguments();
+        if (args != null) {
+            ImageView ivPic = getView().findViewById(R.id.ivPic);
+            ivPic.setVisibility(View.VISIBLE);
+            btnChoosePic.setAlpha(0.3f);
+
+            byte[] byteArray = args.getByteArray("bitmapByteArray");
+            if (byteArray != null && !args.getBoolean("hasPic", false)) {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+                ivPic.setImageBitmap(bitmap);
+            } else if (args.getBoolean("hasPic", false)) {
+                FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                StorageReference userRef = FirebaseStorage
+                        .getInstance()
+                        .getReference()
+                        .child(
+                                Constants.FIREBASE_USERS_CONTAINER_NAME + "/" +
+                                        mAuth.getCurrentUser().getUid() +
+                                        args.getInt("imgVersion") + ".jpg");
+                GlideApp.with(getContext())
+                        .load(userRef)
+                        .into(ivPic);
+            }
+        }
     }
 
     @Override
@@ -70,11 +101,8 @@ public class ProfilePicFragment extends Fragment {
                 ivPic.setVisibility(View.VISIBLE);
                 btnChoosePic.setVisibility(View.GONE);
                 ivPic.setImageBitmap(bitmap);
-
             }
-
         }
-
     }
 
     public Bitmap getFilePath() {

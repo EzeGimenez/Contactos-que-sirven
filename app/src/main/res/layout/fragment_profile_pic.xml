@@ -9,6 +9,7 @@
         android:id="@+id/ivPic"
         android:layout_width="200dp"
         android:layout_height="200dp"
+        android:scaleType="centerCrop"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="50dp"
         android:visibility="gone" />

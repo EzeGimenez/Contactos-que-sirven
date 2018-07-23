@@ -118,5 +118,6 @@
     <string name="removerContacto">Remove Contact</string>
     <string name="ir_a_contactos">Go to Contacts</string>
     <string name="Contactos">Contacts</string>
+    <string name="shareUser">Share user</string>
 
 </resources>

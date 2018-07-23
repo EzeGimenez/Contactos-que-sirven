@@ -51,6 +51,7 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
         bundle.putString("viewTag", (String) v.getTag());
         fragment.setArguments(bundle);
         getFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
                 .replace(R.id.ContainerMainFragments, fragment, Constants.SUB_RUBROS_FRAGMENT_TAG)
                 .addToBackStack(Constants.MAIN_PAGE_FRAGMENT_TAG)
                 .commit();

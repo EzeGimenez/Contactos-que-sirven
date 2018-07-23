@@ -29,7 +29,7 @@
         android:id="@+id/progressBarContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/transparent"
+        android:background="@color/semi_transparent"
         android:clickable="true"
         android:focusable="true"
         android:visibility="gone"

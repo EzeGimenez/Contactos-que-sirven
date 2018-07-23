@@ -207,6 +207,9 @@ public class OwnUserProfileActivity extends AppCompatActivity {
                 //Removing from users;
                 rootRef.child(Constants.FIREBASE_USERS_CONTAINER_NAME).child(user.getUid()).removeValue();
 
+                //Removing contacts
+                rootRef.child(Constants.FIREBASE_CONTACTS_CONTAINER_NAME).child(user.getUid()).removeValue();
+
                 //proUser removing
                 if (user.getIsPro() && proUser != null) {
 
@@ -232,7 +235,14 @@ public class OwnUserProfileActivity extends AppCompatActivity {
 
                 //Removing image
                 StorageReference storage = FirebaseStorage.getInstance().getReference();
-                StorageReference userRef = storage.child(Constants.FIREBASE_USERS_CONTAINER_NAME + "/" + user.getUid() + ".jpg");
+                StorageReference userRef;
+                if (user.getIsPro()) {
+                    ProUser proUser = (ProUser) user;
+                    userRef = storage.child(Constants.FIREBASE_USERS_CONTAINER_NAME + "/" + user.getUid() + proUser.getImgVersion() + ".jpg");
+                } else {
+                    userRef = storage.child(Constants.FIREBASE_USERS_CONTAINER_NAME + "/" + user.getUid() + ".jpg");
+                }
+
                 userRef.delete();
 
                 //Removing from Firebase Auth

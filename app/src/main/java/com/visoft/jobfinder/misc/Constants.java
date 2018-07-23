@@ -42,5 +42,6 @@ public abstract class Constants {
     public static final int MIN_TIEMPO_RESP_INSIGNIA = 30;
     public static final int MIN_ATENCION_INSIGNIA = 50;
     public static final String SHARED_PREF_NAME = "SharedPref";
+    public static final int MAX_RESULTS_SIZE = 20;
 
 }

@@ -6,6 +6,7 @@
     android:background="@drawable/background_profile_search_result_row">
 
     <de.hdodenhof.circleimageview.CircleImageView
+        android:transitionName="ivPic"
         android:id="@+id/ivProfilePic"
         android:layout_width="50dp"
         android:layout_height="50dp"

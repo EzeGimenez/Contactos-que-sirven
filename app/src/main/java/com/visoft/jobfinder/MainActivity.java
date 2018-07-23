@@ -12,7 +12,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -49,7 +48,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private Toolbar toolbar;
     private Menu menu;
     private SearchView searchView;
-    private ConstraintLayout fragmentContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +60,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         //Inicializacion de variables
-        fragmentContainer = findViewById(R.id.ContainerMainFragments);
         searchView = findViewById(R.id.searchView);
 
         //Creacion de toolbar_main

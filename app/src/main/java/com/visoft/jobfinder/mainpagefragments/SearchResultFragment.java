@@ -48,6 +48,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -84,7 +85,6 @@ public class SearchResultFragment extends Fragment {
 
         sharedPref = getContext().getSharedPreferences(Constants.SHARED_PREF_NAME, Context.MODE_PRIVATE);
 
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_search_result, container, false);
     }
 
@@ -119,6 +119,7 @@ public class SearchResultFragment extends Fragment {
     }
 
     public void resetSearch() {
+        results = new ArrayList<ProUser>();
         adapter = null;
     }
 
@@ -144,14 +145,15 @@ public class SearchResultFragment extends Fragment {
                                 String rubro = getString(id).toLowerCase();
 
                                 boolean noUsuario = !proUser.getUid().equals(mAuth.getCurrentUser().getUid());
-                                boolean contieneNombre = proUser.getUsername().toLowerCase().contains(a.toLowerCase());
                                 boolean contieneRubro = rubro.contains(a.toLowerCase());
+                                boolean contieneNombre = proUser.getUsername().toLowerCase().contains(a.toLowerCase());
                                 if (noUsuario && (contieneNombre || contieneRubro)) {
                                     results.add(proUser);
                                 }
                             }
                         }
                     }
+
                     i = j = 0;
                     setAdapter();
                 }
@@ -193,6 +195,9 @@ public class SearchResultFragment extends Fragment {
                             getProUserFromUID(k);
                             i++;
                         }
+                        if (i > Constants.MAX_RESULTS_SIZE) {
+                            break;
+                        }
                     }
                 }
                 setAdapter();
@@ -227,6 +232,12 @@ public class SearchResultFragment extends Fragment {
     private void setAdapter() {
         if (i == j) {
             if (results.size() > 0) {
+                LinkedHashSet<ProUser> linkedHashSet = new LinkedHashSet<>();
+                linkedHashSet.addAll(results);
+                results.clear();
+                results.addAll(linkedHashSet);
+
+
                 Collections.sort(results, new ProUserComparator());
                 if (subRubroID != null) {
                     sharedPref.edit().putString("searchRequest", subRubroID).putBoolean("isRubro", true).commit();
@@ -244,7 +255,8 @@ public class SearchResultFragment extends Fragment {
 
                             ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity(),
                                     Pair.create(view.findViewById(R.id.ratingBar), "ratingBar"),
-                                    Pair.create(view.findViewById(R.id.tvUsername), "username"));
+                                    Pair.create(view.findViewById(R.id.tvUsername), "username"),
+                                    Pair.create(view.findViewById(R.id.ivProfilePic), "ivPic"));
 
                             startActivity(intent, options.toBundle());
                         } else {
@@ -272,7 +284,6 @@ public class SearchResultFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
         Bundle args = getArguments();
         if (args != null) {
             subRubroID = args.getString("subRubroID");
@@ -386,7 +397,7 @@ public class SearchResultFragment extends Fragment {
             if (user.getHasPic()) {
                 StorageReference storage = FirebaseStorage.getInstance().getReference();
 
-                StorageReference userRef = storage.child(Constants.FIREBASE_USERS_CONTAINER_NAME + "/" + user.getUid() + ".jpg");
+                StorageReference userRef = storage.child(Constants.FIREBASE_USERS_CONTAINER_NAME + "/" + user.getUid() + user.getImgVersion() + ".jpg");
                 GlideApp.with(getContext())
                         .load(userRef)
                         .into(holder.ivPic);
@@ -428,8 +439,26 @@ public class SearchResultFragment extends Fragment {
                             "string",
                             getActivity().getPackageName());
                     rubro = getResources().getString(rubroID).toLowerCase();
-                    if (username.toLowerCase().contains(filterString) || rubro.toLowerCase().contains(filterString)) {
-                        nlist.add(list.get(i));
+
+                    String[] name = username.toLowerCase().split(" ");
+                    String[] aSplitted = filterString.toLowerCase().split(" ");
+                    boolean contieneNombre = false;
+
+                    int x = 0, y;
+
+                    while (!contieneNombre && x < name.length) {
+                        y = 0;
+                        while (!contieneNombre && y < aSplitted.length) {
+                            contieneNombre |= name[x].contains(aSplitted[y]);
+                            y++;
+                        }
+                        x++;
+                    }
+
+                    if (contieneNombre || rubro.toLowerCase().contains(filterString)) {
+                        if (!nlist.contains(list.get(i))) {
+                            nlist.add(list.get(i));
+                        }
                     }
                 }
 

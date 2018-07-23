@@ -166,6 +166,21 @@ public class TurnProActivity extends AppCompatActivity {
             if (fragment == null) {
                 fragment = new ProfilePicFragment();
             }
+
+            if (bitmap != null || proUser.getHasPic()) {
+                Bundle bundle = new Bundle();
+                if (bitmap != null) {
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    byte[] byteArray = stream.toByteArray();
+                    bundle.putByteArray("bitmapByteArray", byteArray);
+                } else {
+                    bundle.putBoolean("hasPic", true);
+                    bundle.putInt("imgVersion", proUser.getImgVersion());
+                }
+                fragment.setArguments(bundle);
+            }
+
             transaction
                     .replace(R.id.ContainerTurnProFragments, fragment, Constants.CHOOSE_PIC_FRAGMENT_TAG)
                     .addToBackStack(Constants.WORK_SCOPE_FRAGMENT_TAG)
@@ -296,9 +311,17 @@ public class TurnProActivity extends AppCompatActivity {
 
         } else if (actualFragment instanceof ContactoFragment) {
 
-            Fragment workScopeFragment = fragmentManager.findFragmentByTag(Constants.CHOOSE_PIC_FRAGMENT_TAG);
+            Fragment choosePicFragment = fragmentManager.findFragmentByTag(Constants.CHOOSE_PIC_FRAGMENT_TAG);
+            if (bitmap != null) {
+                Bundle bundle = new Bundle();
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                byte[] byteArray = stream.toByteArray();
+                bundle.putByteArray("bitmapByteArray", byteArray);
+                choosePicFragment.setArguments(bundle);
+            }
             fragmentManager.beginTransaction()
-                    .replace(R.id.ContainerTurnProFragments, workScopeFragment, Constants.CHOOSE_PIC_FRAGMENT_TAG)
+                    .replace(R.id.ContainerTurnProFragments, choosePicFragment, Constants.CHOOSE_PIC_FRAGMENT_TAG)
                     .commit();
 
             btnPrev.setEnabled(true);
@@ -322,6 +345,7 @@ public class TurnProActivity extends AppCompatActivity {
         timer = new DatabaseTimer(16, this, false);
 
         if (!isEditing) {
+            proUser.setImgVersion(0);
             proUser.setPro(true);
             proUser.setUsername(user.getUsername());
             proUser.setRating(user.getRating());
@@ -336,11 +360,17 @@ public class TurnProActivity extends AppCompatActivity {
     private void saveInPic() {
         StorageReference storage = FirebaseStorage.getInstance().getReference();
 
-        StorageReference userRef = storage.child(Constants.FIREBASE_USERS_CONTAINER_NAME + "/" + proUser.getUid() + ".jpg");
+        StorageReference userRef;
+        if (isEditing && bitmap != null && proUser.getHasPic()) {
+            storage.child(Constants.FIREBASE_USERS_CONTAINER_NAME + "/" + proUser.getUid() + proUser.getImgVersion() + ".jpg").delete();
+            proUser.setImgVersion(proUser.getImgVersion() + 1);
+        }
+
+        userRef = storage.child(Constants.FIREBASE_USERS_CONTAINER_NAME + "/" + proUser.getUid() + proUser.getImgVersion() + ".jpg");
 
         if (bitmap != null) {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 130, baos);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
             byte[] data = baos.toByteArray();
 
             userRef.putBytes(data)

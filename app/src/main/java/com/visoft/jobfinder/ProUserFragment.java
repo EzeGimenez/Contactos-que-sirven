@@ -183,7 +183,7 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback {
         if (user.getHasPic()) {
             StorageReference storage = FirebaseStorage.getInstance().getReference();
 
-            StorageReference userRef = storage.child(Constants.FIREBASE_USERS_CONTAINER_NAME + "/" + user.getUid() + ".jpg");
+            StorageReference userRef = storage.child(Constants.FIREBASE_USERS_CONTAINER_NAME + "/" + user.getUid() + user.getImgVersion() + ".jpg");
             GlideApp.with(getContext())
                     .load(userRef)
                     .into(ivProfilePic);
@@ -315,7 +315,7 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback {
 
                             containerReviews.addView(comment);
 
-                            userRef = storage.child(Constants.FIREBASE_USERS_CONTAINER_NAME + "/" + r.getReviewerUID() + ".jpg");
+                            userRef = storage.child(Constants.FIREBASE_USERS_CONTAINER_NAME + "/" + r.getReviewerUID() + r.getReviewerImgVersion() + ".jpg");
                             GlideApp.with(getContext())
                                     .load(userRef)
                                     .into(ivPic);

@@ -26,6 +26,7 @@ import com.iarcuschin.simpleratingbar.SimpleRatingBar;
 import com.visoft.jobfinder.Objects.ProUser;
 import com.visoft.jobfinder.Objects.QualityInfo;
 import com.visoft.jobfinder.Objects.Review;
+import com.visoft.jobfinder.Objects.User;
 import com.visoft.jobfinder.misc.Constants;
 import com.visoft.jobfinder.misc.Database;
 
@@ -92,6 +93,26 @@ public class UserReviewActivity extends AppCompatActivity {
     }
 
     private void saveReview() {
+
+        DatabaseReference userRef = database
+                .child(Constants.FIREBASE_USERS_CONTAINER_NAME)
+                .child(mAuth.getCurrentUser().getUid());
+
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                if (user != null || user.getIsPro()) {
+                    ProUser proUser = dataSnapshot.getValue(ProUser.class);
+                    review.setReviewerImgVersion(proUser.getImgVersion());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         review.setReviewerUID(mAuth.getCurrentUser().getUid());
         review.setReviewerUsername(mAuth.getCurrentUser().getDisplayName());

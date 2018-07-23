@@ -7,7 +7,7 @@ public class ProUser extends User {
     private String horaAtencion, rubroGeneral, rubroEspecifico;
     private boolean showEmail;
     private float mapZoom;
-    private int mapRadius, diasAtencion;
+    private int diasAtencion, imgVersion;
 
     public ProUser() {
         isPro = true;
@@ -101,11 +101,11 @@ public class ProUser extends User {
         this.mapCenterLat = mapCenterLat;
     }
 
-    public int getMapRadius() {
-        return mapRadius;
+    public int getImgVersion() {
+        return imgVersion;
     }
 
-    public void setMapRadius(int mapRadius) {
-        this.mapRadius = mapRadius;
+    public void setImgVersion(int imgVersion) {
+        this.imgVersion = imgVersion;
     }
 }

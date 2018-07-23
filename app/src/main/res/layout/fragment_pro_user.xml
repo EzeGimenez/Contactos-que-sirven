@@ -31,22 +31,22 @@
                 <FrameLayout
                     android:id="@+id/ContainerProfilePic"
                     android:layout_width="0dp"
-                    android:layout_height="200dp"
+                    android:layout_height="230dp"
                     app:layout_constraintBottom_toTopOf="@+id/tvRubro"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
-                        android:scaleType="centerCrop"
                         android:id="@+id/ivProfilePic"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
-                        android:src="@drawable/profile_pic" />
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/profile_pic"
+                        android:transitionName="ivPic" />
 
                     <TextView
-                        android:transitionName="username"
                         android:id="@+id/tvUsername"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -57,7 +57,8 @@
                         android:paddingStart="16dp"
                         android:paddingTop="8dp"
                         android:textAllCaps="true"
-                        android:textColor="@color/primaryAccent" />
+                        android:textColor="@color/primaryAccent"
+                        android:transitionName="username" />
 
                 </FrameLayout>
 
@@ -133,10 +134,10 @@
 
                     <ImageButton
                         android:id="@+id/btnShowContactInfo"
-                        android:layout_width="75dp"
-                        android:layout_height="75dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:src="@drawable/telefono"
+                        android:background="@drawable/background_show_contact_info"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"

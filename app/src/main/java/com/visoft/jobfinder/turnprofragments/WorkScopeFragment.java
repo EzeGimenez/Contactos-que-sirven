@@ -63,14 +63,14 @@ public class WorkScopeFragment extends Fragment implements OnMapReadyCallback {
         MapHighlighter mapHighlighter = new MapHighlighter(getContext(), map);
         mapHighlighter.highlightMap(null);
         if (savedInstance != null) {
-            map.animateCamera(CameraUpdateFactory.newLatLngZoom(
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(
                     new LatLng(savedInstance.getDouble("latStart"),
                             savedInstance.getDouble("lngStart")),
                     savedInstance.getFloat("zoomStart")));
         } else {
             Bundle args = getArguments();
             if (args != null) {
-                map.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(
                         new LatLng(args.getDouble("latStart"),
                                 args.getDouble("lngStart")),
                         args.getFloat("zoomStart")));
