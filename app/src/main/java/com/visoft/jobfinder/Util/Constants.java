@@ -1,4 +1,4 @@
-package com.visoft.jobfinder.misc;
+package com.visoft.jobfinder.Util;
 
 /**
  * Constants class
@@ -23,6 +23,7 @@ public abstract class Constants {
     public static final String SUB_RUBROS_FRAGMENT_TAG = "SubRubrosFragment";
     public static final String SEARCH_RESULT_FRAGMENT_TAG = "SearchResultFragment";
     public static final String CHOOSE_PIC_FRAGMENT_TAG = "ChoosePicFragment";
+    public static final String SOCIAL_FRAGMENT_TAG = "SocialAppsFragment";
 
     /**
      * Firebase database
@@ -38,10 +39,9 @@ public abstract class Constants {
      */
     public static final int MAX_CARACTERES = 210;
     public static final int MIN_DISTANCE = 50 * 1000;
-    public static final int MIN_CALIDAD_INSIGNIA = 30;
-    public static final int MIN_TIEMPO_RESP_INSIGNIA = 30;
+    public static final int MIN_CALIDAD_INSIGNIA = 50;
+    public static final int MIN_TIEMPO_RESP_INSIGNIA = 50;
     public static final int MIN_ATENCION_INSIGNIA = 50;
     public static final String SHARED_PREF_NAME = "SharedPref";
     public static final int MAX_RESULTS_SIZE = 20;
-
 }

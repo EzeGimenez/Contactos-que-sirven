@@ -119,5 +119,17 @@
     <string name="ir_a_contactos">Go to Contacts</string>
     <string name="Contactos">Contacts</string>
     <string name="shareUser">Share user</string>
+    <string name="social_apps_noañadidas">Social Networks to add</string>
+    <string name="social_apps_añadidas">Social Networks already added</string>
+    <string name="introduzcaUsuarioInstagram">Enter your Instragram username</string>
+    <string name="introduzcaUsuarioFacebook">Enter your Facebook ID</string>
+    <string name="introduzcaNumeroWhatsapp">Enter your Whatsapp phone number</string>
+    <string name="deseaMostrarSuEmail">Would you like to display your email?</string>
+    <string name="removerInstagram">Are you sure you want to remove Instagram?</string>
+    <string name="removerFacebook">Are you sure you want to remove Facebook?</string>
+    <string name="removerWhatsapp">Are you sure you want to remove Whatsapp?</string>
+    <string name="removerMail">Are you sure you don\'t want to show your email?</string>
+    <string name="enviarMail">Send Email…</string>
+    <string name="selecciona_social_networks">Add or remove social network links</string>
 
 </resources>

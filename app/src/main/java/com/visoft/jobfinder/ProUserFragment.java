@@ -1,8 +1,8 @@
 package com.visoft.jobfinder;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -37,10 +37,10 @@ import com.iarcuschin.simpleratingbar.SimpleRatingBar;
 import com.visoft.jobfinder.Objects.ProUser;
 import com.visoft.jobfinder.Objects.QualityInfo;
 import com.visoft.jobfinder.Objects.Review;
-import com.visoft.jobfinder.misc.Constants;
-import com.visoft.jobfinder.misc.Database;
-import com.visoft.jobfinder.misc.GlideApp;
-import com.visoft.jobfinder.misc.MapHighlighter;
+import com.visoft.jobfinder.Util.Constants;
+import com.visoft.jobfinder.Util.Database;
+import com.visoft.jobfinder.Util.GlideApp;
+import com.visoft.jobfinder.Util.MapHighlighter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,7 +48,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ProUserFragment extends Fragment implements OnMapReadyCallback {
+public class ProUserFragment extends Fragment implements OnMapReadyCallback, View.OnClickListener {
     private ProUser user;
     private GoogleMap map;
     private DatabaseReference database;
@@ -60,6 +60,7 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback {
     private MapView mapView;
     private ImageButton btnCV, btnShowContactInfo;
     private Button btnShowReviews, btnMsg;
+    private CircleImageView btnInstagram, btnWhatsapp, btnMail, btnFacebook;
     private ImageView ivProfilePic;
 
     @Override
@@ -85,9 +86,13 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback {
         ratingBar = view.findViewById(R.id.ratingBar);
         mapView = view.findViewById(R.id.map);
         btnShowReviews = view.findViewById(R.id.btnShowReviews);
-        btnMsg = view.findViewById(R.id.button);
+        btnMsg = view.findViewById(R.id.buttonChat);
         btnShowContactInfo = view.findViewById(R.id.btnShowContactInfo);
         ivProfilePic = view.findViewById(R.id.ivProfilePic);
+        btnInstagram = view.findViewById(R.id.btnInstagram);
+        btnMail = view.findViewById(R.id.btnMail);
+        btnFacebook = view.findViewById(R.id.btnFacebook);
+        btnWhatsapp = view.findViewById(R.id.btnWhatsapp);
 
         isRunning = true;
 
@@ -97,7 +102,6 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback {
         iniciarUI();
     }
 
-    @SuppressLint("SetTextI18n")
     private void iniciarUI() {
         tvUsername.setText(user.getUsername());
 
@@ -170,6 +174,34 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback {
             btnShowReviews.setVisibility(View.INVISIBLE);
         }
 
+        if (user.getWhatsappNum() != null && user.getWhatsappNum().length() > 0) {
+            btnWhatsapp.setVisibility(View.VISIBLE);
+            btnWhatsapp.setOnClickListener(this);
+        } else {
+            btnWhatsapp.setVisibility(View.GONE);
+        }
+
+        if (user.getInstagramID() != null && user.getInstagramID().length() > 0) {
+            btnInstagram.setVisibility(View.VISIBLE);
+            btnInstagram.setOnClickListener(this);
+        } else {
+            btnInstagram.setVisibility(View.GONE);
+        }
+
+        if (user.getFacebookID() != null && user.getFacebookID().length() > 0) {
+            btnFacebook.setOnClickListener(this);
+            btnFacebook.setVisibility(View.VISIBLE);
+        } else {
+            btnFacebook.setVisibility(View.GONE);
+        }
+
+        if (user.getShowEmail()) {
+            btnMail.setOnClickListener(this);
+            btnMail.setVisibility(View.VISIBLE);
+        } else {
+            btnMail.setVisibility(View.GONE);
+        }
+
         if (getActivity() instanceof OwnUserProfileActivity) {
             ((OwnUserProfileActivity) getActivity()).hideLoadingScreen();
             btnMsg.setVisibility(View.GONE);
@@ -188,7 +220,52 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback {
                     .load(userRef)
                     .into(ivProfilePic);
         }
+    }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btnInstagram:
+                Intent intentInstagram = new Intent(Intent.ACTION_VIEW, Uri.parse("http://instagram.com/_u/" + user.getInstagramID()));
+
+                try {
+                    intentInstagram.setPackage("com.instagram.android");
+                    startActivity(intentInstagram);
+                } catch (ActivityNotFoundException e) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://instagram.com/_u/" + user.getInstagramID())));
+                }
+                break;
+
+            case R.id.btnFacebook:
+
+                Intent intentFacebook = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://facewebmodal/f?href=http://facebook.com/" + user.getFacebookID()));
+                try {
+                    intentFacebook.setPackage("com.facebook.katana");
+                    startActivity(intentFacebook);
+                } catch (ActivityNotFoundException e) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://facebook.com/" + user.getFacebookID())));
+                }
+                break;
+
+            case R.id.btnMail:
+
+                Intent intentEmail = new Intent(Intent.ACTION_SENDTO);
+                intentEmail.setData(Uri.parse("mailto:" + user.getEmail()));
+                startActivity(intentEmail);
+                break;
+
+            case R.id.btnWhatsapp:
+
+                Intent intentWpp = new Intent(Intent.ACTION_VIEW, Uri.parse("https://wa.me/" + user.getWhatsappNum()));
+                try {
+                    intentWpp.setPackage("com.whatsapp");
+                    startActivity(intentWpp);
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(getContext(), "Whatsapp not installed", Toast.LENGTH_SHORT).show();
+                }
+
+                break;
+        }
     }
 
     private void getInsignias() {
@@ -293,33 +370,39 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         timer.cancel();
+                        int i = 0;
                         for (DataSnapshot d : dataSnapshot.getChildren()) {
                             Review r = d.getValue(Review.class);
                             if (r != null) {
-                                reviews.add(r);
+                                StorageReference userRef;
+                                StorageReference storage = FirebaseStorage.getInstance().getReference();
+                                View comment = getLayoutInflater().inflate(R.layout.comment, null);
+                                TextView tvUsername = comment.findViewById(R.id.tvUsername);
+                                TextView msg = comment.findViewById(R.id.tvMessage);
+                                SimpleRatingBar ratingBar = comment.findViewById(R.id.ratingBar);
+                                CircleImageView ivPic = comment.findViewById(R.id.ivImage);
+
+                                tvUsername.setText(r.getReviewerUsername());
+                                msg.setText(r.getMsg());
+                                ratingBar.setRating(r.getRating());
+
+                                containerReviews.addView(comment);
+
+                                if (r.isReviewerHasPic()) {
+                                    userRef = storage.child(Constants.FIREBASE_USERS_CONTAINER_NAME + "/" + r.getReviewerUID() + r.getReviewerImgVersion() + ".jpg");
+                                    GlideApp.with(getContext())
+                                            .load(userRef)
+                                            .into(ivPic);
+                                }
+
+                                i++;
+                            }
+                            if (i > 10) {
+                                break;
                             }
                         }
 
-                        StorageReference userRef;
-                        StorageReference storage = FirebaseStorage.getInstance().getReference();
-                        for (Review r : reviews) {
-                            View comment = getLayoutInflater().inflate(R.layout.comment, null);
-                            TextView tvUsername = comment.findViewById(R.id.tvUsername);
-                            TextView msg = comment.findViewById(R.id.tvMessage);
-                            SimpleRatingBar ratingBar = comment.findViewById(R.id.ratingBar);
-                            CircleImageView ivPic = comment.findViewById(R.id.ivImage);
 
-                            tvUsername.setText(r.getReviewerUsername());
-                            msg.setText(r.getMsg());
-                            ratingBar.setRating(r.getRating());
-
-                            containerReviews.addView(comment);
-
-                            userRef = storage.child(Constants.FIREBASE_USERS_CONTAINER_NAME + "/" + r.getReviewerUID() + r.getReviewerImgVersion() + ".jpg");
-                            GlideApp.with(getContext())
-                                    .load(userRef)
-                                    .into(ivPic);
-                        }
                     }
 
                     @Override

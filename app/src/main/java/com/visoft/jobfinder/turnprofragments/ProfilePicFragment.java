@@ -19,9 +19,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.visoft.jobfinder.R;
-import com.visoft.jobfinder.misc.Constants;
-import com.visoft.jobfinder.misc.GlideApp;
-import com.visoft.jobfinder.misc.ImagePicker;
+import com.visoft.jobfinder.Util.Constants;
+import com.visoft.jobfinder.Util.GlideApp;
+import com.visoft.jobfinder.Util.ImagePicker;
 
 import static android.app.Activity.RESULT_CANCELED;
 

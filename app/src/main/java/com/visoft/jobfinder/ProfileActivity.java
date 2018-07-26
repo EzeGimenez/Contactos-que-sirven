@@ -17,8 +17,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.visoft.jobfinder.Objects.ProUser;
-import com.visoft.jobfinder.misc.Constants;
-import com.visoft.jobfinder.misc.Database;
+import com.visoft.jobfinder.Util.Constants;
+import com.visoft.jobfinder.Util.Database;
 
 public class ProfileActivity extends AppCompatActivity {
     private ProUser shownUser;

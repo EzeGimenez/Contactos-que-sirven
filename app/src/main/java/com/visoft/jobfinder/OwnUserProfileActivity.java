@@ -17,6 +17,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -27,9 +29,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.visoft.jobfinder.Objects.ProUser;
 import com.visoft.jobfinder.Objects.User;
-import com.visoft.jobfinder.misc.Constants;
-import com.visoft.jobfinder.misc.Database;
-import com.visoft.jobfinder.misc.DatabaseTimer;
+import com.visoft.jobfinder.Util.Constants;
+import com.visoft.jobfinder.Util.Database;
+import com.visoft.jobfinder.Util.DatabaseTimer;
 
 public class OwnUserProfileActivity extends AppCompatActivity {
     private static boolean isRunning;
@@ -236,21 +238,19 @@ public class OwnUserProfileActivity extends AppCompatActivity {
                 //Removing image
                 StorageReference storage = FirebaseStorage.getInstance().getReference();
                 StorageReference userRef;
-                if (user.getIsPro()) {
-                    ProUser proUser = (ProUser) user;
-                    userRef = storage.child(Constants.FIREBASE_USERS_CONTAINER_NAME + "/" + user.getUid() + proUser.getImgVersion() + ".jpg");
-                } else {
-                    userRef = storage.child(Constants.FIREBASE_USERS_CONTAINER_NAME + "/" + user.getUid() + ".jpg");
-                }
-
+                userRef = storage.child(Constants.FIREBASE_USERS_CONTAINER_NAME + "/" + user.getUid() + user.getImgVersion() + ".jpg");
                 userRef.delete();
 
                 //Removing from Firebase Auth
-                fbUser.delete();
+                fbUser.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        //Signing out
+                        mAuth.signOut();
+                        goBack();
+                    }
+                });
 
-                //Signing out
-                mAuth.signOut();
-                goBack();
             }
         });
 

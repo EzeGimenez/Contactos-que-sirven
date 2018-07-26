@@ -6,6 +6,7 @@ public class Review implements Serializable {
     private String reviewerUsername, msg, reviewerUID;
     private float rating, atencion, tiempoResp, calidad;
     private int reviewerImgVersion;
+    private boolean reviewerHasPic;
 
     public Review() {
         rating = atencion = tiempoResp = calidad = 0;
@@ -73,5 +74,13 @@ public class Review implements Serializable {
 
     public void setReviewerImgVersion(int reviewerImgVersion) {
         this.reviewerImgVersion = reviewerImgVersion;
+    }
+
+    public boolean isReviewerHasPic() {
+        return reviewerHasPic;
+    }
+
+    public void setReviewerHasPic(boolean reviewerHasPic) {
+        this.reviewerHasPic = reviewerHasPic;
     }
 }

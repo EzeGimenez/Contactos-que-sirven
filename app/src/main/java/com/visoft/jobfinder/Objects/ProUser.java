@@ -5,9 +5,10 @@ public class ProUser extends User {
     private String cvText;
     private double mapCenterLat, mapCenterLng;
     private String horaAtencion, rubroGeneral, rubroEspecifico;
+    private String facebookID, instagramID, whatsappNum;
     private boolean showEmail;
     private float mapZoom;
-    private int diasAtencion, imgVersion;
+    private int diasAtencion;
 
     public ProUser() {
         isPro = true;
@@ -101,11 +102,27 @@ public class ProUser extends User {
         this.mapCenterLat = mapCenterLat;
     }
 
-    public int getImgVersion() {
-        return imgVersion;
+    public String getWhatsappNum() {
+        return whatsappNum;
     }
 
-    public void setImgVersion(int imgVersion) {
-        this.imgVersion = imgVersion;
+    public void setWhatsappNum(String whatsappNum) {
+        this.whatsappNum = whatsappNum;
+    }
+
+    public String getInstagramID() {
+        return instagramID;
+    }
+
+    public void setInstagramID(String instagramID) {
+        this.instagramID = instagramID;
+    }
+
+    public String getFacebookID() {
+        return facebookID;
+    }
+
+    public void setFacebookID(String facebookID) {
+        this.facebookID = facebookID;
     }
 }

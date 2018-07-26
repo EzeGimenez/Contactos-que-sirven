@@ -27,8 +27,8 @@ import com.visoft.jobfinder.Objects.ProUser;
 import com.visoft.jobfinder.Objects.QualityInfo;
 import com.visoft.jobfinder.Objects.Review;
 import com.visoft.jobfinder.Objects.User;
-import com.visoft.jobfinder.misc.Constants;
-import com.visoft.jobfinder.misc.Database;
+import com.visoft.jobfinder.Util.Constants;
+import com.visoft.jobfinder.Util.Database;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -94,26 +94,6 @@ public class UserReviewActivity extends AppCompatActivity {
 
     private void saveReview() {
 
-        DatabaseReference userRef = database
-                .child(Constants.FIREBASE_USERS_CONTAINER_NAME)
-                .child(mAuth.getCurrentUser().getUid());
-
-        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
-                if (user != null || user.getIsPro()) {
-                    ProUser proUser = dataSnapshot.getValue(ProUser.class);
-                    review.setReviewerImgVersion(proUser.getImgVersion());
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
         review.setReviewerUID(mAuth.getCurrentUser().getUid());
         review.setReviewerUsername(mAuth.getCurrentUser().getDisplayName());
 
@@ -123,30 +103,59 @@ public class UserReviewActivity extends AppCompatActivity {
 
         if (atencion >= 4.5) {
             qualityInfo.setAtencion(qualityInfo.getAtencion() + 1);
-        } else if (atencion <= 2 && qualityInfo.getAtencion() > 0) {
-            qualityInfo.setAtencion(qualityInfo.getAtencion() - 1);
+        } else if (atencion <= 2 && qualityInfo.getAtencion() > 1) {
+            qualityInfo.setAtencion(qualityInfo.getAtencion() - 2);
         }
 
         if (tiempoResp >= 4.5) {
             qualityInfo.setTiempoResp(qualityInfo.getTiempoResp() + 1);
-        } else if (tiempoResp <= 2 && qualityInfo.getTiempoResp() > 0) {
-            qualityInfo.setTiempoResp(qualityInfo.getTiempoResp() - 1);
+        } else if (tiempoResp <= 2 && qualityInfo.getTiempoResp() > 1) {
+            qualityInfo.setTiempoResp(qualityInfo.getTiempoResp() - 2);
         }
 
         if (calidad >= 4.5) {
             qualityInfo.setCalidad(qualityInfo.getCalidad() + 1);
-        } else if (calidad <= 2 && qualityInfo.getCalidad() > 0) {
-            qualityInfo.setCalidad(qualityInfo.getCalidad() - 1);
+        } else if (calidad <= 2 && qualityInfo.getCalidad() > 1) {
+            qualityInfo.setCalidad(qualityInfo.getCalidad() - 2);
         }
 
         showLoadingScreen();
-        database.child(Constants.FIREBASE_REVIEWS_CONTAINER_NAME)
-                .child(proUserReviewed.getUid())
-                .child(proUserReviewed.getNumberReviews() + "")
-                .setValue(review).addOnCompleteListener(new OnCompleteListener<Void>() {
+
+        DatabaseReference userRef = database
+                .child(Constants.FIREBASE_USERS_CONTAINER_NAME)
+                .child(mAuth.getCurrentUser().getUid());
+
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                saveQualityInfo();
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                if (user != null) {
+                    review.setReviewerImgVersion(user.getImgVersion());
+                    review.setReviewerHasPic(user.getHasPic());
+                }
+
+                database.child(Constants.FIREBASE_REVIEWS_CONTAINER_NAME)
+                        .child(proUserReviewed.getUid())
+                        .child(proUserReviewed.getNumberReviews() + "")
+                        .setValue(review).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        saveQualityInfo();
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                database.child(Constants.FIREBASE_REVIEWS_CONTAINER_NAME)
+                        .child(proUserReviewed.getUid())
+                        .child(proUserReviewed.getNumberReviews() + "")
+                        .setValue(review).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        saveQualityInfo();
+                    }
+                });
             }
         });
     }
@@ -308,8 +317,8 @@ public class UserReviewActivity extends AppCompatActivity {
                     tvQuery.setText(getString(R.string.calificacionFinalReview));
                     break;
             }
-            mapPage.put(position, view);
 
+            mapPage.put(position, view);
             viewPager.addView(view, 0);
             return view;
         }

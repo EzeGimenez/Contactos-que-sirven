@@ -15,8 +15,8 @@ import android.widget.TextView;
 
 import com.visoft.jobfinder.Objects.ProUser;
 import com.visoft.jobfinder.R;
-import com.visoft.jobfinder.misc.Constants;
-import com.visoft.jobfinder.misc.ErrorAnimator;
+import com.visoft.jobfinder.Util.Constants;
+import com.visoft.jobfinder.Util.ErrorAnimator;
 
 
 public class CVFragment extends Fragment {

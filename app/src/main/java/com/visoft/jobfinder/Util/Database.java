@@ -1,4 +1,4 @@
-package com.visoft.jobfinder.misc;
+package com.visoft.jobfinder.Util;
 
 import com.google.firebase.database.FirebaseDatabase;
 

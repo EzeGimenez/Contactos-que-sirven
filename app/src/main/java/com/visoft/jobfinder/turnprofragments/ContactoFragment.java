@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.visoft.jobfinder.Objects.ProUser;
 import com.visoft.jobfinder.R;
-import com.visoft.jobfinder.misc.ErrorAnimator;
+import com.visoft.jobfinder.Util.ErrorAnimator;
 
 import java.util.ArrayList;
 import java.util.Arrays;

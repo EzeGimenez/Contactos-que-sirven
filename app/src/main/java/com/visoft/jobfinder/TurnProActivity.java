@@ -25,14 +25,15 @@ import com.google.firebase.storage.UploadTask;
 import com.visoft.jobfinder.Objects.ProUser;
 import com.visoft.jobfinder.Objects.QualityInfo;
 import com.visoft.jobfinder.Objects.User;
-import com.visoft.jobfinder.misc.Constants;
-import com.visoft.jobfinder.misc.Database;
-import com.visoft.jobfinder.misc.DatabaseTimer;
+import com.visoft.jobfinder.Util.Constants;
+import com.visoft.jobfinder.Util.Database;
+import com.visoft.jobfinder.Util.DatabaseTimer;
 import com.visoft.jobfinder.turnprofragments.CVFragment;
 import com.visoft.jobfinder.turnprofragments.ContactoFragment;
 import com.visoft.jobfinder.turnprofragments.ProfilePicFragment;
 import com.visoft.jobfinder.turnprofragments.RubroEspecificoFragment;
 import com.visoft.jobfinder.turnprofragments.RubroGeneralFragment;
+import com.visoft.jobfinder.turnprofragments.SocialAppsFragment;
 import com.visoft.jobfinder.turnprofragments.WorkScopeFragment;
 
 import java.io.ByteArrayOutputStream;
@@ -224,28 +225,44 @@ public class TurnProActivity extends AppCompatActivity {
             if (((ContactoFragment) actualFragment).isContactInfoOk()) {
                 ((ContactoFragment) actualFragment).setContactInfo(proUser);
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
-                Fragment fragment = fragmentManager.findFragmentByTag(Constants.CV_FRAGMENT_TAG);
+                Fragment fragment = fragmentManager.findFragmentByTag(Constants.SOCIAL_FRAGMENT_TAG);
                 if (fragment == null) {
-                    fragment = new CVFragment();
+                    fragment = new SocialAppsFragment();
                 }
-                if (isEditing) {
-                    Bundle bundle = new Bundle();
-                    bundle.putString("cv", proUser.getCvText());
-                    fragment.setArguments(bundle);
-                }
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("user", proUser);
+                fragment.setArguments(bundle);
 
                 transaction
-                        .replace(R.id.ContainerTurnProFragments, fragment, Constants.CV_FRAGMENT_TAG)
+                        .replace(R.id.ContainerTurnProFragments, fragment, Constants.SOCIAL_FRAGMENT_TAG)
                         .addToBackStack(Constants.CONTACTO_FRAGMENT_TAG)
                         .commit();
-
-                btnPrev.setEnabled(true);
-                btnNext.setEnabled(true);
-                btnNext.setText(R.string.finalizar);
 
             } else {
                 ((ContactoFragment) actualFragment).vibrate();
             }
+
+        } else if (actualFragment instanceof SocialAppsFragment) {
+
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            Fragment fragment = fragmentManager.findFragmentByTag(Constants.CV_FRAGMENT_TAG);
+            if (fragment == null) {
+                fragment = new CVFragment();
+            }
+            if (isEditing) {
+                Bundle bundle = new Bundle();
+                bundle.putString("cv", proUser.getCvText());
+                fragment.setArguments(bundle);
+            }
+
+            transaction
+                    .replace(R.id.ContainerTurnProFragments, fragment, Constants.CV_FRAGMENT_TAG)
+                    .addToBackStack(Constants.CONTACTO_FRAGMENT_TAG)
+                    .commit();
+
+            btnPrev.setEnabled(true);
+            btnNext.setEnabled(true);
+            btnNext.setText(R.string.finalizar);
 
         } else if (actualFragment instanceof CVFragment) {
 
@@ -326,11 +343,23 @@ public class TurnProActivity extends AppCompatActivity {
 
             btnPrev.setEnabled(true);
 
-        } else if (actualFragment instanceof CVFragment) {
+        } else if (actualFragment instanceof SocialAppsFragment) {
 
             Fragment contactoFragment = fragmentManager.findFragmentByTag(Constants.CONTACTO_FRAGMENT_TAG);
+
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("user", proUser);
+            contactoFragment.setArguments(bundle);
+
             fragmentManager.beginTransaction()
                     .replace(R.id.ContainerTurnProFragments, contactoFragment, Constants.CONTACTO_FRAGMENT_TAG)
+                    .commit();
+
+        } else if (actualFragment instanceof CVFragment) {
+
+            Fragment contactoFragment = fragmentManager.findFragmentByTag(Constants.SOCIAL_FRAGMENT_TAG);
+            fragmentManager.beginTransaction()
+                    .replace(R.id.ContainerTurnProFragments, contactoFragment, Constants.SOCIAL_FRAGMENT_TAG)
                     .commit();
 
             btnNext.setEnabled(true);

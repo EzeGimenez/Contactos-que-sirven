@@ -1,4 +1,4 @@
-package com.visoft.jobfinder.misc;
+package com.visoft.jobfinder.Util;
 
 import android.content.Context;
 import android.view.View;

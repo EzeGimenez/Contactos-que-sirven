@@ -32,7 +32,7 @@
                     android:id="@+id/ContainerProfilePic"
                     android:layout_width="0dp"
                     android:layout_height="230dp"
-                    app:layout_constraintBottom_toTopOf="@+id/tvRubro"
+                    app:layout_constraintBottom_toTopOf="@+id/tvUsername"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -46,21 +46,39 @@
                         android:src="@drawable/profile_pic"
                         android:transitionName="ivPic" />
 
-                    <TextView
-                        android:id="@+id/tvUsername"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom"
-                        android:background="@color/black_transparent"
-                        android:paddingBottom="8dp"
-                        android:paddingEnd="16dp"
-                        android:paddingStart="16dp"
-                        android:paddingTop="8dp"
-                        android:textAllCaps="true"
-                        android:textColor="@color/primaryAccent"
-                        android:transitionName="username" />
-
                 </FrameLayout>
+
+                <TextView
+                    android:id="@+id/tvUsername"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/searchview_background"
+                    android:paddingBottom="4dp"
+                    android:paddingTop="4dp"
+                    android:textAlignment="center"
+                    android:textAllCaps="true"
+                    android:textColor="@android:color/white"
+                    android:transitionName="username"
+                    app:layout_constraintBottom_toTopOf="@id/tvRubro"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ContainerProfilePic" />
+
+                <TextView
+                    android:id="@+id/tvRubro"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:textAllCaps="true"
+                    app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvUsername" />
 
                 <android.support.constraint.ConstraintLayout
                     android:id="@+id/constraintLayout"
@@ -117,12 +135,12 @@
                     </LinearLayout>
 
                     <com.iarcuschin.simpleratingbar.SimpleRatingBar
-                        android:transitionName="ratingBar"
                         android:id="@+id/ratingBar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:numStars="5"
+                        android:transitionName="ratingBar"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:srb_drawBorderEnabled="false"
@@ -155,19 +173,6 @@
 
                 </android.support.constraint.ConstraintLayout>
 
-                <TextView
-                    android:id="@+id/tvRubro"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:textAllCaps="true"
-                    app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/ContainerProfilePic" />
-
             </android.support.constraint.ConstraintLayout>
 
             <android.support.constraint.ConstraintLayout
@@ -189,46 +194,42 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <Button
-                        android:id="@+id/media1"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/btnInstagram"
+                        style="@style/SocialButton"
                         android:layout_marginStart="16dp"
-                        android:background="@android:color/holo_red_dark"
+                        android:src="@drawable/social_instagram_icon"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/media2"
+                        app:layout_constraintEnd_toStartOf="@id/btnFacebook"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <Button
-                        android:id="@+id/media2"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:background="@android:color/holo_blue_dark"
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/btnFacebook"
+                        style="@style/SocialButton"
+                        android:src="@drawable/social_facebook_icon"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/media3"
-                        app:layout_constraintStart_toEndOf="@id/media1"
+                        app:layout_constraintEnd_toStartOf="@id/btnWhatsapp"
+                        app:layout_constraintStart_toEndOf="@id/btnInstagram"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <Button
-                        android:id="@+id/media3"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:background="@android:color/holo_green_dark"
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/btnWhatsapp"
+                        style="@style/SocialButton"
+                        android:src="@drawable/social_whatsapp_icon"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/media4"
-                        app:layout_constraintStart_toEndOf="@id/media2"
+                        app:layout_constraintEnd_toStartOf="@id/btnMail"
+                        app:layout_constraintStart_toEndOf="@id/btnFacebook"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <Button
-                        android:id="@+id/media4"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/btnMail"
+                        style="@style/SocialButton"
                         android:layout_marginEnd="16dp"
-                        android:background="@android:color/white"
+                        android:src="@drawable/social_email_icon"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/media3"
+                        app:layout_constraintStart_toEndOf="@id/btnWhatsapp"
                         app:layout_constraintTop_toTopOf="parent" />
 
                 </android.support.constraint.ConstraintLayout>
@@ -237,7 +238,7 @@
                     android:id="@+id/frameLayout"
                     android:layout_width="0dp"
                     android:layout_height="200dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/ContainerSocialMedia">
@@ -261,7 +262,9 @@
                     android:layout_height="75dp"
                     android:layout_marginBottom="75dp"
                     android:layout_marginTop="32dp"
+                    android:background="@drawable/round_orange_circle"
                     android:drawableStart="@drawable/comment"
+                    android:paddingStart="8dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/btnCV"
                     app:layout_constraintStart_toStartOf="@id/frameLayout"
@@ -273,6 +276,7 @@
                     android:layout_height="75dp"
                     android:layout_marginBottom="75dp"
                     android:layout_marginTop="32dp"
+                    android:background="@drawable/round_orange_circle"
                     android:src="@drawable/curriculum"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -285,7 +289,7 @@
     </ScrollView>
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/buttonChat"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginBottom="16dp"

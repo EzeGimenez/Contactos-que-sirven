@@ -1,4 +1,4 @@
-package com.visoft.jobfinder.misc;
+package com.visoft.jobfinder.Util;
 
 import android.app.Activity;
 import android.os.CountDownTimer;

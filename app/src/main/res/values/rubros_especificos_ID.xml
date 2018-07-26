@@ -17,7 +17,6 @@
     </string-array>
 
     <string-array name="serviciosFamiliaID">
-        <item>estetica</item>
         <item>esteticaDomicilio</item>
         <item>profesorParticular</item>
         <item>instructorado</item>

@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import com.visoft.jobfinder.misc.Constants;
+import com.visoft.jobfinder.Util.Constants;
 
 public class SigninActivity extends AppCompatActivity {
     private ConstraintLayout progressBarContainer;

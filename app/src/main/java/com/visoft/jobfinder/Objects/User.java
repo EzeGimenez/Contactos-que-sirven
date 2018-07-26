@@ -8,7 +8,7 @@ import java.io.Serializable;
 public class User implements Serializable {
     protected String username, email, uid;
     protected float rating;
-    protected int numberReviews;
+    protected int numberReviews, imgVersion;
     protected boolean isPro, hasPic;
 
     /**
@@ -71,5 +71,13 @@ public class User implements Serializable {
 
     public void setHasPic(boolean p) {
         this.hasPic = p;
+    }
+
+    public int getImgVersion() {
+        return imgVersion;
+    }
+
+    public void setImgVersion(int imgVersion) {
+        this.imgVersion = imgVersion;
     }
 }

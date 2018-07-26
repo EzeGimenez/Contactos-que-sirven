@@ -28,11 +28,11 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.visoft.jobfinder.Util.Constants;
+import com.visoft.jobfinder.Util.Database;
 import com.visoft.jobfinder.mainpagefragments.MainPageFragment;
 import com.visoft.jobfinder.mainpagefragments.SearchResultFragment;
 import com.visoft.jobfinder.mainpagefragments.SignInFragment;
-import com.visoft.jobfinder.misc.Constants;
-import com.visoft.jobfinder.misc.Database;
 
 import java.util.Calendar;
 

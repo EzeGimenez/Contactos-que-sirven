@@ -32,7 +32,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <com.visoft.jobfinder.misc.NonSwipeableViewPager
+        <com.visoft.jobfinder.Util.NonSwipeableViewPager
             android:id="@+id/viewPager"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -47,7 +47,7 @@
         android:id="@+id/progressBarContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/transparent"
+        android:background="@color/semi_transparent"
         android:clickable="true"
         android:elevation="10dp"
         android:focusable="true"

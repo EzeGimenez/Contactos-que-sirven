@@ -26,8 +26,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.FirebaseDatabase;
 import com.visoft.jobfinder.Objects.User;
-import com.visoft.jobfinder.misc.Constants;
-import com.visoft.jobfinder.misc.ErrorAnimator;
+import com.visoft.jobfinder.Util.Constants;
+import com.visoft.jobfinder.Util.ErrorAnimator;
 
 /**
  * Fragment del login

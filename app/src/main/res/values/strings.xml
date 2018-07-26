@@ -122,6 +122,18 @@
     <string name="ir_a_contactos">Ir a Agenda</string>
     <string name="Contactos">Agenda</string>
     <string name="shareUser">Compartir Usuario</string>
+    <string name="social_apps_noañadidas">Redes sociales a añadir</string>
+    <string name="social_apps_añadidas">Redes sociales ya añadidas</string>
+    <string name="introduzcaUsuarioInstagram">Introduzca su nombre de usuario de Instagram</string>
+    <string name="introduzcaUsuarioFacebook">Introduzca su ID de Facebook</string>
+    <string name="introduzcaNumeroWhatsapp">Introduzca su número de Whatsapp</string>
+    <string name="deseaMostrarSuEmail">¿Desea mostrar su Email?</string>
+    <string name="removerInstagram">Seguro que desea remover Instagram?</string>
+    <string name="removerFacebook">Está seguro que desea remover Facebook?</string>
+    <string name="removerWhatsapp">Está seguro que desea remover Whatsapp?</string>
+    <string name="removerMail">Está seguro que no desea mostrar su mail?</string>
+    <string name="enviarMail">Enviar Email…</string>
+    <string name="selecciona_social_networks">Añade o elimina links a las redes sociales</string>
 
 
 </resources>

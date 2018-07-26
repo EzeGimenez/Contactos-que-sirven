@@ -1,4 +1,4 @@
-package com.visoft.jobfinder.misc;
+package com.visoft.jobfinder.Util;
 
 import android.app.Activity;
 import android.content.Context;
@@ -94,7 +94,7 @@ public class ImagePicker {
 
     private static File getTempFile(Context context) {
         File imageFile = new File(context.getExternalCacheDir(), TEMP_IMAGE_NAME);
-        imageFile.getParentFile().mkdirs();
+        //imageFile.getParentFile().mkdirs();
         return imageFile;
     }
 

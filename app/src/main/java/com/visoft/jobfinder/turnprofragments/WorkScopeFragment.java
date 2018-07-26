@@ -16,7 +16,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.visoft.jobfinder.Objects.ProUser;
 import com.visoft.jobfinder.R;
-import com.visoft.jobfinder.misc.MapHighlighter;
+import com.visoft.jobfinder.Util.MapHighlighter;
 
 public class WorkScopeFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap map;

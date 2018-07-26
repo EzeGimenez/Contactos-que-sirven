@@ -20,11 +20,13 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
-            android:src="@drawable/telefono"
             android:id="@+id/btnCall1"
+            style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginEnd="16dp"
+            android:background="@drawable/round_orange_circle"
+            android:src="@drawable/telefono"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -46,11 +48,12 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
-            android:src="@drawable/telefono"
             android:id="@+id/btnCall2"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginEnd="16dp"
+            android:background="@drawable/round_orange_circle"
+            android:src="@drawable/telefono"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

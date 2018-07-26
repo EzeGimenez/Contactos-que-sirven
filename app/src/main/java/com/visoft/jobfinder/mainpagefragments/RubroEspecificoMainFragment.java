@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.visoft.jobfinder.R;
-import com.visoft.jobfinder.misc.Constants;
+import com.visoft.jobfinder.Util.Constants;
 
 import java.util.ArrayList;
 

@@ -40,9 +40,9 @@ import com.visoft.jobfinder.Objects.ProUser;
 import com.visoft.jobfinder.Objects.User;
 import com.visoft.jobfinder.ProfileActivity;
 import com.visoft.jobfinder.R;
-import com.visoft.jobfinder.misc.Constants;
-import com.visoft.jobfinder.misc.Database;
-import com.visoft.jobfinder.misc.GlideApp;
+import com.visoft.jobfinder.Util.Constants;
+import com.visoft.jobfinder.Util.Database;
+import com.visoft.jobfinder.Util.GlideApp;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -230,7 +230,7 @@ public class SearchResultFragment extends Fragment {
     }
 
     private void setAdapter() {
-        if (i == j) {
+        if (i == j && isRunning) {
             if (results.size() > 0) {
                 LinkedHashSet<ProUser> linkedHashSet = new LinkedHashSet<>();
                 linkedHashSet.addAll(results);
