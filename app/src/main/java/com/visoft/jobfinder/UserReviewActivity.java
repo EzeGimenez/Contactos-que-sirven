@@ -26,7 +26,6 @@ import com.iarcuschin.simpleratingbar.SimpleRatingBar;
 import com.visoft.jobfinder.Objects.ProUser;
 import com.visoft.jobfinder.Objects.QualityInfo;
 import com.visoft.jobfinder.Objects.Review;
-import com.visoft.jobfinder.Objects.User;
 import com.visoft.jobfinder.Util.Constants;
 import com.visoft.jobfinder.Util.Database;
 
@@ -121,41 +120,13 @@ public class UserReviewActivity extends AppCompatActivity {
 
         showLoadingScreen();
 
-        DatabaseReference userRef = database
-                .child(Constants.FIREBASE_USERS_CONTAINER_NAME)
-                .child(mAuth.getCurrentUser().getUid());
-
-        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        database.child(Constants.FIREBASE_REVIEWS_CONTAINER_NAME)
+                .child(proUserReviewed.getUid())
+                .child(proUserReviewed.getNumberReviews() + "")
+                .setValue(review).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
-                if (user != null) {
-                    review.setReviewerImgVersion(user.getImgVersion());
-                    review.setReviewerHasPic(user.getHasPic());
-                }
-
-                database.child(Constants.FIREBASE_REVIEWS_CONTAINER_NAME)
-                        .child(proUserReviewed.getUid())
-                        .child(proUserReviewed.getNumberReviews() + "")
-                        .setValue(review).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        saveQualityInfo();
-                    }
-                });
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                database.child(Constants.FIREBASE_REVIEWS_CONTAINER_NAME)
-                        .child(proUserReviewed.getUid())
-                        .child(proUserReviewed.getNumberReviews() + "")
-                        .setValue(review).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        saveQualityInfo();
-                    }
-                });
+            public void onComplete(@NonNull Task<Void> task) {
+                saveQualityInfo();
             }
         });
     }

@@ -63,7 +63,7 @@ public class ProfilePicFragment extends Fragment {
         if (args != null) {
             ImageView ivPic = getView().findViewById(R.id.ivPic);
             ivPic.setVisibility(View.VISIBLE);
-            btnChoosePic.setAlpha(0.3f);
+            btnChoosePic.setAlpha(0.7f);
 
             byte[] byteArray = args.getByteArray("bitmapByteArray");
             if (byteArray != null && !args.getBoolean("hasPic", false)) {

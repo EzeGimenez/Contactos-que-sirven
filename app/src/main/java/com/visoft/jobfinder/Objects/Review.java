@@ -5,8 +5,6 @@ import java.io.Serializable;
 public class Review implements Serializable {
     private String reviewerUsername, msg, reviewerUID;
     private float rating, atencion, tiempoResp, calidad;
-    private int reviewerImgVersion;
-    private boolean reviewerHasPic;
 
     public Review() {
         rating = atencion = tiempoResp = calidad = 0;
@@ -66,21 +64,5 @@ public class Review implements Serializable {
 
     public void setReviewerUID(String reviewerUID) {
         this.reviewerUID = reviewerUID;
-    }
-
-    public int getReviewerImgVersion() {
-        return reviewerImgVersion;
-    }
-
-    public void setReviewerImgVersion(int reviewerImgVersion) {
-        this.reviewerImgVersion = reviewerImgVersion;
-    }
-
-    public boolean isReviewerHasPic() {
-        return reviewerHasPic;
-    }
-
-    public void setReviewerHasPic(boolean reviewerHasPic) {
-        this.reviewerHasPic = reviewerHasPic;
     }
 }

@@ -55,12 +55,11 @@
                     android:layout_marginEnd="16dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
-                    android:background="@drawable/searchview_background"
                     android:paddingBottom="4dp"
                     android:paddingTop="4dp"
                     android:textAlignment="center"
                     android:textAllCaps="true"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/primaryAccent"
                     android:transitionName="username"
                     app:layout_constraintBottom_toTopOf="@id/tvRubro"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -74,6 +73,7 @@
                     android:layout_marginEnd="16dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
+                    android:textAlignment="center"
                     android:textAllCaps="true"
                     app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -101,46 +101,15 @@
                         app:layout_constraintStart_toEndOf="@+id/ratingBar"
                         app:layout_constraintTop_toTopOf="@+id/ratingBar" />
 
-                    <LinearLayout
-                        android:id="@+id/ContainerInsignias"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom"
-                        android:gravity="center"
-                        android:orientation="horizontal"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/tvNumberReviews">
-
-                        <ImageView
-                            android:id="@+id/ivInsigniaAtencion"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:src="@drawable/atencion_insignia_24dp"
-                            android:visibility="gone" />
-
-                        <ImageView
-                            android:id="@+id/ivInsigniaTiempoResp"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:src="@drawable/time_resp_insignia_24dp"
-                            android:visibility="gone" />
-
-                        <ImageView
-                            android:id="@+id/ivInsigniaCalidad"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:src="@drawable/quality_insignia_24dp"
-                            android:visibility="gone" />
-
-                    </LinearLayout>
-
                     <com.iarcuschin.simpleratingbar.SimpleRatingBar
                         android:id="@+id/ratingBar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
                         android:layout_marginTop="4dp"
                         android:numStars="5"
                         android:transitionName="ratingBar"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:srb_drawBorderEnabled="false"
@@ -170,6 +139,44 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/btnShowContactInfo" />
+
+                    <LinearLayout
+                        android:id="@+id/ContainerInsignias"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_marginTop="20dp"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvHrAtencion">
+
+                        <ImageView
+                            android:id="@+id/ivInsigniaAtencion"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_margin="8dp"
+                            android:src="@drawable/atencion_insignia_24dp"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/ivInsigniaTiempoResp"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_margin="8dp"
+                            android:src="@drawable/time_resp_insignia_24dp"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/ivInsigniaCalidad"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_margin="8dp"
+                            android:src="@drawable/quality_insignia_24dp"
+                            android:visibility="gone" />
+
+                    </LinearLayout>
 
                 </android.support.constraint.ConstraintLayout>
 

@@ -40,7 +40,6 @@
 
         <android.support.v7.widget.SearchView
             android:id="@+id/searchView"
-            style="@style/SearchView"
             android:layout_width="wrap_content"
             android:layout_height="60dp"
             android:layout_marginBottom="8dp"
@@ -52,8 +51,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:queryBackground="@android:color/transparent" />
-
+            app:queryBackground="@drawable/orange_bottom_line"
+            app:queryHint="@string/search_view_hint"
+            app:searchIcon="@drawable/search_icon" />
 
     </android.support.constraint.ConstraintLayout>
 

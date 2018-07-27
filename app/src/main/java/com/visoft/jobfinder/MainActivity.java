@@ -61,7 +61,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
         //Inicializacion de variables
         searchView = findViewById(R.id.searchView);
-
         //Creacion de toolbar_main
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

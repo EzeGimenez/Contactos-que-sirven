@@ -5,6 +5,11 @@
             <solid android:color="@android:color/white" />
         </shape>
     </item>
-    <item android:drawable="@drawable/social_email_iconfore" />
+    <item
+        android:bottom="100dp"
+        android:drawable="@drawable/social_email_iconfore"
+        android:left="100dp"
+        android:right="100dp"
+        android:top="100dp" />
 
 </layer-list>

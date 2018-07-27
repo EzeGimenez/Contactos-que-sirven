@@ -37,6 +37,7 @@ import com.iarcuschin.simpleratingbar.SimpleRatingBar;
 import com.visoft.jobfinder.Objects.ProUser;
 import com.visoft.jobfinder.Objects.QualityInfo;
 import com.visoft.jobfinder.Objects.Review;
+import com.visoft.jobfinder.Objects.User;
 import com.visoft.jobfinder.Util.Constants;
 import com.visoft.jobfinder.Util.Database;
 import com.visoft.jobfinder.Util.GlideApp;
@@ -353,10 +354,7 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback, Vie
         }.start();
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-
         final View view = getLayoutInflater().inflate(R.layout.reviews_alert_dialog, null);
-        final List<Review> reviews = new ArrayList<Review>();
-
         final LinearLayout containerReviews = view.findViewById(R.id.ContainerReviews);
 
         builder.setView(view);
@@ -371,11 +369,11 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback, Vie
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         timer.cancel();
                         int i = 0;
+                        ArrayList<CircleImageView> picList = new ArrayList<>();
+                        ArrayList<String> uids = new ArrayList<>();
                         for (DataSnapshot d : dataSnapshot.getChildren()) {
                             Review r = d.getValue(Review.class);
                             if (r != null) {
-                                StorageReference userRef;
-                                StorageReference storage = FirebaseStorage.getInstance().getReference();
                                 View comment = getLayoutInflater().inflate(R.layout.comment, null);
                                 TextView tvUsername = comment.findViewById(R.id.tvUsername);
                                 TextView msg = comment.findViewById(R.id.tvMessage);
@@ -388,12 +386,8 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback, Vie
 
                                 containerReviews.addView(comment);
 
-                                if (r.isReviewerHasPic()) {
-                                    userRef = storage.child(Constants.FIREBASE_USERS_CONTAINER_NAME + "/" + r.getReviewerUID() + r.getReviewerImgVersion() + ".jpg");
-                                    GlideApp.with(getContext())
-                                            .load(userRef)
-                                            .into(ivPic);
-                                }
+                                picList.add(ivPic);
+                                uids.add(r.getReviewerUID());
 
                                 i++;
                             }
@@ -401,8 +395,7 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback, Vie
                                 break;
                             }
                         }
-
-
+                        getCommentsPics(picList, uids);
                     }
 
                     @Override
@@ -410,6 +403,36 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback, Vie
 
                     }
                 });
+    }
+
+    private void getCommentsPics(final List<CircleImageView> picList, final List<String> uids) {
+        for (int i = 0; i < uids.size(); i++) {
+
+            final int finalI = i;
+            database
+                    .child(Constants.FIREBASE_USERS_CONTAINER_NAME)
+                    .child(uids.get(i))
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            User user = dataSnapshot.getValue(User.class);
+                            if (user != null && user.getHasPic() && isRunning) {
+                                StorageReference userRef = FirebaseStorage
+                                        .getInstance()
+                                        .getReference()
+                                        .child(Constants.FIREBASE_USERS_CONTAINER_NAME + "/" + uids.get(finalI) + user.getImgVersion() + ".jpg");
+                                GlideApp.with(getContext())
+                                        .load(userRef)
+                                        .into(picList.get(finalI));
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+        }
     }
 
     @Override

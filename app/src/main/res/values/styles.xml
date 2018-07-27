@@ -28,8 +28,6 @@
     </style>
 
     <style name="SearchView" parent="Widget.AppCompat.SearchView">
-        <item name="android:background">@drawable/searchview_background</item>
-        <item name="queryHint">@string/search_view_hint</item>
     </style>
 
     <style name="SocialButton">
