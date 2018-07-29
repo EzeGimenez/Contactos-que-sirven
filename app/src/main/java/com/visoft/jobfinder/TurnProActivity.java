@@ -115,10 +115,8 @@ public class TurnProActivity extends AppCompatActivity {
             }
         });
 
-
         btnPrev.setEnabled(true);
         btnPrev.setText(R.string.cancelar);
-
     }
 
     /**

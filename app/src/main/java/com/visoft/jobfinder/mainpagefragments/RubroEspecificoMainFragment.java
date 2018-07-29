@@ -20,7 +20,6 @@ public class RubroEspecificoMainFragment extends Fragment {
     private ArrayList<Button> buttons;
 
     //Graphical components
-    private Button btn1, btn2, btn3, btn4, btn5, btn6;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

@@ -61,8 +61,8 @@
     <Button
         android:id="@+id/button6"
         style="@style/MainButtons"
-        android:tag="otros"
-        android:text="@string/otros"
+        android:tag="alquileres"
+        android:text="@string/alquileres"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/button5"

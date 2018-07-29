@@ -57,6 +57,7 @@
         <item>@string/medico</item>
         <item>@string/servicioDiscapacitados</item>
         <item>@string/cerrajeria</item>
+        <item>@string/seguridad</item>
         <item>@string/policia</item>
         <item>@string/bomberos</item>
         <item>@string/defensaCivil</item>
@@ -64,7 +65,8 @@
 
     </string-array>
 
-    <string-array name="otros">
-        <item></item>
+    <string-array name="alquileres">
+        <item>@string/container</item>
+        <item>@string/bañosquimicos</item>
     </string-array>
 </resources>

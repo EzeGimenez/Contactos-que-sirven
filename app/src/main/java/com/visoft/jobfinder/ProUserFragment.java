@@ -3,6 +3,7 @@ package com.visoft.jobfinder;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -10,12 +11,18 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -27,6 +34,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,6 +42,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.iarcuschin.simpleratingbar.SimpleRatingBar;
+import com.visoft.jobfinder.Objects.ChatOverview;
+import com.visoft.jobfinder.Objects.Message;
 import com.visoft.jobfinder.Objects.ProUser;
 import com.visoft.jobfinder.Objects.QualityInfo;
 import com.visoft.jobfinder.Objects.Review;
@@ -45,7 +55,9 @@ import com.visoft.jobfinder.Util.MapHighlighter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -60,9 +72,14 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback, Vie
     private SimpleRatingBar ratingBar;
     private MapView mapView;
     private ImageButton btnCV, btnShowContactInfo;
-    private Button btnShowReviews, btnMsg;
-    private CircleImageView btnInstagram, btnWhatsapp, btnMail, btnFacebook;
+    private Button btnShowReviews;
+    private FloatingActionButton btnSend;
+    private EditText etChat;
+    private ConstraintLayout msgContainer;
+    private ImageView btnInstagram, btnWhatsapp, btnMail, btnFacebook;
     private ImageView ivProfilePic;
+
+    private ConstraintLayout containerScreens;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -87,13 +104,16 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback, Vie
         ratingBar = view.findViewById(R.id.ratingBar);
         mapView = view.findViewById(R.id.map);
         btnShowReviews = view.findViewById(R.id.btnShowReviews);
-        btnMsg = view.findViewById(R.id.buttonChat);
         btnShowContactInfo = view.findViewById(R.id.btnShowContactInfo);
         ivProfilePic = view.findViewById(R.id.ivProfilePic);
         btnInstagram = view.findViewById(R.id.btnInstagram);
         btnMail = view.findViewById(R.id.btnMail);
         btnFacebook = view.findViewById(R.id.btnFacebook);
         btnWhatsapp = view.findViewById(R.id.btnWhatsapp);
+        btnSend = view.findViewById(R.id.btnSend);
+        msgContainer = view.findViewById(R.id.msgContainer);
+        etChat = view.findViewById(R.id.etChat);
+        containerScreens = view.findViewById(R.id.ContainerScreen);
 
         isRunning = true;
 
@@ -205,11 +225,113 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback, Vie
 
         if (getActivity() instanceof OwnUserProfileActivity) {
             ((OwnUserProfileActivity) getActivity()).hideLoadingScreen();
-            btnMsg.setVisibility(View.GONE);
+            btnSend.setVisibility(View.GONE);
+            msgContainer.setVisibility(View.GONE);
+        } else {
+            etChat.setOnKeyListener(new View.OnKeyListener() {
+
+                @Override
+                public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                    if (i == KeyEvent.KEYCODE_BACK) {
+                        etChat.clearFocus();
+                        return true;
+                    } else return false;
+                }
+            });
+            etChat.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    Objects.requireNonNull(imm).hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            });
+
+            containerScreens.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    InputMethodManager imm = (InputMethodManager) v.getContext()
+                            .getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    etChat.clearFocus();
+                }
+            });
+
+            btnSend.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    sendMessage(etChat.getText().toString());
+                }
+            });
         }
 
         getProfilePic();
         getInsignias();
+    }
+
+    private void sendMessage(final String s) {
+        etChat.setText("");
+        if (s != null && s.length() > 0) {
+            final String uidSender = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            final String uidReceiver = user.getUid();
+
+            database
+                    .child(Constants.FIREBASE_CHATS_CONTAINER_NAME)
+                    .child(uidSender)
+                    .child(uidReceiver)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            ChatOverview chatOverview = dataSnapshot.getValue(ChatOverview.class);
+
+                            if (chatOverview == null) {
+                                String chatID = database
+                                        .child(Constants.FIREBASE_MESSAGES_CONTAINER_NAME)
+                                        .push().getKey();
+                                chatOverview = new ChatOverview();
+                                chatOverview.setChatID(chatID);
+                            }
+
+                            chatOverview.setAuthor(uidSender);
+                            chatOverview.setReceiverUID(uidReceiver);
+                            chatOverview.setLastMessage(s);
+                            chatOverview.setTimeStamp(new Date().getTime());
+                            saveInChats(chatOverview);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+        }
+    }
+
+    private void saveInChats(ChatOverview chatOverview) {
+        database
+                .child(Constants.FIREBASE_CHATS_CONTAINER_NAME)
+                .child(chatOverview.getAuthor())
+                .child(chatOverview.getReceiver())
+                .setValue(chatOverview);
+
+        database
+                .child(Constants.FIREBASE_CHATS_CONTAINER_NAME)
+                .child(chatOverview.getReceiver())
+                .child(chatOverview.getAuthor())
+                .setValue(chatOverview);
+
+        Message message = new Message();
+        message.setAuthor(chatOverview.getAuthor());
+        message.setTimeStamp(chatOverview.getTimeStamp());
+        message.setText(chatOverview.getLastMessage());
+
+        database
+                .child(Constants.FIREBASE_MESSAGES_CONTAINER_NAME)
+                .child(chatOverview.getChatID())
+                .push()
+                .setValue(message);
+
+        Snackbar.make(getActivity().findViewById(R.id.rootContainer),
+                getString(R.string.enviado), Snackbar.LENGTH_SHORT).show();
     }
 
     private void getProfilePic() {

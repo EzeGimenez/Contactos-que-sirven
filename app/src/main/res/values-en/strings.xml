@@ -46,13 +46,16 @@
     <string name="defensaMujer">Women defense</string>
     <string name="instructorado">Instructor</string>
     <string name="mantpiscinas">Pool maintenance</string>
+    <string name="container">Garbage containers</string>
+    <string name="alquileres">Rent</string>
+    <string name="bañosquimicos">Chemical Baths</string>
 
     <!-- Rubros Generales-->
     <string name="hogarMantenimiento">Home &amp; Maintenance</string>
     <string name="serviciosFamilia">Family service</string>
     <string name="obraConstruccion">Construction</string>
     <string name="personalEventual">Casual staff</string>
-    <string name="emergencias">Medical &amp; vehicular emergency</string>
+    <string name="emergencias">Emergencies</string>
     <string name="otros">Others</string>
     <string name="transformar_en_perfil_de_trabajo">Make Professional profile</string>
     <string name="editar_perfil">Edit Profile</string>
@@ -131,5 +134,9 @@
     <string name="removerMail">Are you sure you don\'t want to show your email?</string>
     <string name="enviarMail">Send Email…</string>
     <string name="selecciona_social_networks">Add or remove social network links</string>
+    <string name="chatHint">Type message</string>
+    <string name="enviado">Sent</string>
+    <string name="chats">Chats</string>
+    <string name="go_to_chats">Go to Chats</string>
 
 </resources>

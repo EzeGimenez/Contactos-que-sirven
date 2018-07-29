@@ -50,13 +50,16 @@
     <string name="atencionReview">¿Cómo evaluaría la atención recibida?</string>
     <string name="calificacionFinalReview">¿Cómo calificaría en general al profesional?</string>
     <string name="pequeñaDescripcion">Escriba una reseña corta</string>
+    <string name="container">Containers de basura</string>
+    <string name="alquileres">Alquileres</string>
+    <string name="bañosquimicos">Baños Químicos</string>
 
     <!-- Rubros Generales-->
     <string name="hogarMantenimiento">Hogar y Mantenimiento</string>
     <string name="serviciosFamilia">Servicios de familia</string>
     <string name="obraConstruccion">Obra y Construcción</string>
     <string name="personalEventual">Personal Eventual</string>
-    <string name="emergencias">Emergencias Médicas y vehiculares</string>
+    <string name="emergencias">Emergencias</string>
     <string name="otros">Otros</string>
 
     <string name="app_name">NetWork</string>
@@ -134,6 +137,10 @@
     <string name="removerMail">Está seguro que no desea mostrar su mail?</string>
     <string name="enviarMail">Enviar Email…</string>
     <string name="selecciona_social_networks">Añade o elimina links a las redes sociales</string>
+    <string name="chatHint">Escribe mensaje</string>
+    <string name="enviado">Enviado</string>
+    <string name="chats">Mensajes</string>
+    <string name="go_to_chats">Ir a Mensajes</string>
 
 
 </resources>

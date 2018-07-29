@@ -99,7 +99,7 @@ public class ProfilePicFragment extends Fragment {
 
                 ImageView ivPic = getView().findViewById(R.id.ivPic);
                 ivPic.setVisibility(View.VISIBLE);
-                btnChoosePic.setVisibility(View.GONE);
+                btnChoosePic.setAlpha(0.0f);
                 ivPic.setImageBitmap(bitmap);
             }
         }

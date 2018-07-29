@@ -12,12 +12,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.visoft.jobfinder.Objects.ProUser;
 import com.visoft.jobfinder.R;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class SocialAppsFragment extends Fragment implements View.OnClickListener {
@@ -25,8 +24,8 @@ public class SocialAppsFragment extends Fragment implements View.OnClickListener
 
     //Componentes gráficas
     private ConstraintLayout containerAñadidas, containerNoAñadidas;
-    private CircleImageView btnInstagramAdded, btnFacebookAdded, btnMailAdded, btnWhatsappAdded;
-    private CircleImageView btnInstagram, btnFacebook, btnMail, btnWhatsapp;
+    private ImageView btnInstagramAdded, btnFacebookAdded, btnMailAdded, btnWhatsappAdded;
+    private ImageView btnInstagram, btnFacebook, btnMail, btnWhatsapp;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

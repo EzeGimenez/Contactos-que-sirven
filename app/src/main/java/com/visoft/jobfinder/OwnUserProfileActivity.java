@@ -154,7 +154,7 @@ public class OwnUserProfileActivity extends AppCompatActivity {
                 editarPerfil.setVisible(false);
                 convertirEnProIcon.setVisible(true);
                 fragment = new DefaultUserFragment();
-                id = Constants.DEFAULT_USER_FRAGMENT;
+                id = Constants.DEFAULT_USER_FRAGMENT_TAG;
                 bundle.putSerializable("user", user);
             }
             fragment.setArguments(bundle);

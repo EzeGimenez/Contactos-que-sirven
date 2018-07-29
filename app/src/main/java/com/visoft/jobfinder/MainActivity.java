@@ -190,6 +190,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private void updateUI(@Nullable FirebaseUser user) {
         final MenuItem goToProfileItem = menu.findItem(R.id.goToProfile);
         final MenuItem goToContactsItem = menu.findItem(R.id.goToContacts);
+        final MenuItem goToChatsItem = menu.findItem(R.id.goToChats);
+
         if (user != null) { // esta iniciado sesion
             searchView.setVisibility(View.VISIBLE);
 
@@ -205,6 +207,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             tvusername.setVisibility(View.VISIBLE);
             goToProfileItem.setVisible(true);
             goToContactsItem.setVisible(true);
+            goToChatsItem.setVisible(true);
 
             MainPageFragment mainPageFragment = new MainPageFragment();
             getSupportFragmentManager()
@@ -239,6 +242,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             searchView.setVisibility(View.GONE);
             goToProfileItem.setVisible(false);
             goToContactsItem.setVisible(false);
+            goToChatsItem.setVisible(false);
 
             SignInFragment signInFragment = new SignInFragment();
             getSupportFragmentManager()
@@ -264,6 +268,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             case R.id.goToContacts:
                 Intent intent2 = new Intent(this, ContactsActivity.class);
                 startActivity(intent2);
+                return true;
+            case R.id.goToChats:
+                Intent intent3 = new Intent(this, ChatsActivity.class);
+                startActivity(intent3);
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

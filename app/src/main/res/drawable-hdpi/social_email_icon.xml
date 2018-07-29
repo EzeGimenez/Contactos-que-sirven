@@ -11,5 +11,16 @@
         android:left="100dp"
         android:right="100dp"
         android:top="100dp" />
+    <item
+        android:bottom="-200dp"
+        android:left="-200dp"
+        android:right="-200dp"
+        android:top="-200dp">
+        <shape android:shape="oval">
+            <stroke
+                android:width="200dp"
+                android:color="@color/colorPrimary" />
+        </shape>
+    </item>
 
 </layer-list>

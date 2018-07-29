@@ -46,6 +46,9 @@
     <string name="defensaMujer">Defensa de la Mujer</string>
     <string name="instructorado">Instructorado</string>
     <string name="mantpiscinas">Mantenimiendo de piscinas</string>
+    <string name="container">Containers de basura</string>
+    <string name="alquileres">Alquileres</string>
+    <string name="bañosquimicos">Baños Químicos</string>
 
     <!-- Rubros Generales-->
     <string name="hogarMantenimiento">Hogar y Mantenimiento</string>
@@ -131,4 +134,8 @@
     <string name="removerMail">Está seguro que no desea mostrar su mail?</string>
     <string name="enviarMail">Enviar Email…</string>
     <string name="selecciona_social_networks">Añade o elimina links a las redes sociales</string>
+    <string name="chatHint">Escribe mensaje</string>
+    <string name="enviado">Enviado</string>
+    <string name="chats">Mensajes</string>
+    <string name="go_to_chats">Ir a Mensajes</string>
 </resources>

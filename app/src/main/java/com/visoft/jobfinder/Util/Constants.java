@@ -13,7 +13,7 @@ public abstract class Constants {
     public static final String SIGNIN_FRAGMENT_TAG = "SignInFragment";
     public static final String MAIN_PAGE_FRAGMENT_TAG = "MainPageFragment";
     public static final String PRO_USER_FRAGMENT_TAG = "ProUserFragment";
-    public static final String DEFAULT_USER_FRAGMENT = "DefaultUserFragment";
+    public static final String DEFAULT_USER_FRAGMENT_TAG = "DefaultUserFragment";
     public static final String WORK_SCOPE_FRAGMENT_TAG = "WorkScopeFragment";
     public static final String CONTACTO_FRAGMENT_TAG = "ContactoFragment";
     public static final String CV_FRAGMENT_TAG = "CVFragment";
@@ -24,6 +24,8 @@ public abstract class Constants {
     public static final String SEARCH_RESULT_FRAGMENT_TAG = "SearchResultFragment";
     public static final String CHOOSE_PIC_FRAGMENT_TAG = "ChoosePicFragment";
     public static final String SOCIAL_FRAGMENT_TAG = "SocialAppsFragment";
+    public static final String ALL_CHATS_FRAGMENT_NAME = "AllChatsFragment";
+    public static final String SPECIFIC_CHAT_FRAGMENT_TAG = "SpecificChatFragmentTag";
 
     /**
      * Firebase database
@@ -33,6 +35,8 @@ public abstract class Constants {
     public static final String FIREBASE_QUALITY_CONTAINER_NAME = "userQuality";
     public static final String FIREBASE_REVIEWS_CONTAINER_NAME = "reviews";
     public static final String FIREBASE_CONTACTS_CONTAINER_NAME = "contacts";
+    public static final String FIREBASE_CHATS_CONTAINER_NAME = "Chats";
+    public static final String FIREBASE_MESSAGES_CONTAINER_NAME = "Messages";
 
     /**
      * Constants

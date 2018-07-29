@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -40,6 +41,7 @@ public class UserReviewActivity extends AppCompatActivity {
     private ProUser proUserReviewed;
     private Map<Integer, View> mapPage;
     private FirebaseAuth mAuth;
+    private CountDownTimer timer;
 
     //Componentes gráficas
     private Button btnNext, btnPrev;
@@ -119,6 +121,17 @@ public class UserReviewActivity extends AppCompatActivity {
         }
 
         showLoadingScreen();
+        timer = new CountDownTimer(8000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                finish();
+            }
+        };
 
         database.child(Constants.FIREBASE_REVIEWS_CONTAINER_NAME)
                 .child(proUserReviewed.getUid())

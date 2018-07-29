@@ -14,4 +14,9 @@
         android:title="@string/ir_a_contactos"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/goToChats"
+        android:title="@string/go_to_chats"
+        app:showAsAction="never" />
+
 </menu>

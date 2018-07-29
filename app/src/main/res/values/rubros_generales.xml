@@ -6,6 +6,6 @@
         <item>@string/obraConstruccion</item>
         <item>@string/personalEventual</item>
         <item>@string/emergencias</item>
-        <item>@string/otros</item>
+        <item>@string/alquileres</item>
     </string-array>
 </resources>

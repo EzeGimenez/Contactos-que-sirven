@@ -44,6 +44,7 @@
         <item>diseñoGrafico</item>
         <item>plomeria</item>
         <item>cerrajeria</item>
+
     </string-array>
 
     <string-array name="personalEventualID">
@@ -57,6 +58,7 @@
         <item>medico</item>
         <item>servicioDiscapacitados</item>
         <item>cerrajeria</item>
+        <item>seguridad</item>
         <item>policia</item>
         <item>bomberos</item>
         <item>defensaCivil</item>
@@ -64,7 +66,8 @@
 
     </string-array>
 
-    <string-array name="otrosID">
-        <item></item>
+    <string-array name="alquileresID">
+        <item>container</item>
+        <item>bañosquimicos</item>
     </string-array>
 </resources>

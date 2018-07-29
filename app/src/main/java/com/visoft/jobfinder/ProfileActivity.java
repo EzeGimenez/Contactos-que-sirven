@@ -17,11 +17,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.visoft.jobfinder.Objects.ProUser;
+import com.visoft.jobfinder.Objects.User;
 import com.visoft.jobfinder.Util.Constants;
 import com.visoft.jobfinder.Util.Database;
 
 public class ProfileActivity extends AppCompatActivity {
-    private ProUser shownUser;
+    private User shownUser;
     private Toolbar toolbar;
     private Menu menu;
     private boolean esContacto = false;
@@ -33,7 +34,7 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        shownUser = (ProUser) getIntent().getSerializableExtra("user");
+        shownUser = (User) getIntent().getSerializableExtra("user");
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         userContacts = Database.getDatabase()
@@ -45,12 +46,27 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void iniciarUI() {
-        Fragment fragment = new ProUserFragment();
+        Fragment fragment;
+        String tag;
         Bundle bundle = new Bundle();
-        bundle.putSerializable("user", shownUser);
+        if (shownUser.getIsPro()) {
+
+            fragment = new ProUserFragment();
+            tag = Constants.PRO_USER_FRAGMENT_TAG;
+            ProUser proUser = (ProUser) shownUser;
+            bundle.putSerializable("user", proUser);
+
+        } else {
+
+            fragment = new DefaultUserFragment();
+            tag = Constants.DEFAULT_USER_FRAGMENT_TAG;
+            bundle.putSerializable("user", shownUser);
+
+        }
+
         fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.ContainerProfileFragments, fragment, Constants.PRO_USER_FRAGMENT_TAG)
+                .replace(R.id.ContainerProfileFragments, fragment, tag)
                 .commit();
 
         //Toolbar

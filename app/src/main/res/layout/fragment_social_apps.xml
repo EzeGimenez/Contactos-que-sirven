@@ -29,11 +29,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvAppsNoAñadidas">
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <ImageView
             android:id="@+id/btnInstagram"
             style="@style/SocialButton"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
             android:layout_marginStart="16dp"
             android:src="@drawable/social_instagram_icon"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -41,7 +39,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <ImageView
             android:id="@+id/btnFacebook"
             style="@style/SocialButton"
             android:src="@drawable/social_facebook_icon"
@@ -50,7 +48,7 @@
             app:layout_constraintStart_toEndOf="@id/btnInstagram"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <ImageView
             android:id="@+id/btnWhatsapp"
             style="@style/SocialButton"
             android:src="@drawable/social_whatsapp_icon"
@@ -59,7 +57,7 @@
             app:layout_constraintStart_toEndOf="@id/btnFacebook"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <ImageView
             android:id="@+id/btnMail"
             style="@style/SocialButton"
             android:layout_marginEnd="16dp"
@@ -95,7 +93,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvAppsAñadidas">
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <ImageView
             android:id="@+id/btnInstagramA"
             style="@style/SocialButton"
             android:layout_marginStart="16dp"
@@ -105,7 +103,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <ImageView
             android:id="@+id/btnFacebookA"
             style="@style/SocialButton"
             android:src="@drawable/social_facebook_icon"
@@ -114,7 +112,7 @@
             app:layout_constraintStart_toEndOf="@id/btnInstagramA"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <ImageView
             android:id="@+id/btnWhatsappA"
             style="@style/SocialButton"
             android:src="@drawable/social_whatsapp_icon"
@@ -123,7 +121,7 @@
             app:layout_constraintStart_toEndOf="@id/btnFacebookA"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <ImageView
             android:id="@+id/btnMailA"
             style="@style/SocialButton"
             android:layout_marginEnd="16dp"
