@@ -22,6 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.visoft.jobfinder.Objects.ChatOverview;
+import com.visoft.jobfinder.Objects.ProUser;
 import com.visoft.jobfinder.Objects.User;
 import com.visoft.jobfinder.Util.Constants;
 import com.visoft.jobfinder.Util.Database;
@@ -100,7 +101,12 @@ public class AllChatsFragment extends Fragment {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     User user = dataSnapshot.getValue(User.class);
-                    if (user != null) {
+                    if (user == null || user.getIsPro()) {
+                        ProUser proUser = dataSnapshot.getValue(ProUser.class);
+                        if (proUser != null) {
+                            chatUsers.add(proUser);
+                        }
+                    } else {
                         chatUsers.add(user);
                     }
                     setAdapter();

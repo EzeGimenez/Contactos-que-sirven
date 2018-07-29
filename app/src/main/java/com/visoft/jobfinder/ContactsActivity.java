@@ -25,6 +25,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.iarcuschin.simpleratingbar.SimpleRatingBar;
 import com.visoft.jobfinder.Objects.ProUser;
+import com.visoft.jobfinder.Objects.User;
 import com.visoft.jobfinder.Util.Constants;
 import com.visoft.jobfinder.Util.Database;
 import com.visoft.jobfinder.Util.GlideApp;
@@ -36,7 +37,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ContactsActivity extends AppCompatActivity {
-    private ArrayList<ProUser> contacts;
+    private ArrayList<User> contacts;
     private FirebaseAuth mAuth;
     private DatabaseReference contactsRef, userRef;
     private int j, i;
@@ -133,8 +134,13 @@ public class ContactsActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 j++;
-                ProUser user = dataSnapshot.getValue(ProUser.class);
-                if (user != null) {
+                User user = dataSnapshot.getValue(User.class);
+                if (user == null || user.getIsPro()) {
+                    ProUser proUser = dataSnapshot.getValue(ProUser.class);
+                    if (proUser != null) {
+                        contacts.add(proUser);
+                    }
+                } else {
                     contacts.add(user);
                 }
                 setAdapter();
@@ -148,11 +154,11 @@ public class ContactsActivity extends AppCompatActivity {
     }
 
 
-    private class ListViewAdapter extends ArrayAdapter<ProUser> {
+    private class ListViewAdapter extends ArrayAdapter<User> {
         private LayoutInflater inflater;
-        private List<ProUser> list;
+        private List<User> list;
 
-        public ListViewAdapter(@NonNull Context context, int resource, @NonNull List<ProUser> objects) {
+        public ListViewAdapter(@NonNull Context context, int resource, @NonNull List<User> objects) {
             super(context, resource, objects);
             this.inflater = LayoutInflater.from(context);
             this.list = objects;
@@ -179,11 +185,16 @@ public class ContactsActivity extends AppCompatActivity {
                 holder = (ViewHolder) convertView.getTag();
             }
 
-            ProUser user = list.get(position);
-            int id = getResources().getIdentifier(user.getRubroEspecifico(),
-                    "string",
-                    getPackageName());
-            String subRubro = getResources().getString(id);
+            User user = list.get(position);
+            String subRubro = "";
+            if (user.getIsPro()) {
+                ProUser proUser = (ProUser) user;
+                int id = getResources().getIdentifier(proUser.getRubroEspecifico(),
+                        "string",
+                        getPackageName());
+                subRubro = getResources().getString(id);
+            }
+
             holder.tvUsername.setText(user.getUsername());
             holder.tvRubro.setText(subRubro);
             holder.tvNumReviews.setText(user.getNumberReviews() + " " + getString(R.string.reviews));

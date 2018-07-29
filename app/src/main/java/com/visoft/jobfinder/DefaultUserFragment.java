@@ -35,7 +35,9 @@ public class DefaultUserFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ((OwnUserProfileActivity) getActivity()).hideLoadingScreen();
+        if (getActivity() instanceof OwnUserProfileActivity) {
+            ((OwnUserProfileActivity) getActivity()).hideLoadingScreen();
+        }
 
         tvNumberReviews = view.findViewById(R.id.tvNumberReviews);
         tvUsername = view.findViewById(R.id.tvUsername);

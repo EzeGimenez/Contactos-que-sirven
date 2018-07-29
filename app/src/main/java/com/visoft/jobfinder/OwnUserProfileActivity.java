@@ -27,11 +27,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.visoft.jobfinder.Objects.ChatOverview;
 import com.visoft.jobfinder.Objects.ProUser;
 import com.visoft.jobfinder.Objects.User;
 import com.visoft.jobfinder.Util.Constants;
 import com.visoft.jobfinder.Util.Database;
 import com.visoft.jobfinder.Util.DatabaseTimer;
+
+import java.util.ArrayList;
 
 public class OwnUserProfileActivity extends AppCompatActivity {
     private static boolean isRunning;
@@ -204,7 +207,7 @@ public class OwnUserProfileActivity extends AppCompatActivity {
         builder.setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                DatabaseReference rootRef = Database.getDatabase().getReference();
+                final DatabaseReference rootRef = Database.getDatabase().getReference();
 
                 //Removing from users;
                 rootRef.child(Constants.FIREBASE_USERS_CONTAINER_NAME).child(user.getUid()).removeValue();
@@ -214,7 +217,6 @@ public class OwnUserProfileActivity extends AppCompatActivity {
 
                 //proUser removing
                 if (user.getIsPro() && proUser != null) {
-
                     //Removing from rubros
                     rootRef
                             .child(Constants.FIREBASE_RUBRO_CONTAINER_NAME)
@@ -234,6 +236,47 @@ public class OwnUserProfileActivity extends AppCompatActivity {
                             .child(proUser.getUid())
                             .removeValue();
                 }
+
+                //Remove chats
+                final ArrayList<String> uidsChat = new ArrayList<>();
+                final ArrayList<String> chatIds = new ArrayList<>();
+
+                rootRef
+                        .child(Constants.FIREBASE_CHATS_CONTAINER_NAME)
+                        .child(user.getUid())
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                    uidsChat.add(ds.getKey());
+                                    ChatOverview chatOverview = ds.getValue(ChatOverview.class);
+                                    chatIds.add(chatOverview.getChatID());
+                                }
+
+                                rootRef.child(Constants.FIREBASE_CHATS_CONTAINER_NAME)
+                                        .child(user.getUid())
+                                        .removeValue();
+
+                                for (String uid : uidsChat) {
+                                    rootRef
+                                            .child(Constants.FIREBASE_CHATS_CONTAINER_NAME)
+                                            .child(uid)
+                                            .child(user.getUid()).removeValue();
+                                }
+
+                                for (String chatId : chatIds) {
+                                    rootRef
+                                            .child(Constants.FIREBASE_MESSAGES_CONTAINER_NAME)
+                                            .child(chatId)
+                                            .removeValue();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
 
                 //Removing image
                 StorageReference storage = FirebaseStorage.getInstance().getReference();

@@ -386,10 +386,16 @@ public class SearchResultFragment extends Fragment {
             }
 
             ProUser user = filteredData.get(position);
-            int id = getResources().getIdentifier(user.getRubroEspecifico(),
-                    "string",
-                    Objects.requireNonNull(getActivity()).getPackageName());
-            String subRubro = getResources().getString(id);
+            String packageName = Objects.requireNonNull(getActivity()).getPackageName();
+            String subRubro = "";
+
+            if (packageName != null) {
+                int id = getResources().getIdentifier(user.getRubroEspecifico(),
+                        "string",
+                        packageName);
+                subRubro = getResources().getString(id);
+            }
+
             holder.tvUsername.setText(user.getUsername());
             holder.tvRubro.setText(subRubro);
             holder.tvNumReviews.setText(user.getNumberReviews() + " " + getString(R.string.reviews));
