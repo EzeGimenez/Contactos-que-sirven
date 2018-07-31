@@ -7,11 +7,11 @@
     tools:context=".DefaultUserFragment">
 
     <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:clickable="true"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -334,6 +334,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
+            android:background="@color/transparent"
             android:hint="@string/chatHint"
             android:inputType="textCapSentences|textShortMessage|textAutoCorrect"
             android:textColor="@color/colorPrimary"

@@ -3,6 +3,7 @@
     <color name="colorPrimaryDark">#060606</color>
     <color name="colorPrimary">#313131</color>
     <color name="primaryAccent">#e78700</color>
+    <color name="light_orange">#ffc068</color>
     <color name="secondaryAccent">#e25700</color>
     <color name="filledStar">#ffdd00</color>
     <color name="transparent">#00ffffff</color>

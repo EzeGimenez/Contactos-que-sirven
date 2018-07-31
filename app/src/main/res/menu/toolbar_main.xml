@@ -11,12 +11,12 @@
 
     <item
         android:id="@+id/goToContacts"
-        android:title="@string/ir_a_contactos"
+        android:title="@string/Contactos"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/goToChats"
-        android:title="@string/go_to_chats"
+        android:title="@string/chats"
         app:showAsAction="never" />
 
 </menu>

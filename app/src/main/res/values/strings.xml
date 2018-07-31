@@ -122,7 +122,6 @@
     <string name="seguro_eliminar">Estás seguro de querer eliminar la cuenta?</string>
     <string name="añadirContacto">Añadir a agenda</string>
     <string name="removerContacto">Remover Contacto</string>
-    <string name="ir_a_contactos">Ir a Agenda</string>
     <string name="Contactos">Agenda</string>
     <string name="shareUser">Compartir Usuario</string>
     <string name="social_apps_noañadidas">Redes sociales a añadir</string>
@@ -139,8 +138,7 @@
     <string name="selecciona_social_networks">Añade o elimina links a las redes sociales</string>
     <string name="chatHint">Escribe mensaje</string>
     <string name="enviado">Enviado</string>
-    <string name="chats">Mensajes</string>
-    <string name="go_to_chats">Ir a Mensajes</string>
+    <string name="chats">Chats</string>
 
 
 </resources>

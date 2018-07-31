@@ -85,6 +85,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
+            android:background="@color/transparent"
             android:hint="@string/chatHint"
             android:inputType="textCapSentences|textShortMessage|textAutoCorrect"
             android:textColor="@color/colorPrimary"

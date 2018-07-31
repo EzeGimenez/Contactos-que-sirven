@@ -119,7 +119,6 @@
     <string name="seguro_eliminar">Are you sure you want to delete your account?</string>
     <string name="añadirContacto">Add to Contacts</string>
     <string name="removerContacto">Remove Contact</string>
-    <string name="ir_a_contactos">Go to Contacts</string>
     <string name="Contactos">Contacts</string>
     <string name="shareUser">Share user</string>
     <string name="social_apps_noañadidas">Social Networks to add</string>
@@ -134,9 +133,8 @@
     <string name="removerMail">Are you sure you don\'t want to show your email?</string>
     <string name="enviarMail">Send Email…</string>
     <string name="selecciona_social_networks">Add or remove social network links</string>
-    <string name="chatHint">Type message</string>
+    <string name="chatHint">Type a message</string>
     <string name="enviado">Sent</string>
     <string name="chats">Chats</string>
-    <string name="go_to_chats">Go to Chats</string>
 
 </resources>
