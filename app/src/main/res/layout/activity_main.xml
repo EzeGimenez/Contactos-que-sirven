@@ -21,49 +21,24 @@
         app:layout_constraintTop_toTopOf="parent"
         app:popupTheme="@style/AppTheme" />
 
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/constraintLayout2"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        app:layout_constraintBottom_toTopOf="@+id/ContainerMainFragments"
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabLayoutMain"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/black_transparent"
+        app:layout_constraintBottom_toTopOf="@id/ViewPagerMain"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:focusedByDefault="true" />
-
-        <android.support.v7.widget.SearchView
-            android:id="@+id/searchView"
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            app:iconifiedByDefault="false"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:queryBackground="@drawable/orange_bottom_line"
-            app:queryHint="@string/search_view_hint"
-            app:searchIcon="@drawable/search_icon" />
-
-    </android.support.constraint.ConstraintLayout>
-
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/ContainerMainFragments"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/ViewPagerMain"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2" />
+        app:layout_constraintTop_toBottomOf="@id/tabLayoutMain" />
 
 </android.support.constraint.ConstraintLayout>

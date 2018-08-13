@@ -2,12 +2,10 @@ package com.visoft.network;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +34,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ContactsActivity extends AppCompatActivity {
+public class MainContactsFragment extends Fragment {
     private ArrayList<User> contacts;
     private FirebaseAuth mAuth;
     private DatabaseReference contactsRef, userRef;
@@ -47,12 +45,16 @@ public class ContactsActivity extends AppCompatActivity {
     //Componentes gráficas
     private ListView listView;
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_contacts);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.activity_contacts, null);
+    }
 
-        listView = findViewById(R.id.listViewContacts);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        listView = view.findViewById(R.id.listViewContacts);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -67,17 +69,11 @@ public class ContactsActivity extends AppCompatActivity {
 
         storage = FirebaseStorage.getInstance().getReference();
 
-        Toolbar toolbar = findViewById(R.id.ToolbarContacts);
-        setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(R.drawable.arrow_back);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.black_transparent)));
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        if (contacts != null && adapter != null) {
+            contacts.clear();
+            adapter.notifyDataSetChanged();
+        }
+        populateContacts();
     }
 
     private void populateContacts() {
@@ -102,25 +98,15 @@ public class ContactsActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (contacts != null && adapter != null) {
-            contacts.clear();
-            adapter.notifyDataSetChanged();
-        }
-        populateContacts();
-    }
-
     private void setAdapter() {
         if (i == j) {
             if (contacts.size() > 0) {
-                adapter = new ListViewAdapter(this, R.layout.profile_search_result_row, contacts);
+                adapter = new ListViewAdapter(getContext(), R.layout.profile_search_result_row, contacts);
                 listView.setAdapter(adapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Intent intent = new Intent(getApplication(), ProfileActivity.class);
+                        Intent intent = new Intent(getActivity(), ProfileActivity.class);
                         intent.putExtra("user", contacts.get(position));
                         startActivity(intent);
                     }
@@ -191,7 +177,7 @@ public class ContactsActivity extends AppCompatActivity {
                 ProUser proUser = (ProUser) user;
                 int id = getResources().getIdentifier(proUser.getRubroEspecifico(),
                         "string",
-                        getPackageName());
+                        getActivity().getPackageName());
                 subRubro = getResources().getString(id);
             }
 

@@ -1,66 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Rubros Especificos-->
-    <string name="jardineria">Jardinería</string>
-    <string name="servidumbre">Servidumbre</string>
-    <string name="controlDePlagas">Control de Plagas</string>
-    <string name="arreglosInformaticos">Arreglos Informáticos</string>
-    <string name="plomeria">Plomería</string>
-    <string name="electricista">Electricista</string>
-    <string name="seguridad">Seguridad</string>
-    <string name="fiestasEventos">Fiestas y Eventos</string>
-    <string name="cadeteria">Cadetería</string>
-    <string name="viandas">Viandas</string>
-    <string name="comidaDelivery">Comida y delivery</string>
-    <string name="estetica">Estética</string>
-    <string name="esteticaDomicilio">Estética a domicilio</string>
-    <string name="profesorParticular">Profesor particular</string>
-    <string name="transporte">Transporte</string>
-    <string name="cuidadoNiños">Cuidado de niños</string>
-    <string name="cuidadoMascotas">Cuidado de mascotas</string>
-    <string name="veterinaria">Veterinaria</string>
-    <string name="arquitectura">Arquitectura</string>
-    <string name="ingenieria">Ingeniería</string>
-    <string name="personal">Personal</string>
-    <string name="gasista">Gasista</string>
-    <string name="albañileria">Albañilería</string>
-    <string name="techista">Techista</string>
-    <string name="carpintero">Carpintería</string>
-    <string name="flete">Flete</string>
-    <string name="parquizacion">Parquización</string>
-    <string name="picapedreria">Picapedrería</string>
-    <string name="pintor">Pintor</string>
-    <string name="movimientosIndustriales">Movimientos Industriales</string>
-    <string name="muebleria">Mueblería</string>
-    <string name="diseñoGrafico">Diseño Gráfico</string>
-    <string name="cerrajeria">Cerrajería</string>
-    <string name="fuerza">Se requiere fuerza</string>
-    <string name="noFuerza">No se requiere fuerza</string>
-    <string name="grua">Grúa</string>
-    <string name="mecanico">Taller Mecánico</string>
-    <string name="medico">Médica/Médico</string>
-    <string name="servicioDiscapacitados">Servicio para Discapacitados</string>
-    <string name="policia">Policía</string>
-    <string name="bomberos">Bomberos</string>
-    <string name="defensaCivil">Defensa Civil</string>
-    <string name="defensaMujer">Defensa de la Mujer</string>
-    <string name="instructorado">Instructorado</string>
-    <string name="mantpiscinas">Mantenimiendo de piscinas</string>
-    <string name="container">Containers de basura</string>
-    <string name="alquileres">Alquileres</string>
-    <string name="bañosquimicos">Baños Químicos</string>
 
     <!-- Rubros Generales-->
-    <string name="hogarMantenimiento">Hogar y Mantenimiento</string>
-    <string name="serviciosFamilia">Servicios de familia</string>
-    <string name="obraConstruccion">Obra y Construcción</string>
-    <string name="personalEventual">Personal Eventual</string>
-    <string name="emergencias">Emergencias Médicas y vehiculares</string>
-    <string name="otros">Otros</string>
+
+
     <string name="transformar_en_perfil_de_trabajo">Transformar en perfil de trabajo</string>
     <string name="editar_perfil">Editar Perfil</string>
     <string name="aceptar">aceptar</string>
-
     <string name="app_name">NetWork</string>
     <string name="previo">Previo</string>
     <string name="siguiente">Siguiente</string>
@@ -136,4 +83,8 @@
     <string name="chatHint">Escribe mensaje</string>
     <string name="enviado">Enviado</string>
     <string name="chats">Chats</string>
+    <string name="buscar">buscar</string>
+    <string name="contactos">Contactos</string>
+    <string name="serviciosHogar">Servicios de Hogar y Negocio</string>
+    <string name="serviciosPersonales">Servicios personales</string>
 </resources>

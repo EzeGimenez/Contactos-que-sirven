@@ -21,7 +21,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:windowSoftInputMode="adjustPan">
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -38,8 +38,6 @@
 
         <activity android:name=".ProfileActivity" />
         <activity android:name=".UserReviewActivity" />
-        <activity android:name=".ContactsActivity" />
-        <activity android:name=".ChatsActivity" />
     </application>
 
 </manifest>

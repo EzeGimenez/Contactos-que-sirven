@@ -12,10 +12,13 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,10 +33,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.visoft.network.Util.Constants;
 import com.visoft.network.Util.Database;
-import com.visoft.network.mainpagefragments.MainPageFragment;
 import com.visoft.network.mainpagefragments.SearchResultFragment;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements LocationListener {
     private FirebaseAuth mAuth;
@@ -42,11 +46,12 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private boolean hasSearched;
     private SharedPreferences sharedPref;
     private DatabaseReference database;
+    private ViewPagerAdapter adapter;
 
     //Componentes graficas
     private Toolbar toolbar;
     private Menu menu;
-    private SearchView searchView;
+    private ViewPager viewPagerMain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +63,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         mAuth = FirebaseAuth.getInstance();
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        //Inicializacion de variables
-        searchView = findViewById(R.id.searchView);
         //Creacion de toolbar_main
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -74,51 +77,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
             }
         }
-        final SearchResultFragment fragment = new SearchResultFragment();
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                if (newText.length() > 0) {
-                    Fragment fragment1 = getSupportFragmentManager().findFragmentById(R.id.ContainerMainFragments);
-                    if (!(fragment1 instanceof SearchResultFragment) || !fragment.isVisible()) {
-                        Bundle bundle = new Bundle();
-                        bundle.putString("searchQuery", newText);
-                        fragment.setArguments(bundle);
-                        fragment.resetSearch();
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.ContainerMainFragments, fragment, Constants.SEARCH_RESULT_FRAGMENT_TAG)
-                                .addToBackStack(Constants.MAIN_PAGE_FRAGMENT_TAG)
-                                .commit();
-                    } else {
-                        fragment.searchForQuery(newText);
-                    }
-                    return true;
-                }
-                Fragment fragment1 = getSupportFragmentManager().findFragmentByTag(Constants.MAIN_PAGE_FRAGMENT_TAG);
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.ContainerMainFragments, fragment1, Constants.MAIN_PAGE_FRAGMENT_TAG)
-                        .addToBackStack(null)
-                        .commit();
-
-                return false;
-            }
-        });
-    }
-
-    @Override
-    public void onBackPressed() {
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.ContainerMainFragments);
-        if (fragment instanceof MainPageFragment) {
-            finish();
-        } else {
-            super.onBackPressed();
-        }
     }
 
     @Override
@@ -132,14 +90,19 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     @Override
     protected void onPause() {
         super.onPause();
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.ContainerMainFragments);
-
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment fragment = fm.findFragmentById(R.id.ContainerRubroFragments);
         if (fragment != null && fragment instanceof SearchResultFragment) {
             hasSearched = true;
         } else {
             hasSearched = false;
         }
         sharedPref.edit().putBoolean("hasSearched", hasSearched).commit();
+
+
+        for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
+            fm.popBackStack();
+        }
     }
 
     @Override
@@ -147,6 +110,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         super.onDestroy();
         sharedPref.edit().putBoolean("hasSearched", false).commit();
     }
+
 
     @Override
     protected void onResume() {
@@ -188,11 +152,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
      */
     private void updateUI(@Nullable FirebaseUser user) {
         final MenuItem goToProfileItem = menu.findItem(R.id.goToProfile);
-        final MenuItem goToContactsItem = menu.findItem(R.id.goToContacts);
-        final MenuItem goToChatsItem = menu.findItem(R.id.goToChats);
 
         if (user != null) { // esta iniciado sesion
-            searchView.setVisibility(View.VISIBLE);
 
             View view = menu.findItem(R.id.goToProfile).getActionView();
             view.setOnClickListener(new View.OnClickListener() {
@@ -205,14 +166,37 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             tvusername.setText(user.getDisplayName());
             tvusername.setVisibility(View.VISIBLE);
             goToProfileItem.setVisible(true);
-            goToContactsItem.setVisible(true);
-            goToChatsItem.setVisible(true);
 
-            MainPageFragment mainPageFragment = new MainPageFragment();
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.ContainerMainFragments, mainPageFragment, Constants.MAIN_PAGE_FRAGMENT_TAG)
-                    .commit();
+            viewPagerMain = findViewById(R.id.ViewPagerMain);
+            adapter = new ViewPagerAdapter(getSupportFragmentManager());
+
+            // Add Fragments to adapter one by one
+            adapter.addFragment(new HolderRubrosFragment(), getString(R.string.buscar));
+            adapter.addFragment(new ChatsFragment(), getString(R.string.chats));
+            adapter.addFragment(new MainContactsFragment(), getString(R.string.contactos));
+            viewPagerMain.setAdapter(adapter);
+
+            TabLayout tabLayout = findViewById(R.id.tabLayoutMain);
+            tabLayout.setupWithViewPager(viewPagerMain);
+
+            tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                @Override
+                public void onTabSelected(TabLayout.Tab tab) {
+                    FragmentManager fm = getSupportFragmentManager();
+                    for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
+                        fm.popBackStack();
+                    }
+                }
+
+                @Override
+                public void onTabUnselected(TabLayout.Tab tab) {
+                }
+
+                @Override
+                public void onTabReselected(TabLayout.Tab tab) {
+
+                }
+            });
 
             if (hasSearched) {
                 String searchRequest = getSharedPreferences(Constants.SHARED_PREF_NAME, MODE_PRIVATE).getString("searchRequest", "");
@@ -222,29 +206,55 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 Bundle bundle = new Bundle();
                 if (isRubro) {
                     bundle.putString("subRubroID", searchRequest);
-                    int id = getResources().getIdentifier(searchRequest,
+                    /*int id = getResources().getIdentifier(searchRequest,
                             "string",
                             getPackageName());
                     String subRubro = getResources().getString(id);
-                    bundle.putString("subRubro", subRubro);
+                    bundle.putString("subRubro", subRubro);*/
                 } else {
                     bundle.putString("searchQuery", searchRequest);
                 }
 
                 searchResultFragment.setArguments(bundle);
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.ContainerMainFragments, searchResultFragment, Constants.SEARCH_RESULT_FRAGMENT_TAG)
+                        .replace(R.id.ContainerRubroFragments, searchResultFragment, Constants.SEARCH_RESULT_FRAGMENT_TAG)
                         .addToBackStack(Constants.MAIN_PAGE_FRAGMENT_TAG)
                         .commit();
             }
-        } else { // no esta iniciado sesion
-            searchView.setVisibility(View.GONE);
-            goToProfileItem.setVisible(false);
-            goToContactsItem.setVisible(false);
-            goToChatsItem.setVisible(false);
 
+        } else { // no esta iniciado sesion
+            goToProfileItem.setVisible(false);
             Intent intent = new Intent(this, SigninActivity.class);
             startActivity(intent);
+        }
+    }
+
+    private class ViewPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        public ViewPagerAdapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
         }
     }
 
@@ -260,15 +270,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             case R.id.goToProfile:
                 Intent intent = new Intent(this, OwnUserProfileActivity.class);
                 startActivity(intent);
-                return true;
-            case R.id.goToContacts:
-                Intent intent2 = new Intent(this, ContactsActivity.class);
-                startActivity(intent2);
-                return true;
-            case R.id.goToChats:
-                Intent intent3 = new Intent(this, ChatsActivity.class);
-                startActivity(intent3);
-
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

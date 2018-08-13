@@ -56,7 +56,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class SearchResultFragment extends Fragment {
     private FirebaseAuth mAuth;
-    private String subRubroID, subRubro, searchQuery;
+    private String subRubroID, searchQuery;
     private DatabaseReference database;
     private DatabaseReference databaseUsers;
     private ArrayList<ProUser> results;
@@ -71,7 +71,6 @@ public class SearchResultFragment extends Fragment {
 
     //UI components
     private ListView listView;
-    private TextView tvResultsFor;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -102,31 +101,20 @@ public class SearchResultFragment extends Fragment {
         Bundle args = getArguments();
         if (args != null) {
             subRubroID = args.getString("subRubroID");
-            subRubro = args.getString("subRubro");
             searchQuery = args.getString("searchQuery");
         }
 
         //UI comoponents initialization
         listView = view.findViewById(R.id.ListViewResult);
-        tvResultsFor = view.findViewById(R.id.tvResultsFor);
-
 
         if (subRubroID != null) {
             getResultsFromSubArea();
-            tvResultsFor.setText(getString(R.string.resultsFor) + " " + subRubro);
         } else if (searchQuery != null) {
             searchForQuery(searchQuery);
         }
     }
 
-    public void resetSearch() {
-        results = new ArrayList<ProUser>();
-        adapter = null;
-    }
-
     public void searchForQuery(final String a) {
-        tvResultsFor.setText(getString(R.string.resultsFor) + " " + a);
-
         sharedPref.edit().putString("searchRequest", a).putBoolean("isRubro", false).commit();
 
         if (adapter == null) {
@@ -140,7 +128,7 @@ public class SearchResultFragment extends Fragment {
                         if (user == null || user.getIsPro()) {
                             ProUser proUser = ds.getValue(ProUser.class);
                             if (proUser != null) {
-                                int id = getResources().getIdentifier(proUser.getRubroEspecifico(),
+                                int id = getResources().getIdentifier(proUser.getRubroEspecificoEspecifico(),
                                         "string",
                                         getActivity().getPackageName());
                                 String rubro = getString(id).toLowerCase();
@@ -288,7 +276,6 @@ public class SearchResultFragment extends Fragment {
         Bundle args = getArguments();
         if (args != null) {
             subRubroID = args.getString("subRubroID");
-            subRubro = args.getString("subRubro");
             searchQuery = args.getString("searchQuery");
         }
     }
@@ -303,8 +290,6 @@ public class SearchResultFragment extends Fragment {
         @Override
         public int compare(ProUser p1, ProUser p2) {
             int score = 0;
-
-
             if (p2.getNumberReviews() + 10 < p1.getNumberReviews()) {
                 score--;
             } else if (p1.getNumberReviews() + 10 <= p2.getNumberReviews()) {
@@ -341,6 +326,11 @@ public class SearchResultFragment extends Fragment {
             }
             return score;
         }
+    }
+
+    public void resetSearch() {
+        results = new ArrayList<ProUser>();
+        adapter = null;
     }
 
     private class SearchableAdapter extends BaseAdapter implements Filterable {
@@ -387,17 +377,23 @@ public class SearchResultFragment extends Fragment {
 
             ProUser user = filteredData.get(position);
             String packageName = Objects.requireNonNull(getActivity()).getPackageName();
-            String subRubro = "";
+            String subRubroEsp = "";
+            String subRubroEspEsp = "";
 
             if (packageName != null) {
                 int id = getResources().getIdentifier(user.getRubroEspecifico(),
                         "string",
                         packageName);
-                subRubro = getResources().getString(id);
+                subRubroEsp = getResources().getString(id);
+
+                id = getResources().getIdentifier(user.getRubroEspecificoEspecifico(),
+                        "string",
+                        packageName);
+                subRubroEspEsp = getResources().getString(id);
             }
 
             holder.tvUsername.setText(user.getUsername());
-            holder.tvRubro.setText(subRubro);
+            holder.tvRubro.setText(subRubroEsp + " - " + subRubroEspEsp);
             holder.tvNumReviews.setText(user.getNumberReviews() + " " + getString(R.string.reviews));
             holder.ratingBar.setRating(user.getRating());
 

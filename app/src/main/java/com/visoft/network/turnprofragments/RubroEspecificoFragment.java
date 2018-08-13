@@ -39,19 +39,13 @@ public class RubroEspecificoFragment extends Fragment {
 
         rubroGeneral = getArguments().getString("RubroGeneral", null);
 
-        int id = getResources().getIdentifier(rubroGeneral,
-                "array",
-                getActivity().getPackageName());
-        final String[] rubroEspecificos = getResources().getStringArray(id);
-
-        id = getResources().getIdentifier(rubroGeneral + "ID",
+        int id = getResources().getIdentifier(rubroGeneral + "ID",
                 "array",
                 getActivity().getPackageName());
         final String[] rubroEspecificosID = getResources().getStringArray(id);
 
-
         listView = view.findViewById(R.id.listView);
-        listView.setAdapter(new RubrosGeneralesAdapter(getContext(), rubroEspecificos));
+        listView.setAdapter(new RubrosGeneralesAdapter(getContext(), rubroEspecificosID));
 
         //Guardar en un arraystring los ids y en otro los nombres posta
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -83,7 +77,10 @@ public class RubroEspecificoFragment extends Fragment {
             LayoutInflater inflater = getLayoutInflater();
             View view = inflater.inflate(R.layout.rubros_especificos_row, parent, false);
             TextView tvRubro = view.findViewById(R.id.tvRubro);
-            tvRubro.setText(rubrosArray[position]);
+            int id = getResources().getIdentifier(rubrosArray[position],
+                    "string",
+                    getActivity().getPackageName());
+            tvRubro.setText(getString(id));
             return view;
         }
     }

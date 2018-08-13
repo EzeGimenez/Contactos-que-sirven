@@ -42,6 +42,7 @@ public class AllChatsFragment extends Fragment {
     private List<String> chatUIDS;
     private List<ChatOverview> chatOverviews;
 
+
     //Componentes gráficas
     private ListView listView;
 
@@ -123,29 +124,31 @@ public class AllChatsFragment extends Fragment {
     }
 
     private void setAdapter() {
-        if (chatUsers.size() == chatUIDS.size()) {
-            ListViewChatsAdapter adapter = new ListViewChatsAdapter(getContext(), R.layout.chat_overview_layout, chatOverviews, chatUsers);
-            Collections.sort(chatOverviews, new ChatOverviewComparator());
-            listView.setAdapter(adapter);
+        if (getContext() != null) {
+            if (chatUsers.size() == chatUIDS.size()) {
+                ListViewChatsAdapter adapter = new ListViewChatsAdapter(getContext(), R.layout.chat_overview_layout, chatOverviews, chatUsers);
+                Collections.sort(chatOverviews, new ChatOverviewComparator());
+                listView.setAdapter(adapter);
 
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Fragment fragment = new SpecificChatFragment();
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Fragment fragment = new SpecificChatFragment();
 
-                    Bundle bundle = new Bundle();
-                    bundle.putString("chatid", chatOverviews.get(position).getChatID());
-                    bundle.putSerializable("receiver", chatUsers.get(position));
-                    fragment.setArguments(bundle);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("chatid", chatOverviews.get(position).getChatID());
+                        bundle.putSerializable("receiver", chatUsers.get(position));
+                        fragment.setArguments(bundle);
 
-                    getFragmentManager()
-                            .beginTransaction()
-                            .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
-                            .replace(R.id.ContainerFragmentChats, fragment, Constants.SPECIFIC_CHAT_FRAGMENT_TAG)
-                            .addToBackStack(Constants.ALL_CHATS_FRAGMENT_NAME)
-                            .commit();
-                }
-            });
+                        getActivity().getSupportFragmentManager()
+                                .beginTransaction()
+                                .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
+                                .replace(R.id.ContainerFragmentChats, fragment, Constants.SPECIFIC_CHAT_FRAGMENT_TAG)
+                                .addToBackStack(Constants.ALL_CHATS_FRAGMENT_NAME)
+                                .commit();
+                    }
+                });
+            }
         }
     }
 

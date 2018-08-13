@@ -20,9 +20,9 @@ import java.util.Arrays;
 
 public class SubRubrosFragment extends Fragment {
     //Constants
-    private static int MAX_ITEMS;
     private String tag;
-    private ArrayList<String> subRubrosID, subRubros;
+    private ArrayList<String> subRubrosID;
+
     //Componentes gráficas
     private ViewPager viewPager;
 
@@ -31,7 +31,6 @@ public class SubRubrosFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         tag = getArguments().getString("viewTag");
-
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_sub_rubros, container, false);
     }
@@ -46,20 +45,13 @@ public class SubRubrosFragment extends Fragment {
         dots.setupWithViewPager(viewPager, true);
 
         setup();
-
         viewPager.setAdapter(new FragmentViewPagerAdapter(getChildFragmentManager()));
     }
 
     private void setup() {
         TextView tvSubRubro = getView().findViewById(R.id.tvSubRubro);
 
-        int id = getResources().getIdentifier(tag,
-                "array",
-                getActivity().getPackageName());
-
-        subRubros = new ArrayList<>(Arrays.asList(getResources().getStringArray(id)));
-
-        id = getResources().getIdentifier(tag + "ID",
+        int id = getResources().getIdentifier(tag + "ID",
                 "array",
                 getActivity().getPackageName());
         subRubrosID = new ArrayList<>(Arrays.asList(getResources().getStringArray(id)));
@@ -81,7 +73,6 @@ public class SubRubrosFragment extends Fragment {
             Fragment fragment = new RubroEspecificoMainFragment();
             Bundle bundle = new Bundle();
             bundle.putStringArrayList("listID", subRubrosID);
-            bundle.putStringArrayList("list", subRubros);
             bundle.putInt("index", position * 6); // at which index to start the buttons
             fragment.setArguments(bundle);
             return fragment;

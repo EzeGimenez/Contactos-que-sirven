@@ -36,9 +36,8 @@ public class RubroGeneralFragment extends Fragment {
 
         listView = view.findViewById(R.id.listView);
 
-        final String[] rubrosA = getResources().getStringArray(R.array.rubrosGenerales);
         final String[] rubrosAID = getResources().getStringArray(R.array.rubrosGeneralesID);
-        listView.setAdapter(new RubrosGeneralesAdapter(getContext(), rubrosA));
+        listView.setAdapter(new RubrosGeneralesAdapter(getContext(), rubrosAID));
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -66,7 +65,10 @@ public class RubroGeneralFragment extends Fragment {
             LayoutInflater inflater = getLayoutInflater();
             View view = inflater.inflate(R.layout.rubros_generales_row, parent, false);
             TextView tvRubro = view.findViewById(R.id.tvRubro);
-            tvRubro.setText(rubrosArray[position]);
+            int id = getResources().getIdentifier(rubrosArray[position],
+                    "string",
+                    getActivity().getPackageName());
+            tvRubro.setText(getString(id));
             return view;
         }
     }

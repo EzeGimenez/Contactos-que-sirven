@@ -141,9 +141,26 @@ public class TurnProActivity extends AppCompatActivity {
 
             btnPrev.setText(R.string.previo);
 
-        } else if (actualFragment instanceof RubroEspecificoFragment) {
+        } else if (actualFragment instanceof RubroEspecificoFragment && actualFragment.getTag().equals(Constants.RUBRO_ESPECIFICO_FRAGMENT_TAG)) {
 
             proUser.setRubroEspecifico(fragmentConfig.getString("rubroEspecifico"));
+            fragmentConfig.putString("RubroGeneral", fragmentConfig.getString("rubroEspecifico"));
+            Fragment rubroEspecificoFragment = fragmentManager.findFragmentByTag(Constants.RUBRO_ESPECIFICO_FRAGMENT_TAG2);
+            if (rubroEspecificoFragment == null) {
+                rubroEspecificoFragment = new RubroEspecificoFragment();
+            }
+
+            rubroEspecificoFragment.setArguments(fragmentConfig);
+            fragmentManager.beginTransaction()
+                    .replace(R.id.ContainerTurnProFragments, rubroEspecificoFragment, Constants.RUBRO_ESPECIFICO_FRAGMENT_TAG2)
+                    .addToBackStack(Constants.RUBRO_ESPECIFICO_FRAGMENT_TAG)
+                    .commit();
+
+            btnPrev.setEnabled(true);
+
+        } else if (actualFragment instanceof RubroEspecificoFragment && actualFragment.getTag().equals(Constants.RUBRO_ESPECIFICO_FRAGMENT_TAG2)) {
+
+            proUser.setRubroEspecificoEspecifico(fragmentConfig.getString("rubroEspecifico"));
             Fragment fragment = fragmentManager.findFragmentByTag(Constants.WORK_SCOPE_FRAGMENT_TAG);
             if (fragment == null) {
                 fragment = new WorkScopeFragment();
@@ -151,11 +168,9 @@ public class TurnProActivity extends AppCompatActivity {
 
             FragmentTransaction transaction = fragmentManager.beginTransaction();
             transaction
-                    .addToBackStack(Constants.RUBRO_ESPECIFICO_FRAGMENT_TAG)
                     .replace(R.id.ContainerTurnProFragments, fragment, Constants.WORK_SCOPE_FRAGMENT_TAG)
+                    .addToBackStack(Constants.RUBRO_ESPECIFICO_FRAGMENT_TAG2)
                     .commit();
-
-            btnPrev.setEnabled(true);
 
         } else if (actualFragment instanceof WorkScopeFragment) {
 
@@ -284,7 +299,7 @@ public class TurnProActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
 
-        } else if (actualFragment instanceof RubroEspecificoFragment) {
+        } else if (actualFragment instanceof RubroEspecificoFragment && actualFragment.getTag().equals(Constants.RUBRO_ESPECIFICO_FRAGMENT_TAG)) {
 
             Fragment rubroGeneralFragment = fragmentManager.findFragmentByTag(Constants.RUBRO_GENERAL_FRAGMENT_TAG);
             fragmentManager.beginTransaction()
@@ -295,12 +310,23 @@ public class TurnProActivity extends AppCompatActivity {
             btnNext.setEnabled(false);
             btnPrev.setEnabled(true);
 
+        } else if (actualFragment instanceof RubroEspecificoFragment && actualFragment.getTag().equals(Constants.RUBRO_ESPECIFICO_FRAGMENT_TAG2)) {
+
+            Fragment rubroEspecificoFragment = fragmentManager.findFragmentByTag(Constants.RUBRO_ESPECIFICO_FRAGMENT_TAG);
+            fragmentManager.beginTransaction()
+                    .replace(R.id.ContainerTurnProFragments, rubroEspecificoFragment, Constants.RUBRO_ESPECIFICO_FRAGMENT_TAG)
+                    .commit();
+
+            btnPrev.setText(R.string.previo);
+            btnNext.setEnabled(false);
+            btnPrev.setEnabled(false);
+
         } else if (actualFragment instanceof WorkScopeFragment) {
 
             if (!isEditing) {
-                Fragment rubroEspecificoFragment = fragmentManager.findFragmentByTag(Constants.RUBRO_ESPECIFICO_FRAGMENT_TAG);
+                Fragment rubroEspecificoFragment = fragmentManager.findFragmentByTag(Constants.RUBRO_ESPECIFICO_FRAGMENT_TAG2);
                 fragmentManager.beginTransaction()
-                        .replace(R.id.ContainerTurnProFragments, rubroEspecificoFragment, Constants.RUBRO_ESPECIFICO_FRAGMENT_TAG)
+                        .replace(R.id.ContainerTurnProFragments, rubroEspecificoFragment, Constants.RUBRO_ESPECIFICO_FRAGMENT_TAG2)
                         .commit();
 
                 btnPrev.setText(R.string.previo);
@@ -435,7 +461,7 @@ public class TurnProActivity extends AppCompatActivity {
 
     private void saveInRubro() {
         database.child(Constants.FIREBASE_RUBRO_CONTAINER_NAME)
-                .child(proUser.getRubroEspecifico())
+                .child(proUser.getRubroEspecificoEspecifico())
                 .child(mAuth.getCurrentUser().getUid())
                 .setValue(true).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

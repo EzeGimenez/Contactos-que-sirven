@@ -54,7 +54,6 @@ import com.visoft.network.Util.GlideApp;
 import com.visoft.network.Util.MapHighlighter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -126,25 +125,19 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback, Vie
     private void iniciarUI() {
         tvUsername.setText(user.getUsername());
 
-        int id = getResources().getIdentifier(user.getRubroGeneral() + "ID",
-                "array",
+        int id1 = getResources().getIdentifier(user.getRubroGeneral(),
+                "string",
                 getActivity().getPackageName());
-        final String[] rubroEspecificosID = getResources().getStringArray(id);
-        id = getResources().getIdentifier(user.getRubroGeneral(),
-                "array",
+
+        int id2 = getResources().getIdentifier(user.getRubroEspecifico(),
+                "string",
                 getActivity().getPackageName());
-        final String[] rubroEspecificos = getResources().getStringArray(id);
 
-        final String[] rubroGeneral = getResources().getStringArray(R.array.rubrosGenerales);
-        final String[] rubroGeneralID = getResources().getStringArray(R.array.rubrosGeneralesID);
+        int id3 = getResources().getIdentifier(user.getRubroEspecificoEspecifico(),
+                "string",
+                getActivity().getPackageName());
 
-        List<String> aux1 = new ArrayList<>(Arrays.asList(rubroGeneralID));
-        List<String> aux2 = new ArrayList<>(Arrays.asList(rubroEspecificosID));
-
-        String rubroGral = rubroGeneral[aux1.indexOf(user.getRubroGeneral())];
-        String rubroEsp = rubroEspecificos[aux2.indexOf(user.getRubroEspecifico())];
-
-        tvRubro.setText(rubroGral + " - " + rubroEsp);
+        tvRubro.setText(getString(id1) + " - " + getString(id2) + " - " + getString(id3));
 
         String[] diasL = getResources().getStringArray(R.array.dias);
         String[] hrAtencion = user.getHoraAtencion().split(" - ");

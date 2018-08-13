@@ -11,8 +11,8 @@
     <Button
         android:id="@+id/button1"
         style="@style/MainButtons"
-        android:tag="hogarMantenimiento"
-        android:text="@string/hogarMantenimiento"
+        android:tag="servicioshogar"
+        android:text="@string/serviciosHogar"
         app:layout_constraintBottom_toTopOf="@+id/button3"
         app:layout_constraintEnd_toStartOf="@+id/button2"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,8 +21,8 @@
     <Button
         android:id="@+id/button2"
         style="@style/MainButtons"
-        android:tag="serviciosFamilia"
-        android:text="@string/serviciosFamilia"
+        android:tag="obraConstruccion"
+        android:text="@string/obraConstruccion"
         app:layout_constraintBottom_toTopOf="@+id/button4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/button1"
@@ -31,9 +31,9 @@
     <Button
         android:id="@+id/button3"
         style="@style/MainButtons"
-        android:tag="obraConstruccion"
-        android:text="@string/obraConstruccion"
-        app:layout_constraintBottom_toTopOf="@+id/button5"
+        android:tag="serviciosPersonales"
+        android:text="@string/serviciosPersonales"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button1" />
@@ -41,30 +41,11 @@
     <Button
         android:id="@+id/button4"
         style="@style/MainButtons"
-        android:tag="personalEventual"
-        android:text="@string/personalEventual"
-        app:layout_constraintBottom_toTopOf="@+id/button6"
+        android:tag="emergencias"
+        android:text="@string/emergencias"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/button3"
         app:layout_constraintTop_toBottomOf="@+id/button2" />
 
-    <Button
-        android:id="@+id/button5"
-        style="@style/MainButtons"
-        android:tag="emergencias"
-        android:text="@string/emergencias"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button6"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button3" />
-
-    <Button
-        android:id="@+id/button6"
-        style="@style/MainButtons"
-        android:tag="alquileres"
-        android:text="@string/alquileres"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button5"
-        app:layout_constraintTop_toBottomOf="@+id/button4" />
 </android.support.constraint.ConstraintLayout>

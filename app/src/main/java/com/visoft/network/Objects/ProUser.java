@@ -9,6 +9,7 @@ public class ProUser extends User {
     private boolean showEmail;
     private float mapZoom;
     private int diasAtencion;
+    private String rubroEspecificoEspecifico;
 
     public ProUser() {
         isPro = true;
@@ -124,5 +125,13 @@ public class ProUser extends User {
 
     public void setFacebookID(String facebookID) {
         this.facebookID = facebookID;
+    }
+
+    public String getRubroEspecificoEspecifico() {
+        return rubroEspecificoEspecifico;
+    }
+
+    public void setRubroEspecificoEspecifico(String rubroEspecificoEspecifico) {
+        this.rubroEspecificoEspecifico = rubroEspecificoEspecifico;
     }
 }

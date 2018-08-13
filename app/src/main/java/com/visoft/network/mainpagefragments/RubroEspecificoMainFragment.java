@@ -15,7 +15,7 @@ import com.visoft.network.Util.Constants;
 import java.util.ArrayList;
 
 public class RubroEspecificoMainFragment extends Fragment {
-    private ArrayList<String> subRubrosID, subRubros;
+    private ArrayList<String> subRubrosID;
     private int index;
     private ArrayList<Button> buttons;
 
@@ -26,7 +26,6 @@ public class RubroEspecificoMainFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         subRubrosID = getArguments().getStringArrayList("listID");
-        subRubros = getArguments().getStringArrayList("list");
         index = getArguments().getInt("index");
         buttons = new ArrayList<>();
 
@@ -51,24 +50,43 @@ public class RubroEspecificoMainFragment extends Fragment {
 
         int j = 0;
         int i = index;
+
         boolean seguir = true;
         while (seguir) {
             Button button = buttons.get(j);
             button.setVisibility(View.VISIBLE);
-            button.setText(subRubros.get(i));
+
+            int id = getResources().getIdentifier(subRubrosID.get(i),
+                    "string",
+                    getActivity().getPackageName());
+            button.setText(getString(id));
             final int finalI = i;
+
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Fragment fragment = new SearchResultFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putString("subRubroID", subRubrosID.get(finalI));
-                    bundle.putString("subRubro", subRubros.get(finalI));
-                    fragment.setArguments(bundle);
-                    (getActivity()).getSupportFragmentManager().beginTransaction()
-                            .addToBackStack(Constants.SUB_RUBROS_FRAGMENT_TAG)
-                            .replace(R.id.ContainerMainFragments, fragment, Constants.SEARCH_RESULT_FRAGMENT_TAG)
-                            .commit();
+                    Fragment shownFrag = getActivity().getSupportFragmentManager().findFragmentById(R.id.ContainerRubroFragments);
+                    if (shownFrag.getTag().equals(Constants.SUB_RUBROS_FRAGMENT_TAG2)) {
+                        Fragment fragment = new SearchResultFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("subRubroID", subRubrosID.get(finalI));
+                        fragment.setArguments(bundle);
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
+                                .replace(R.id.ContainerRubroFragments, fragment, Constants.SEARCH_RESULT_FRAGMENT_TAG)
+                                .addToBackStack(Constants.SUB_RUBROS_FRAGMENT_TAG)
+                                .commit();
+                    } else {
+                        Fragment fragment = new SubRubrosFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("viewTag", subRubrosID.get(finalI));
+                        fragment.setArguments(bundle);
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
+                                .replace(R.id.ContainerRubroFragments, fragment, Constants.SUB_RUBROS_FRAGMENT_TAG2)
+                                .addToBackStack(Constants.SUB_RUBROS_FRAGMENT_TAG)
+                                .commit();
+                    }
                 }
             });
 

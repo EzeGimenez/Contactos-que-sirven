@@ -9,14 +9,4 @@
         app:actionLayout="@layout/go_to_profile_icon_layout"
         app:showAsAction="always" />
 
-    <item
-        android:id="@+id/goToContacts"
-        android:title="@string/Contactos"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/goToChats"
-        android:title="@string/chats"
-        app:showAsAction="never" />
-
 </menu>
