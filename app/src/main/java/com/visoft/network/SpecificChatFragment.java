@@ -2,29 +2,28 @@ package com.visoft.network;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -37,7 +36,6 @@ import com.visoft.network.Util.GlideApp;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
@@ -49,10 +47,11 @@ public class SpecificChatFragment extends Fragment {
     private List<Message> messageList;
     private DatabaseReference database;
     private User receiver;
-    private ArrayAdapter adapter;
+    private FirebaseRecyclerAdapter<Message, ViewHolderChats> adapter1;
+    private DatabaseReference messagesRef;
 
     //Componentes gráficas
-    private ListView listView;
+    private RecyclerView listView;
     private FloatingActionButton btnSend;
     private EditText etChat;
     private ConstraintLayout msgContainer;
@@ -96,24 +95,16 @@ public class SpecificChatFragment extends Fragment {
             GlideApp.with(getContext())
                     .load(userRef)
                     .into(ivPic);
+        } else {
+            ivPic.setImageDrawable(getResources().getDrawable(R.drawable.profile_pic));
         }
 
+        //Hides the keyboard when the edittext loses focus
         etChat.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 Objects.requireNonNull(imm).hideSoftInputFromWindow(v.getWindowToken(), 0);
-            }
-        });
-
-        etChat.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                if (keyboardShown(etChat.getRootView())) {
-                    listView.setSelection(adapter.getCount() - 1);
-                } else {
-                    //etChat.clearFocus();
-                }
             }
         });
 
@@ -195,110 +186,101 @@ public class SpecificChatFragment extends Fragment {
     private void populateMessages() {
         messageList = new ArrayList<>();
 
-        DatabaseReference messagesRef = Database
+        messagesRef = Database
                 .getDatabase()
                 .getReference(Constants.FIREBASE_MESSAGES_CONTAINER_NAME)
                 .child(chatID);
 
         messagesRef.keepSynced(true);
-
-        messagesRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (messageList.size() == 0) {
-                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                        Message message = ds.getValue(Message.class);
-                        if (message != null) {
-                            messageList.add(message);
-                        }
-                    }
-                    setAdapter();
-                } else {
-                    Iterator<DataSnapshot> it = dataSnapshot.getChildren().iterator();
-                    DataSnapshot index = it.next();
-                    while (it.hasNext()) {
-                        index = it.next();
-                    }
-                    Message message = index.getValue(Message.class);
-                    adapter.add(message);
-                }
-                listView.setSelection(adapter.getCount() - 1);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        setAdapter();
     }
 
-    private boolean keyboardShown(View rootView) {
+    private void setAdapter() {
+        adapter1 = new ListViewChatsAdapter(Message.class, 0, ViewHolderChats.class, messagesRef);
+
+        // Scroll to bottom on new messages
+        adapter1.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                listView.smoothScrollToPosition(adapter1.getItemCount());
+            }
+        });
+
+        listView.setLayoutManager(new LinearLayoutManager(getContext()));
+        listView.setAdapter(adapter1);
+    }
+
+ /*   private boolean keyboardShown(View rootView) {
         final int softKeyboardHeight = 100;
         Rect r = new Rect();
         rootView.getWindowVisibleDisplayFrame(r);
         DisplayMetrics dm = rootView.getResources().getDisplayMetrics();
         int heightDiff = rootView.getBottom() - r.bottom;
         return heightDiff > softKeyboardHeight * dm.density;
+    }*/
+
+    private class ViewHolderChats extends RecyclerView.ViewHolder {
+        TextView tvText, tvTimeStamp;
+
+        public ViewHolderChats(View itemView) {
+            super(itemView);
+
+            tvText = itemView.findViewById(R.id.tvText);
+            tvTimeStamp = itemView.findViewById(R.id.tvTimeStamp);
+        }
     }
 
-    private void setAdapter() {
-        adapter = new ListViewChatsAdapter(getContext(), R.layout.message_sent_change, messageList);
-        listView.setAdapter(adapter);
-    }
+    private class ListViewChatsAdapter extends FirebaseRecyclerAdapter<Message, ViewHolderChats> {
 
-    private class ListViewChatsAdapter extends ArrayAdapter<Message> {
-        private List<Message> messages;
-        private LayoutInflater inflater;
-
-        public ListViewChatsAdapter(@NonNull Context context, int resource, @NonNull List<Message> messages) {
-            super(context, resource, messages);
-            inflater = LayoutInflater.from(context);
-            this.messages = messages;
+        public ListViewChatsAdapter(Class<Message> modelClass, int modelLayout, Class<ViewHolderChats> viewHolderClass, Query ref) {
+            super(modelClass, modelLayout, viewHolderClass, ref);
         }
 
         @NonNull
         @Override
-        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-            final ViewHolder holder;
-
-            Message msg = messages.get(position);
-            String authorUID = msg.getAuthor();
-
-            if (authorUID.equals(receiver.getUid())) {
-                //Received message
-
-                //Previous one is same person
-                if (position > 0 && messages.get(position - 1).getAuthor().equals(receiver.getUid())) {
-                    convertView = inflater.inflate(R.layout.message_received_cont, null);
-                } else {
-                    convertView = inflater.inflate(R.layout.message_received_change, null);
-                }
-            } else {
-                //Sent message
-                //Previous one is same person
-                if (position > 0 && !messages.get(position - 1).getAuthor().equals(receiver.getUid())) {
-                    convertView = inflater.inflate(R.layout.message_sent_cont, null);
-                } else {
-                    convertView = inflater.inflate(R.layout.message_sent_change, null);
-                }
+        public ViewHolderChats onCreateViewHolder(ViewGroup parent, int viewType) {
+            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+            switch (viewType) {
+                case 0: //received message, previous one same person
+                    return new ViewHolderChats(inflater.inflate(R.layout.message_received_cont, parent, false));
+                case 1: //received message, previous one other person
+                    return new ViewHolderChats(inflater.inflate(R.layout.message_received_change, parent, false));
+                case 2: //sent message, previous one same person
+                    return new ViewHolderChats(inflater.inflate(R.layout.message_sent_cont, parent, false));
+                case 3: //sent message, previous one is user
+                    return new ViewHolderChats(inflater.inflate(R.layout.message_sent_change, parent, false));
+                default:
+                    return null;
             }
+        }
 
-            holder = new ViewHolder();
-            holder.tvText = convertView.findViewById(R.id.tvText);
-            holder.tvTimeStamp = convertView.findViewById(R.id.tvTimeStamp);
-            convertView.setTag(holder);
-
-
+        @Override
+        protected void populateViewHolder(ViewHolderChats holder, Message msg, int position) {
             holder.tvText.setText(msg.getText());
             holder.tvTimeStamp.setText(DateFormat.format("HH:mm",
                     msg.getTimeStamp()));
-
-            return convertView;
         }
 
-        private class ViewHolder {
-            TextView tvText, tvTimeStamp;
+        @Override
+        public int getItemViewType(int position) {
+            Message msg = getItem(position);
+
+            String authorUID = msg.getAuthor();
+            if (authorUID.equals(receiver.getUid())) { //Received message
+                if (position > 0 && getItem(position - 1).getAuthor().equals(receiver.getUid())) {
+                    return 0;
+                } else {
+                    return 1;
+                }
+            } else { //Sent Message
+                if (position > 0 && !getItem(position - 1).getAuthor().equals(receiver.getUid())) {
+                    return 2;
+                } else {
+                    return 3;
+                }
+            }
         }
+
 
     }
 

@@ -7,14 +7,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import com.visoft.network.Util.Constants;
 
 public class ChatsFragment extends Fragment {
-
-    //Componentes gráficas
-    private ListView listView;
 
     @Nullable
     @Override

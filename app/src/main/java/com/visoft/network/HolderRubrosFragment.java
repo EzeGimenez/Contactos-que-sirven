@@ -1,5 +1,7 @@
 package com.visoft.network;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -28,16 +30,32 @@ public class HolderRubrosFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        setRetainInstance(true);
         searchView = view.findViewById(R.id.searchView);
+        final FragmentManager childFragmentManager = getChildFragmentManager();
 
-        Fragment fm = getChildFragmentManager().findFragmentByTag(Constants.MAIN_PAGE_FRAGMENT_TAG);
-        if (fm == null || !fm.isAdded()) {
-            if (fm == null) {
-                fm = new MainPageFragment();
-            }
-            getChildFragmentManager().beginTransaction()
+        Fragment fm = childFragmentManager.findFragmentByTag(Constants.MAIN_PAGE_FRAGMENT_TAG);
+        if (fm == null) {
+            fm = new MainPageFragment();
+        }
+        if (!fm.isAdded()) {
+            childFragmentManager.beginTransaction()
                     .replace(R.id.ContainerRubroFragments, fm, Constants.MAIN_PAGE_FRAGMENT_TAG)
+                    .commit();
+        }
+
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        boolean hasSearched = sharedPreferences.getBoolean("hasSearched", false);
+        if (hasSearched) {
+            Fragment searchResultFragment = new SearchResultFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("searchQuery", sharedPreferences.getString("searchQuery", ""));
+            bundle.putBoolean("isRubro", sharedPreferences.getBoolean("isRubro", true));
+            searchResultFragment.setArguments(bundle);
+
+            childFragmentManager.beginTransaction()
+                    .replace(R.id.ContainerRubroFragments, searchResultFragment, Constants.SEARCH_RESULT_FRAGMENT_TAG)
+                    .addToBackStack(Constants.MAIN_PAGE_FRAGMENT_TAG)
                     .commit();
         }
 
@@ -50,15 +68,14 @@ public class HolderRubrosFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 if (newText.length() > 0) {
-                    Fragment fragment1 = fragmentManager.findFragmentById(R.id.ContainerRubroFragments);
+                    Fragment fragment1 = childFragmentManager.findFragmentById(R.id.ContainerRubroFragments);
                     if (!(fragment1 instanceof SearchResultFragment) || !fragment.isVisible()) {
                         Bundle bundle = new Bundle();
                         bundle.putString("searchQuery", newText);
                         fragment.setArguments(bundle);
                         fragment.resetSearch();
-                        fragmentManager.beginTransaction()
+                        childFragmentManager.beginTransaction()
                                 .replace(R.id.ContainerRubroFragments, fragment, Constants.SEARCH_RESULT_FRAGMENT_TAG)
                                 .addToBackStack(Constants.MAIN_PAGE_FRAGMENT_TAG)
                                 .commit();
@@ -67,6 +84,8 @@ public class HolderRubrosFragment extends Fragment {
                     }
                     return true;
                 }
+
+                /*
                 Fragment fragment1 = fragmentManager.findFragmentByTag(Constants.MAIN_PAGE_FRAGMENT_TAG);
                 if (fragment1 == null) {
                     fragment1 = new MainPageFragment();
@@ -76,6 +95,7 @@ public class HolderRubrosFragment extends Fragment {
                             .replace(R.id.ContainerRubroFragments, fragment1, Constants.MAIN_PAGE_FRAGMENT_TAG)
                             .commit();
                 }
+                */
 
                 return false;
             }

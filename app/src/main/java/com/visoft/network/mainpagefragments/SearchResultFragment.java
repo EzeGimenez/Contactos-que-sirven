@@ -56,7 +56,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class SearchResultFragment extends Fragment {
     private FirebaseAuth mAuth;
-    private String subRubroID, searchQuery;
+    private String searchQuery;
     private DatabaseReference database;
     private DatabaseReference databaseUsers;
     private ArrayList<ProUser> results;
@@ -67,7 +67,7 @@ public class SearchResultFragment extends Fragment {
     private int j = 0;
     private SharedPreferences sharedPref;
     private SearchableAdapter adapter;
-    private boolean isRunning;
+    private boolean isRunning, isRubro;
 
     //UI components
     private ListView listView;
@@ -95,28 +95,24 @@ public class SearchResultFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         database = Database.getDatabase().getReference();
         databaseUsers = database.child(Constants.FIREBASE_USERS_CONTAINER_NAME);
-
         isRunning = true;
-
         Bundle args = getArguments();
         if (args != null) {
-            subRubroID = args.getString("subRubroID");
+            isRubro = args.getBoolean("isRubro");
             searchQuery = args.getString("searchQuery");
         }
 
-        //UI comoponents initialization
+        //UI components initialization
         listView = view.findViewById(R.id.ListViewResult);
 
-        if (subRubroID != null) {
+        if (isRubro) {
             getResultsFromSubArea();
-        } else if (searchQuery != null) {
+        } else {
             searchForQuery(searchQuery);
         }
     }
 
     public void searchForQuery(final String a) {
-        sharedPref.edit().putString("searchRequest", a).putBoolean("isRubro", false).commit();
-
         if (adapter == null) {
             results = new ArrayList<ProUser>();
             databaseUsers.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -172,7 +168,7 @@ public class SearchResultFragment extends Fragment {
             }
         };
 
-        database.child(Constants.FIREBASE_RUBRO_CONTAINER_NAME).child(subRubroID).addListenerForSingleValueEvent(new ValueEventListener() {
+        database.child(Constants.FIREBASE_RUBRO_CONTAINER_NAME).child(searchQuery).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 timer.cancel();
@@ -221,18 +217,14 @@ public class SearchResultFragment extends Fragment {
     private void setAdapter() {
         if (i == j && isRunning) {
             if (results.size() > 0) {
+
                 LinkedHashSet<ProUser> linkedHashSet = new LinkedHashSet<>();
                 linkedHashSet.addAll(results);
                 results.clear();
                 results.addAll(linkedHashSet);
-
-
                 Collections.sort(results, new ProUserComparator());
-                if (subRubroID != null) {
-                    sharedPref.edit().putString("searchRequest", subRubroID).putBoolean("isRubro", true).commit();
-                } else {
-                    sharedPref.edit().putString("searchRequest", searchQuery).putBoolean("isRubro", false).commit();
-                }
+
+                sharedPref.edit().putString("searchQuery", searchQuery).putBoolean("isRubro", isRubro).commit();
                 adapter = new SearchableAdapter(getContext(), results);
                 listView.setAdapter(adapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -275,7 +267,7 @@ public class SearchResultFragment extends Fragment {
         super.onResume();
         Bundle args = getArguments();
         if (args != null) {
-            subRubroID = args.getString("subRubroID");
+            isRubro = args.getBoolean("isRubro");
             searchQuery = args.getString("searchQuery");
         }
     }

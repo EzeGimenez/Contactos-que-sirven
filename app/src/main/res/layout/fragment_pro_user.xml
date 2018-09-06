@@ -316,18 +316,19 @@
     <android.support.constraint.ConstraintLayout
         android:id="@+id/msgContainer"
         android:layout_width="0dp"
-        android:layout_height="55dp"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
+        android:minHeight="55dp"
         android:background="@drawable/chat_floating_background"
         android:paddingBottom="4dp"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
         android:paddingTop="4dp"
-        app:layout_constraintBottom_toBottomOf="@id/btnSend"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/btnSend"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/btnSend">
+        app:layout_constraintStart_toStartOf="parent">
 
         <EditText
             android:id="@+id/etChat"
@@ -336,7 +337,7 @@
             android:layout_margin="8dp"
             android:background="@color/transparent"
             android:hint="@string/chatHint"
-            android:inputType="textCapSentences|textShortMessage|textAutoCorrect"
+            android:inputType="textCapSentences|textShortMessage|textAutoCorrect|textMultiLine"
             android:textColor="@color/colorPrimary"
             android:textColorHint="@android:color/darker_gray"
             app:layout_constraintBottom_toBottomOf="parent"

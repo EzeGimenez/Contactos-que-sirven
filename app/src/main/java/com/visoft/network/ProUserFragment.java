@@ -13,7 +13,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.view.KeyEvent;
@@ -129,15 +128,11 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback, Vie
                 "string",
                 getActivity().getPackageName());
 
-        int id2 = getResources().getIdentifier(user.getRubroEspecifico(),
-                "string",
-                getActivity().getPackageName());
-
         int id3 = getResources().getIdentifier(user.getRubroEspecificoEspecifico(),
                 "string",
                 getActivity().getPackageName());
 
-        tvRubro.setText(getString(id1) + " - " + getString(id2) + " - " + getString(id3));
+        tvRubro.setText(getString(id1) + " - " + getString(id3));
 
         String[] diasL = getResources().getStringArray(R.array.dias);
         String[] hrAtencion = user.getHoraAtencion().split(" - ");
@@ -322,9 +317,6 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback, Vie
                 .child(chatOverview.getChatID())
                 .push()
                 .setValue(message);
-
-        Snackbar.make(getActivity().findViewById(R.id.rootContainer),
-                getString(R.string.enviado), Snackbar.LENGTH_SHORT).show();
     }
 
     private void getProfilePic() {

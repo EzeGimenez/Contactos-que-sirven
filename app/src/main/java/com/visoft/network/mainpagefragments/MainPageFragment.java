@@ -37,7 +37,7 @@ public class MainPageFragment extends Fragment implements View.OnClickListener {
         bundle.putString("viewTag", (String) v.getTag());
         bundle.putBoolean("isSubSubRubro", false);
         fragment.setArguments(bundle);
-        getActivity().getSupportFragmentManager().beginTransaction()
+        getFragmentManager().beginTransaction()
                 .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
                 .replace(R.id.ContainerRubroFragments, fragment, Constants.SUB_RUBROS_FRAGMENT_TAG)
                 .addToBackStack(Constants.MAIN_PAGE_FRAGMENT_TAG)

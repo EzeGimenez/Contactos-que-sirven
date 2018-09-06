@@ -7,13 +7,13 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.visoft.network.R;
+import com.visoft.network.Util.VerticalViewPager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,7 +24,7 @@ public class SubRubrosFragment extends Fragment {
     private ArrayList<String> subRubrosID;
 
     //Componentes gráficas
-    private ViewPager viewPager;
+    private VerticalViewPager viewPager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

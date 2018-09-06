@@ -33,6 +33,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.visoft.network.Util.Constants;
 import com.visoft.network.Util.Database;
+import com.visoft.network.mainpagefragments.MainPageFragment;
 import com.visoft.network.mainpagefragments.SearchResultFragment;
 
 import java.util.ArrayList;
@@ -47,6 +48,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private SharedPreferences sharedPref;
     private DatabaseReference database;
     private ViewPagerAdapter adapter;
+    private HolderRubrosFragment holderRubrosFragment;
+    private ChatsFragment chatsFragment;
+    private MainContactsFragment mainContactsFragment;
 
     //Componentes graficas
     private Toolbar toolbar;
@@ -80,6 +84,25 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     }
 
     @Override
+    public void onBackPressed() {
+        if (viewPagerMain.getCurrentItem() == 0) {
+            FragmentManager fm = holderRubrosFragment.getChildFragmentManager();
+            if (fm.findFragmentById(R.id.ContainerRubroFragments) instanceof MainPageFragment) {
+                finish();
+            } else {
+                fm.popBackStack();
+            }
+        } else {
+            Fragment shownFrag = adapter.getItem(viewPagerMain.getCurrentItem());
+            if (shownFrag != null && shownFrag.getChildFragmentManager().getBackStackEntryCount() > 0) {
+                shownFrag.getChildFragmentManager().popBackStack();
+            } else {
+                finish();
+            }
+        }
+    }
+
+    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -90,25 +113,26 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     @Override
     protected void onPause() {
         super.onPause();
-        FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = fm.findFragmentById(R.id.ContainerRubroFragments);
-        if (fragment != null && fragment instanceof SearchResultFragment) {
-            hasSearched = true;
-        } else {
-            hasSearched = false;
-        }
-        sharedPref.edit().putBoolean("hasSearched", hasSearched).commit();
-
-
-        for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
-            fm.popBackStack();
+        if (viewPagerMain != null) {
+            hasSearched = viewPagerMain.getCurrentItem() == 0 &&
+                    holderRubrosFragment.getChildFragmentManager().findFragmentById(R.id.ContainerRubroFragments) instanceof SearchResultFragment;
+            sharedPref.edit().putBoolean("hasSearched", hasSearched).commit();
+            if (!hasSearched) {
+                Fragment shownFrag = adapter.getItem(viewPagerMain.getCurrentItem());
+                if (shownFrag != null) {
+                    for (int i = 0; i < shownFrag.getChildFragmentManager().getBackStackEntryCount(); i++) {
+                        shownFrag.getChildFragmentManager().popBackStack();
+                    }
+                }
+            }
         }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        sharedPref.edit().putBoolean("hasSearched", false).commit();
+        hasSearched = false;
+        sharedPref.edit().putBoolean("hasSearched", hasSearched).commit();
     }
 
 
@@ -116,8 +140,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     protected void onResume() {
         super.onResume();
         invalidateOptionsMenu();
-        SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREF_NAME, MODE_PRIVATE);
-        hasSearched = sharedPreferences.getBoolean("hasSearched", false);
     }
 
     /**
@@ -154,8 +176,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         final MenuItem goToProfileItem = menu.findItem(R.id.goToProfile);
 
         if (user != null) { // esta iniciado sesion
-
-            View view = menu.findItem(R.id.goToProfile).getActionView();
+            final View view = menu.findItem(R.id.goToProfile).getActionView();
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -170,26 +191,37 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             viewPagerMain = findViewById(R.id.ViewPagerMain);
             adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
-            // Add Fragments to adapter one by one
-            adapter.addFragment(new HolderRubrosFragment(), getString(R.string.buscar));
-            adapter.addFragment(new ChatsFragment(), getString(R.string.chats));
-            adapter.addFragment(new MainContactsFragment(), getString(R.string.contactos));
-            viewPagerMain.setAdapter(adapter);
+            holderRubrosFragment = holderRubrosFragment == null ? new HolderRubrosFragment() : holderRubrosFragment;
+            chatsFragment = chatsFragment == null ? new ChatsFragment() : chatsFragment;
+            mainContactsFragment = mainContactsFragment == null ? new MainContactsFragment() : mainContactsFragment;
 
             TabLayout tabLayout = findViewById(R.id.tabLayoutMain);
             tabLayout.setupWithViewPager(viewPagerMain);
+            adapter.addFragment(holderRubrosFragment, getString(R.string.buscar));
+            adapter.addFragment(chatsFragment, getString(R.string.chats));
+            adapter.addFragment(mainContactsFragment, getString(R.string.contactos));
+            viewPagerMain.setAdapter(adapter);
 
             tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                 @Override
                 public void onTabSelected(TabLayout.Tab tab) {
-                    FragmentManager fm = getSupportFragmentManager();
-                    for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
-                        fm.popBackStack();
+                    if (tab.getPosition() == 0) {
+                        //Search for the result
                     }
                 }
 
                 @Override
                 public void onTabUnselected(TabLayout.Tab tab) {
+                    //Check whether searchResultsFragment was visible
+                    if (tab.getPosition() == 0) {
+                        hasSearched = false;
+                        Fragment shownFrag = holderRubrosFragment.getChildFragmentManager().findFragmentById(R.id.ContainerRubroFragments);
+                        if (shownFrag instanceof SearchResultFragment) {
+                            hasSearched = true;
+                        }
+
+                        sharedPref.edit().putBoolean("hasSearched", hasSearched).commit();
+                    }
                 }
 
                 @Override
@@ -197,30 +229,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
                 }
             });
-
-            if (hasSearched) {
-                String searchRequest = getSharedPreferences(Constants.SHARED_PREF_NAME, MODE_PRIVATE).getString("searchRequest", "");
-                boolean isRubro = getSharedPreferences(Constants.SHARED_PREF_NAME, MODE_PRIVATE).getBoolean("isRubro", true);
-                Fragment searchResultFragment = new SearchResultFragment();
-
-                Bundle bundle = new Bundle();
-                if (isRubro) {
-                    bundle.putString("subRubroID", searchRequest);
-                    /*int id = getResources().getIdentifier(searchRequest,
-                            "string",
-                            getPackageName());
-                    String subRubro = getResources().getString(id);
-                    bundle.putString("subRubro", subRubro);*/
-                } else {
-                    bundle.putString("searchQuery", searchRequest);
-                }
-
-                searchResultFragment.setArguments(bundle);
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.ContainerRubroFragments, searchResultFragment, Constants.SEARCH_RESULT_FRAGMENT_TAG)
-                        .addToBackStack(Constants.MAIN_PAGE_FRAGMENT_TAG)
-                        .commit();
-            }
 
         } else { // no esta iniciado sesion
             goToProfileItem.setVisible(false);

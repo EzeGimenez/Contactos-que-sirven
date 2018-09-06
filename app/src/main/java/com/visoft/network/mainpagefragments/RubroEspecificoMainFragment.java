@@ -65,13 +65,14 @@ public class RubroEspecificoMainFragment extends Fragment {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Fragment shownFrag = getActivity().getSupportFragmentManager().findFragmentById(R.id.ContainerRubroFragments);
+                    Fragment shownFrag = getParentFragment().getFragmentManager().findFragmentById(R.id.ContainerRubroFragments);
                     if (shownFrag.getTag().equals(Constants.SUB_RUBROS_FRAGMENT_TAG2)) {
                         Fragment fragment = new SearchResultFragment();
                         Bundle bundle = new Bundle();
-                        bundle.putString("subRubroID", subRubrosID.get(finalI));
+                        bundle.putString("searchQuery", subRubrosID.get(finalI));
+                        bundle.putBoolean("isRubro", true);
                         fragment.setArguments(bundle);
-                        getActivity().getSupportFragmentManager().beginTransaction()
+                        getParentFragment().getFragmentManager().beginTransaction()
                                 .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
                                 .replace(R.id.ContainerRubroFragments, fragment, Constants.SEARCH_RESULT_FRAGMENT_TAG)
                                 .addToBackStack(Constants.SUB_RUBROS_FRAGMENT_TAG)
@@ -81,7 +82,7 @@ public class RubroEspecificoMainFragment extends Fragment {
                         Bundle bundle = new Bundle();
                         bundle.putString("viewTag", subRubrosID.get(finalI));
                         fragment.setArguments(bundle);
-                        getActivity().getSupportFragmentManager().beginTransaction()
+                        getParentFragment().getFragmentManager().beginTransaction()
                                 .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
                                 .replace(R.id.ContainerRubroFragments, fragment, Constants.SUB_RUBROS_FRAGMENT_TAG2)
                                 .addToBackStack(Constants.SUB_RUBROS_FRAGMENT_TAG)
