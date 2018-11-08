@@ -12,7 +12,7 @@
         android:id="@+id/button1"
         style="@style/MainButtons"
         android:tag="servicioshogar"
-        android:text="@string/serviciosHogar"
+        android:text="@string/servicioshogar"
         app:layout_constraintBottom_toTopOf="@+id/button3"
         app:layout_constraintEnd_toStartOf="@+id/button2"
         app:layout_constraintStart_toStartOf="parent"

@@ -17,6 +17,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.visoft.network.Objects.User;
 import com.visoft.network.Util.Constants;
 import com.visoft.network.Util.ErrorAnimator;
@@ -106,6 +107,8 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         user.setPro(false);
         user.setUid(uid);
         user.setEmail(mail);
+        String instanceId = FirebaseInstanceId.getInstance().getToken();
+        user.setInstanceID(instanceId);
         FirebaseDatabase
                 .getInstance()
                 .getReference()

@@ -1,8 +1,10 @@
 package com.visoft.network;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
@@ -17,6 +19,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -51,6 +54,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private HolderRubrosFragment holderRubrosFragment;
     private ChatsFragment chatsFragment;
     private MainContactsFragment mainContactsFragment;
+    public static final String RECEIVER_INTENT = "RECEIVER_INTENT";
+    public static final String RECEIVER_MESSAGE = "RECEIVER_MESSAGE";
+    public static boolean isRunning;
+    private BroadcastReceiver broadcastReceiver;
+    private TabLayout tabLayout;
 
     //Componentes graficas
     private Toolbar toolbar;
@@ -67,6 +75,13 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         mAuth = FirebaseAuth.getInstance();
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                notifyNewMessage();
+            }
+        };
+
         //Creacion de toolbar_main
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -81,6 +96,35 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
             }
         }
+    }
+
+    public void notifyNewMessage() {
+        if (viewPagerMain.getCurrentItem() == 1) {
+            Fragment shownFrag = chatsFragment.getChildFragmentManager().findFragmentById(R.id.ContainerFragmentChats);
+            if (shownFrag instanceof AllChatsFragment) {
+                ((AllChatsFragment) shownFrag).refresh();
+            }
+            sharedPref.edit().putBoolean("unreadMessages", false).commit();
+        } else {
+            View view = tabLayout.getTabAt(1).getCustomView();
+            view.findViewById(R.id.notImg).setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        LocalBroadcastManager.getInstance(this).registerReceiver((broadcastReceiver),
+                new IntentFilter(RECEIVER_INTENT)
+        );
+        isRunning = true;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver);
+        isRunning = false;
     }
 
     @Override
@@ -195,7 +239,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             chatsFragment = chatsFragment == null ? new ChatsFragment() : chatsFragment;
             mainContactsFragment = mainContactsFragment == null ? new MainContactsFragment() : mainContactsFragment;
 
-            TabLayout tabLayout = findViewById(R.id.tabLayoutMain);
+            tabLayout = findViewById(R.id.tabLayoutMain);
             tabLayout.setupWithViewPager(viewPagerMain);
             adapter.addFragment(holderRubrosFragment, getString(R.string.buscar));
             adapter.addFragment(chatsFragment, getString(R.string.chats));
@@ -207,6 +251,17 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 public void onTabSelected(TabLayout.Tab tab) {
                     if (tab.getPosition() == 0) {
                         //Search for the result
+                    }
+                    if (tab.getPosition() == 1) {
+                        Fragment shownFrag = chatsFragment.getChildFragmentManager().findFragmentById(R.id.ContainerFragmentChats);
+                        if (shownFrag instanceof AllChatsFragment) {
+                            ((AllChatsFragment) shownFrag).refresh();
+                        }
+                        View view = tab.getCustomView();
+                        if (view != null) {
+                            view.findViewById(R.id.notImg).setVisibility(View.INVISIBLE);
+                        }
+                        sharedPref.edit().putBoolean("unreadMessages", false).commit();
                     }
                 }
 
@@ -229,8 +284,12 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
                 }
             });
+            tabLayout.getTabAt(1).setCustomView(R.layout.chat_notified);
+            if (!sharedPref.getBoolean("unreadMessages", false)) {
+                tabLayout.getTabAt(1).getCustomView().findViewById(R.id.notImg).setVisibility(View.INVISIBLE);
+            }
 
-        } else { // no esta iniciado sesion
+        } else {
             goToProfileItem.setVisible(false);
             Intent intent = new Intent(this, SigninActivity.class);
             startActivity(intent);

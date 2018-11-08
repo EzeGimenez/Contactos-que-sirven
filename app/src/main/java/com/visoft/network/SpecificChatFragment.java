@@ -1,11 +1,11 @@
 package com.visoft.network;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,9 +16,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -54,8 +58,8 @@ public class SpecificChatFragment extends Fragment {
     private RecyclerView listView;
     private FloatingActionButton btnSend;
     private EditText etChat;
-    private ConstraintLayout msgContainer;
     private CircleImageView ivPic;
+    private ImageView btnSendPay, btnSendLocation;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -75,9 +79,10 @@ public class SpecificChatFragment extends Fragment {
         listView = view.findViewById(R.id.listViewSpecificChat);
         ((TextView) view.findViewById(R.id.tvReceiver)).setText(receiver.getUsername());
         btnSend = view.findViewById(R.id.btnSend);
-        msgContainer = view.findViewById(R.id.msgContainer);
         etChat = view.findViewById(R.id.etChat);
         ivPic = view.findViewById(R.id.ivPic);
+        btnSendLocation = view.findViewById(R.id.btnSendLocation);
+        btnSendPay = view.findViewById(R.id.btnSendPay);
 
         view.findViewById(R.id.ContainerReceiver).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,7 +120,33 @@ public class SpecificChatFragment extends Fragment {
             }
         });
 
+        btnSendLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendLocationAsMessage();
+            }
+        });
+
         populateMessages();
+    }
+
+    private void sendLocationAsMessage() {
+        //Open alert dialog with map on it and a marker to select the location
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        MapView mapView = new MapView(getContext());
+        final GoogleMap[] map = new GoogleMap[1];
+
+        mapView.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                map[0] = googleMap;
+
+            }
+        });
+        builder.setView(mapView);
+        builder.create();
+        builder.show();
     }
 
     private void sendMessage(final String s) {
@@ -181,6 +212,11 @@ public class SpecificChatFragment extends Fragment {
                 .child(chatOverview.getChatID())
                 .push()
                 .setValue(message);
+        database
+                .child(Constants.FIREBASE_NOTIFICATIONS_CONTAINER_NAME)
+                .child(Constants.FIREBASE_MESSAGES_CONTAINER_NAME)
+                .push()
+                .setValue(chatOverview);
     }
 
     private void populateMessages() {
@@ -209,15 +245,6 @@ public class SpecificChatFragment extends Fragment {
         listView.setLayoutManager(new LinearLayoutManager(getContext()));
         listView.setAdapter(adapter1);
     }
-
- /*   private boolean keyboardShown(View rootView) {
-        final int softKeyboardHeight = 100;
-        Rect r = new Rect();
-        rootView.getWindowVisibleDisplayFrame(r);
-        DisplayMetrics dm = rootView.getResources().getDisplayMetrics();
-        int heightDiff = rootView.getBottom() - r.bottom;
-        return heightDiff > softKeyboardHeight * dm.density;
-    }*/
 
     private class ViewHolderChats extends RecyclerView.ViewHolder {
         TextView tvText, tvTimeStamp;

@@ -10,6 +10,16 @@ public class User implements Serializable {
     protected float rating;
     protected int numberReviews, imgVersion;
     protected boolean isPro, hasPic;
+    protected String instanceID;
+
+    public String getInstanceID() {
+        return instanceID;
+    }
+
+    public void setInstanceID(String instanceID) {
+        this.instanceID = instanceID;
+    }
+
 
     /**
      * Constructor de la clase

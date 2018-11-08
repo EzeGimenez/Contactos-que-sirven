@@ -77,6 +77,7 @@ public class RubroEspecificoFragment extends Fragment {
             LayoutInflater inflater = getLayoutInflater();
             View view = inflater.inflate(R.layout.rubros_especificos_row, parent, false);
             TextView tvRubro = view.findViewById(R.id.tvRubro);
+
             int id = getResources().getIdentifier(rubrosArray[position],
                     "string",
                     getActivity().getPackageName());

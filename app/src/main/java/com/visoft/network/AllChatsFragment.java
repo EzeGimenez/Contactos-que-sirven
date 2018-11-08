@@ -43,7 +43,6 @@ public class AllChatsFragment extends Fragment {
     private List<ChatOverview> chatOverviews;
     private HashMap<String, User> mapUIDUser;
 
-
     //Componentes gráficas
     private ListView listView;
 
@@ -161,6 +160,10 @@ public class AllChatsFragment extends Fragment {
 
     }
 
+    public void refresh() {
+        populateChats();
+    }
+
     private class ListViewChatsAdapter extends ArrayAdapter<ChatOverview> {
         private List<ChatOverview> chats;
         private LayoutInflater inflater;
@@ -197,18 +200,20 @@ public class AllChatsFragment extends Fragment {
                 user = mapUIDUser.get(chatOverview.getAuthor());
             }
 
-            holder.tvUsername.setText(user.getUsername());
-            holder.tvLastMessage.setText(chatOverview.getLastMessage());
-            holder.tvTimeStamp.setText(DateFormat.format("HH:mm",
-                    chatOverview.getTimeStamp()));
-            holder.ivPic.setImageDrawable(getResources().getDrawable(R.drawable.profile_pic));
+            if (user != null) {
+                holder.tvUsername.setText(user.getUsername());
+                holder.tvLastMessage.setText(chatOverview.getLastMessage());
+                holder.tvTimeStamp.setText(DateFormat.format("HH:mm",
+                        chatOverview.getTimeStamp()));
+                holder.ivPic.setImageDrawable(getResources().getDrawable(R.drawable.profile_pic));
 
-            if (user.getHasPic()) {
-                StorageReference storage = FirebaseStorage.getInstance().getReference();
-                StorageReference userRef = storage.child(Constants.FIREBASE_USERS_CONTAINER_NAME + "/" + user.getUid() + user.getImgVersion() + ".jpg");
-                GlideApp.with(getContext())
-                        .load(userRef)
-                        .into(holder.ivPic);
+                if (user.getHasPic()) {
+                    StorageReference storage = FirebaseStorage.getInstance().getReference();
+                    StorageReference userRef = storage.child(Constants.FIREBASE_USERS_CONTAINER_NAME + "/" + user.getUid() + user.getImgVersion() + ".jpg");
+                    GlideApp.with(getContext())
+                            .load(userRef)
+                            .into(holder.ivPic);
+                }
             }
             return convertView;
         }

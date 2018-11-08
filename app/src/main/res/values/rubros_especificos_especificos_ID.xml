@@ -74,7 +74,7 @@
     <string-array name="profesoradoID">
         <item>deportesBalon</item>
         <item>deportesAcuaticos</item>
-        <item>deportesMontaña</item>
+        <item>deportesMontana</item>
         <item>entretenimiento</item>
         <item>asignaturas</item>
         <item>idiomas</item>

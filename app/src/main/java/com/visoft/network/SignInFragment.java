@@ -24,7 +24,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.visoft.network.Objects.User;
 import com.visoft.network.Util.Constants;
 import com.visoft.network.Util.ErrorAnimator;
@@ -82,6 +84,11 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         if (account != null) {
             //Retornando a la pantalla principal, ya loggeado
             ((SigninActivity) getActivity()).onBackPressed();
+            DatabaseReference ds = FirebaseDatabase.getInstance().getReference();
+            String s = FirebaseInstanceId.getInstance().getToken();
+            ds.child(Constants.FIREBASE_USERS_CONTAINER_NAME)
+                    .child(account.getUid())
+                    .child("instanceID").setValue(s);
         }
 
         hideLoadingScreen();
@@ -200,6 +207,8 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                                 user.setPro(false);
                                 user.setUid(userfb.getUid());
                                 user.setEmail(userfb.getEmail());
+                                String instanceId = FirebaseInstanceId.getInstance().getToken();
+                                user.setInstanceID(instanceId);
                                 FirebaseDatabase.getInstance()
                                         .getReference()
                                         .child(Constants.FIREBASE_USERS_CONTAINER_NAME)

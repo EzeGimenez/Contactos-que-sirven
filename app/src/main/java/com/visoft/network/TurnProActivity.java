@@ -404,6 +404,7 @@ public class TurnProActivity extends AppCompatActivity {
             proUser.setRating(user.getRating());
             proUser.setEmail(user.getEmail());
             proUser.setUid(user.getUid());
+            proUser.setInstanceID(user.getInstanceID());
             proUser.setNumberReviews(user.getNumberReviews());
         }
 

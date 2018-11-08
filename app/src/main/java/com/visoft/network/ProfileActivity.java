@@ -57,11 +57,9 @@ public class ProfileActivity extends AppCompatActivity {
             bundle.putSerializable("user", proUser);
 
         } else {
-
             fragment = new DefaultUserFragment();
             tag = Constants.DEFAULT_USER_FRAGMENT_TAG;
             bundle.putSerializable("user", shownUser);
-
         }
 
         fragment.setArguments(bundle);
@@ -155,6 +153,9 @@ public class ProfileActivity extends AppCompatActivity {
 
         if (esContacto) {
             menu.findItem(R.id.addContact).setTitle(R.string.removerContacto);
+        }
+        if (!shownUser.getIsPro()) {
+            menu.findItem(R.id.calificar).setVisible(false);
         }
         return true;
     }

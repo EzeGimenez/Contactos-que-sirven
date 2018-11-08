@@ -73,7 +73,7 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback, Vie
     private Button btnShowReviews;
     private FloatingActionButton btnSend;
     private EditText etChat;
-    private ConstraintLayout msgContainer;
+    private LinearLayout msgContainer;
     private ImageView btnInstagram, btnWhatsapp, btnMail, btnFacebook;
     private ImageView ivProfilePic;
 
@@ -317,6 +317,12 @@ public class ProUserFragment extends Fragment implements OnMapReadyCallback, Vie
                 .child(chatOverview.getChatID())
                 .push()
                 .setValue(message);
+
+        database
+                .child(Constants.FIREBASE_NOTIFICATIONS_CONTAINER_NAME)
+                .child(Constants.FIREBASE_MESSAGES_CONTAINER_NAME)
+                .push()
+                .setValue(chatOverview);
     }
 
     private void getProfilePic() {

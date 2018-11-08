@@ -38,6 +38,23 @@
 
         <activity android:name=".ProfileActivity" />
         <activity android:name=".UserReviewActivity" />
+
+        <service
+            android:name="com.visoft.network.MessagingService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+
+        </service>
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/arrow_back" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/primaryAccent" />
     </application>
 
 </manifest>

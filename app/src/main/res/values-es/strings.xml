@@ -1,8 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Rubros Especificos-->
-
     <!-- Rubros Generales-->
+    <string name="servicioshogar">Servicios de Hogar y Negocio</string>
+    <string name="obraConstruccion">Obra y Construcción</string>
+    <string name="serviciosPersonales">Servicios Personales</string>
+    <string name="emergencias">Emergencias</string>
+
+    <!-- Rubros Esp-->
+    <string name="serviciosMant">Mantenimiento</string>
+    <string name="proveedores">Proveedores</string>
+    <string name="asesoramientos">Asesoramientos</string>
+    <string name="personalEventual">Personal Eventual</string>
+    <string name="servicios">Servicios</string>
+    <string name="alquileres">Alquileres</string>
+    <string name="esteticaBienestar">Estetica y Bienestar</string>
+    <string name="profesorado">Profesorado</string>
+    <string name="delivery">Delivery</string>
+    <string name="serviciosMascotas">Servicios de Mascotas</string>
+    <string name="medicinaSalud">Medicina Salud</string>
+    <string name="organismos">Organismos</string>
+    <string name="emergenciasDomesticas">Emergencias Domésticas</string>
+
+    <!-- Rubros EspEsp-->
+    <string name="mantGeneral">General</string>
+    <string name="mantVehicular">Vehicular</string>
+    <string name="mantElectrodomesticos">Electrodomésticos</string>
+    <string name="limpieza">Limpieza</string>
+    <string name="controlPlagas">Control de plagas</string>
+    <string name="mantPiscinas">Piscinas</string>
+    <string name="jardineria">Jardinería</string>
+    <string name="corralones">Corralones</string>
+    <string name="electrodomesticos">Electrodomésticos</string>
+    <string name="bebidasAlimentos">Bebidas y Alimentos</string>
+    <string name="farmacias">Farmacias</string>
+    <string name="ropa">Ropa y accesorios</string>
+    <string name="campo">Campo</string>
+    <string name="hogares">Hogares</string>
+    <string name="mascotas">Mascotas</string>
+    <string name="jugueteria">Juguetería y papelería</string>
+    <string name="auditoria">Auditoría</string>
+    <string name="contabilidad">Contabilidad</string>
+    <string name="abogacia">Abogacía</string>
+    <string name="espiritual">Espiritual</string>
+    <string name="grupal">Grupal</string>
+    <string name="marketing">Marketing</string>
+    <string name="fuerza">Fuerza</string>
+    <string name="noFuerza">No Fuerza</string>
+
+    <string name="ingenieria">Ingeniería</string>
+    <string name="disenador">Diseñador</string>
+    <string name="albanil">Albañil</string>
+    <string name="gasista">Gasista</string>
+    <string name="mueblero">Mueblero</string>
+    <string name="plomero">Plomero</string>
+    <string name="electricista">Electricista</string>
+    <string name="techista">Techista</string>
+    <string name="singuero">Singuero</string>
+    <string name="picapedrero">Picapedrero</string>
+    <string name="serviciosGenerales">Servicios Generales</string>
+    <string name="movimientosIndustriales">Movimientos Industriales</string>
+    <string name="rellenos">Rellenos</string>
+    <string name="gestion">Gestión</string>
+    <string name="mudanza">Mudanza</string>
+    <string name="fletes">Fletes</string>
+    <string name="parquizacion">Parquización</string>
+    <string name="carpinteria">Carpintería</string>
+    <string name="pintor">Pintor</string>
+
+    <string name="herramientas">Herramientas</string>
+    <string name="maquinarias">Maquinarias</string>
+    <string name="otros">Otros</string>
+    <string name="peluqueria">Peluquería</string>
+    <string name="manicura">Manicura</string>
+    <string name="masajes">Masajes</string>
+    <string name="pedicura">Pedicura</string>
+    <string name="deportesBalon">Deportes con balón</string>
+    <string name="deportesAcuaticos">Deportes acuáticos</string>
+    <string name="deportesMontana">Deportes de Montaña</string>
+    <string name="entretenimiento">Entretenimiento</string>
+    <string name="asignaturas">Asignaturas</string>
+    <string name="idiomas">Idiomas</string>
+    <string name="artesMarciales">Artes Marciales</string>
+    <string name="relajacion">Relajación</string>
+    <string name="cursosEntretenimiento">Cursos de Entretenimiento</string>
+    <string name="cursosProfesionales">Cursos profesionales</string>
+    <string name="comida">Comida</string>
+    <string name="cuidado">Cuidado</string>
+    <string name="transporte">Transporte</string>
+    <string name="estetica">Estética</string>
+    <string name="paseo">Paseo y entretenimiento</string>
+    <string name="nutricionista">Nutricionista</string>
+    <string name="podologia">Podología</string>
+    <string name="traumatologia">Traumatología</string>
+    <string name="pediatria">Pediatría</string>
+    <string name="geriatria">Geriatría</string>
+    <string name="ambulancia">Ambulancia</string>
+    <string name="oftalmologia">Oftalmología</string>
+    <string name="cardiologia">Cardiología</string>
+    <string name="enfermeria">Enfermería</string>
+    <string name="psicologia">Psicología</string>
+    <string name="defensaCivil">Defensa Civil</string>
+    <string name="defensaMujer">Defensa Mujer</string>
+    <string name="bomberos">Bomberos</string>
+    <string name="policia">Policía</string>
+    <string name="serviciosDiscapacitados">Servicios Discapacitados</string>
+    <string name="veterniario">Veterinario</string>
+    <string name="grua">Grúa</string>
+    <string name="mecanico">Mecánico</string>
+    <string name="gomero">Gomero</string>
+    <string name="cerrajeria">Cerrajería</string>
 
 
     <string name="transformar_en_perfil_de_trabajo">Transformar en perfil de trabajo</string>
@@ -54,7 +160,7 @@
     <string name="calidadTrabajoReview">¿Cómo evaluaría la calidad de servicio brindada?</string>
     <string name="atencionReview">¿Cómo evaluaría la atención recibida?</string>
     <string name="calificacionFinalReview">¿Cómo calificaría en general al profesional?</string>
-    <string name="pequeñaDescripcion">Escriba una reseña corta</string>
+    <string name="pequenaDescripcion">Escriba una reseña corta</string>
     <string name="show_reviews">Mostrar Reseñas</string>
     <string name="registrarse">Registrarse</string>
     <string name="search_view_hint">Buscar por Nombre o Rubro</string>
@@ -85,6 +191,4 @@
     <string name="chats">Chats</string>
     <string name="buscar">buscar</string>
     <string name="contactos">Contactos</string>
-    <string name="serviciosHogar">Servicios de Hogar y Negocio</string>
-    <string name="serviciosPersonales">Servicios personales</string>
 </resources>

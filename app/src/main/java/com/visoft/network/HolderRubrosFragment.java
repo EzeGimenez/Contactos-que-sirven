@@ -60,6 +60,7 @@ public class HolderRubrosFragment extends Fragment {
         }
 
         final SearchResultFragment fragment = new SearchResultFragment();
+        final Fragment finalFm = fm;
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -83,19 +84,13 @@ public class HolderRubrosFragment extends Fragment {
                         fragment.searchForQuery(newText);
                     }
                     return true;
+                } else {
+                    if (!finalFm.isAdded()) {
+                        childFragmentManager.beginTransaction()
+                                .replace(R.id.ContainerRubroFragments, finalFm, Constants.MAIN_PAGE_FRAGMENT_TAG)
+                                .commit();
+                    }
                 }
-
-                /*
-                Fragment fragment1 = fragmentManager.findFragmentByTag(Constants.MAIN_PAGE_FRAGMENT_TAG);
-                if (fragment1 == null) {
-                    fragment1 = new MainPageFragment();
-                }
-                if (!fragment1.isAdded()) {
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.ContainerRubroFragments, fragment1, Constants.MAIN_PAGE_FRAGMENT_TAG)
-                            .commit();
-                }
-                */
 
                 return false;
             }

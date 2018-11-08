@@ -56,11 +56,11 @@
                     android:id="@+id/tvUsername"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
-                    android:paddingBottom="4dp"
+                    android:layout_marginEnd="16dp"
                     android:paddingTop="4dp"
+                    android:paddingBottom="4dp"
                     android:textAlignment="center"
                     android:textAllCaps="true"
                     android:textColor="@color/primaryAccent"
@@ -74,9 +74,9 @@
                     android:id="@+id/tvRubro"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
                     android:textAlignment="center"
                     android:textAllCaps="true"
                     app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
@@ -88,9 +88,9 @@
                     android:id="@+id/constraintLayout"
                     android:layout_width="0dp"
                     android:layout_height="350dp"
-                    android:layout_marginEnd="16dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
@@ -109,8 +109,8 @@
                         android:id="@+id/ratingBar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
                         android:layout_marginTop="4dp"
+                        android:layout_marginEnd="8dp"
                         android:numStars="5"
                         android:transitionName="ratingBar"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -275,8 +275,8 @@
                     android:id="@+id/btnShowReviews"
                     android:layout_width="75dp"
                     android:layout_height="75dp"
-                    android:layout_marginBottom="75dp"
                     android:layout_marginTop="32dp"
+                    android:layout_marginBottom="75dp"
                     android:background="@drawable/round_orange_circle"
                     android:drawableStart="@drawable/comment"
                     android:paddingStart="8dp"
@@ -289,8 +289,8 @@
                     android:id="@+id/btnCV"
                     android:layout_width="75dp"
                     android:layout_height="75dp"
-                    android:layout_marginBottom="75dp"
                     android:layout_marginTop="32dp"
+                    android:layout_marginBottom="75dp"
                     android:background="@drawable/round_orange_circle"
                     android:src="@drawable/curriculum"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -311,60 +311,55 @@
         android:src="@drawable/send_arrow"
         app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/listViewSpecificChat" />
 
-    <android.support.constraint.ConstraintLayout
+    <LinearLayout
         android:id="@+id/msgContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:layout_marginStart="8dp"
-        android:minHeight="55dp"
         android:background="@drawable/chat_floating_background"
-        android:paddingBottom="4dp"
         android:paddingLeft="8dp"
-        android:paddingRight="8dp"
         android:paddingTop="4dp"
+        android:paddingRight="8dp"
+        android:paddingBottom="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/btnSend"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <EditText
-            android:id="@+id/etChat"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:background="@color/transparent"
-            android:hint="@string/chatHint"
-            android:inputType="textCapSentences|textShortMessage|textAutoCorrect|textMultiLine"
-            android:textColor="@color/colorPrimary"
-            android:textColorHint="@android:color/darker_gray"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/btnSendPay"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/btnSendPay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:src="@drawable/money"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/btnSendLocation"
-            app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/btnSend">
 
         <ImageView
             android:id="@+id/btnSendLocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_margin="4dp"
-            android:src="@drawable/location"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:src="@drawable/location" />
 
-    </android.support.constraint.ConstraintLayout>
+        <ImageView
+            android:id="@+id/btnSendPay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="4dp"
+            android:src="@drawable/money" />
+
+
+        <EditText
+            android:id="@+id/etChat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            android:background="@color/transparent"
+            android:hint="@string/chatHint"
+            android:inputType="textCapSentences|textShortMessage|textAutoCorrect|textMultiLine"
+            android:maxHeight="100dp"
+            android:textColor="@color/colorPrimary"
+            android:textColorHint="@android:color/darker_gray" />
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

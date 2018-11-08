@@ -31,13 +31,14 @@ public abstract class Constants {
     /**
      * Firebase database
      */
-    public static final String FIREBASE_RUBRO_CONTAINER_NAME = "RubrosGenerales";
+    public static final String FIREBASE_RUBRO_CONTAINER_NAME = "rubros_generales";
     public static final String FIREBASE_USERS_CONTAINER_NAME = "users";
     public static final String FIREBASE_QUALITY_CONTAINER_NAME = "userQuality";
     public static final String FIREBASE_REVIEWS_CONTAINER_NAME = "reviews";
     public static final String FIREBASE_CONTACTS_CONTAINER_NAME = "contacts";
-    public static final String FIREBASE_CHATS_CONTAINER_NAME = "Chats";
-    public static final String FIREBASE_MESSAGES_CONTAINER_NAME = "Messages";
+    public static final String FIREBASE_CHATS_CONTAINER_NAME = "chats";
+    public static final String FIREBASE_MESSAGES_CONTAINER_NAME = "messages";
+    public static final String FIREBASE_NOTIFICATIONS_CONTAINER_NAME = "notifications";
 
     /**
      * Constants
@@ -49,4 +50,7 @@ public abstract class Constants {
     public static final int MIN_ATENCION_INSIGNIA = 50;
     public static final String SHARED_PREF_NAME = "SharedPref";
     public static final int MAX_RESULTS_SIZE = 20;
+
+    public static final String NOTIFICATION_CHAT_CHANNEL_ID = "notification_channel";
+    public static final CharSequence NOTIFICATION_CHAT_CHANNEL_NAME = "chatNot";
 }

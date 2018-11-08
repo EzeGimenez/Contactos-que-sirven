@@ -1,9 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Rubros Especificos-->
-
-
     <!-- Rubros Generales-->
+
+    <string name="servicioshogar">Home &amp; business Services</string>
+    <string name="obraConstruccion">Work &amp; construction</string>
+    <string name="serviciosPersonales">Personal services</string>
+    <string name="emergencias">Emergencies</string>
+
+    <!-- Rubros Esp-->
+    <string name="serviciosMant">Maintaining</string>
+    <string name="proveedores">Providers</string>
+    <string name="asesoramientos">Assessment</string>
+    <string name="personalEventual">Casual staff</string>
+    <string name="servicios">Services</string>
+    <string name="alquileres">Rent</string>
+    <string name="esteticaBienestar">Aesthetics &amp; well being</string>
+    <string name="profesorado">Professorship</string>
+    <string name="delivery">Delivery</string>
+    <string name="serviciosMascotas">Pet care</string>
+    <string name="medicinaSalud">Health</string>
+    <string name="organismos">Organisms</string>
+    <string name="emergenciasDomesticas">Domestic Emergencies</string>
+
+    <!-- Rubros EspEsp-->
+    <string name="mantGeneral">General</string>
+    <string name="mantVehicular">Vehicular</string>
+    <string name="mantElectrodomesticos">Home appliances services</string>
+    <string name="limpieza">Cleaning</string>
+    <string name="controlPlagas">Pest control</string>
+    <string name="mantPiscinas">Pool maintaining</string>
+    <string name="jardineria">Gardening</string>
+    <string name="corralones">Construction products</string>
+    <string name="electrodomesticos">Home appliances</string>
+    <string name="bebidasAlimentos">Drinks &amp; food</string>
+    <string name="farmacias">Pharmacy</string>
+    <string name="ropa">Clothing &amp; accessories</string>
+    <string name="campo">Countryside</string>
+    <string name="hogares">Homes</string>
+    <string name="mascotas">Pets</string>
+    <string name="jugueteria">Toy &amp; book shop</string>
+    <string name="auditoria">Auditory</string>
+    <string name="contabilidad">Countability</string>
+    <string name="abogacia">Advocacy</string>
+    <string name="espiritual">Spiritual</string>
+    <string name="grupal">Grup</string>
+    <string name="marketing">Marketing</string>
+    <string name="fuerza">Strength needed</string>
+    <string name="noFuerza">No Strength needed</string>
+
+    <string name="ingenieria">Engineering</string>
+    <string name="disenador">Designer</string>
+    <string name="albanil">Masonry</string>
+    <string name="gasista">Gas</string>
+    <string name="mueblero">Furniture service</string>
+    <string name="plomero">Plumbing</string>
+    <string name="electricista">Electrician</string>
+    <string name="techista">Techist</string>
+    <string name="singuero">Spelter Works</string>
+    <string name="picapedrero">Stone cutter</string>
+    <string name="serviciosGenerales">General services</string>
+    <string name="movimientosIndustriales">Industrial movements</string>
+    <string name="rellenos">Fillings</string>
+    <string name="gestion">Management</string>
+    <string name="mudanza">Move</string>
+    <string name="fletes">Freight</string>
+    <string name="parquizacion">Parking</string>
+    <string name="carpinteria">Carpenter</string>
+    <string name="pintor">Painter</string>
+
+    <string name="herramientas">Tools</string>
+    <string name="maquinarias">Machinery</string>
+    <string name="otros">Others</string>
+    <string name="peluqueria">Hairdressing</string>
+    <string name="manicura">Manicure</string>
+    <string name="masajes">Massage</string>
+    <string name="pedicura">Pedicure</string>
+    <string name="deportesBalon">Ball sports</string>
+    <string name="deportesAcuaticos">Aquatic sports</string>
+    <string name="deportesMontana">Mountain sports</string>
+    <string name="entretenimiento">Entertainment</string>
+    <string name="asignaturas">Signatures</string>
+    <string name="idiomas">Languages</string>
+    <string name="artesMarciales">Martial Arts</string>
+    <string name="relajacion">Relax</string>
+    <string name="cursosEntretenimiento">Entertainment courses</string>
+    <string name="cursosProfesionales">Professional courses</string>
+    <string name="comida">Food</string>
+    <string name="cuidado">Care</string>
+    <string name="transporte">Transport</string>
+    <string name="estetica">Aesthetics</string>
+    <string name="paseo">Walk &amp; entertainment</string>
+    <string name="nutricionista">Nutritionist</string>
+    <string name="podologia">Podiatry</string>
+    <string name="traumatologia">Traumatology</string>
+    <string name="pediatria">Pediatrics</string>
+    <string name="geriatria">Geriatrics</string>
+    <string name="ambulancia">Ambulance</string>
+    <string name="oftalmologia">Ophthalmology</string>
+    <string name="cardiologia">Cardiology</string>
+    <string name="enfermeria">Nursing</string>
+    <string name="psicologia">Psicology</string>
+    <string name="defensaCivil">Civil defense</string>
+    <string name="defensaMujer">Woman defense</string>
+    <string name="bomberos">Firefighters</string>
+    <string name="policia">Police</string>
+    <string name="serviciosDiscapacitados">Handicapped services</string>
+    <string name="veterniario">Vet</string>
+    <string name="grua">Crane</string>
+    <string name="mecanico">Mechanic</string>
+    <string name="gomero">Tire shop</string>
+    <string name="cerrajeria">Locksmith</string>
 
 
     <string name="transformar_en_perfil_de_trabajo">Make Professional profile</string>
@@ -57,7 +163,7 @@
     <string name="calidadTrabajoReview">How would you rate the quality of service received?</string>
     <string name="atencionReview">How would you rate the attention?</string>
     <string name="calificacionFinalReview">Finally, a general review</string>
-    <string name="pequeñaDescripcion">Write a short review</string>
+    <string name="pequenaDescripcion">Write a short review</string>
     <string name="show_reviews">Show Reviews</string>
     <string name="registrarse">Sign Up</string>
     <string name="search_view_hint">Search Name or Area</string>
@@ -88,7 +194,5 @@
     <string name="chats">Chats</string>
     <string name="buscar">Search</string>
     <string name="contactos">Contacts</string>
-    <string name="serviciosHogar">Home &amp; work services</string>
-    <string name="serviciosPersonales">Personal services</string>
 
 </resources>
