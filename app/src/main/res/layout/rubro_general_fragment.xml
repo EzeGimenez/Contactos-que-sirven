@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    tools:context=".turnprofragments.RubroGeneralFragment">
+    tools:context=".TurnProFragments.RubroGeneralFragment">
 
     <ListView
         android:id="@+id/listView"

@@ -34,16 +34,25 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.visoft.network.MainPageChats.AllChatsFragment;
+import com.visoft.network.MainPageChats.ChatsFragment;
+import com.visoft.network.MainPageContacts.MainContactsFragment;
+import com.visoft.network.MainPageSearch.HolderRubrosFragment;
+import com.visoft.network.MainPageSearch.MainPageFragment;
+import com.visoft.network.MainPageSearch.SearchResultFragment;
+import com.visoft.network.Profiles.OwnUserProfileActivity;
+import com.visoft.network.SignIn.SigninActivity;
 import com.visoft.network.Util.Constants;
 import com.visoft.network.Util.Database;
-import com.visoft.network.mainpagefragments.MainPageFragment;
-import com.visoft.network.mainpagefragments.SearchResultFragment;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements LocationListener {
+    public static final String RECEIVER_INTENT = "RECEIVER_INTENT";
+    public static final String RECEIVER_MESSAGE = "RECEIVER_MESSAGE";
+    public static boolean isRunning;
     private FirebaseAuth mAuth;
     private LocationManager locationManager;
     private Location location;
@@ -54,9 +63,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private HolderRubrosFragment holderRubrosFragment;
     private ChatsFragment chatsFragment;
     private MainContactsFragment mainContactsFragment;
-    public static final String RECEIVER_INTENT = "RECEIVER_INTENT";
-    public static final String RECEIVER_MESSAGE = "RECEIVER_MESSAGE";
-    public static boolean isRunning;
     private BroadcastReceiver broadcastReceiver;
     private TabLayout tabLayout;
 
@@ -99,16 +105,14 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     }
 
     public void notifyNewMessage() {
-        if (viewPagerMain.getCurrentItem() == 1) {
-            Fragment shownFrag = chatsFragment.getChildFragmentManager().findFragmentById(R.id.ContainerFragmentChats);
-            if (shownFrag instanceof AllChatsFragment) {
-                ((AllChatsFragment) shownFrag).refresh();
-            }
-            sharedPref.edit().putBoolean("unreadMessages", false).commit();
-        } else {
+        if (viewPagerMain.getCurrentItem() != 1) {
             View view = tabLayout.getTabAt(1).getCustomView();
             view.findViewById(R.id.notImg).setVisibility(View.VISIBLE);
         }
+
+        AllChatsFragment allChatsFragment = (AllChatsFragment) chatsFragment.getChildFragmentManager().findFragmentByTag(Constants.ALL_CHATS_FRAGMENT_NAME);
+        allChatsFragment.refresh();
+        sharedPref.edit().putBoolean("unreadMessages", false).commit();
     }
 
     @Override
@@ -158,14 +162,16 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     protected void onPause() {
         super.onPause();
         if (viewPagerMain != null) {
-            hasSearched = viewPagerMain.getCurrentItem() == 0 &&
-                    holderRubrosFragment.getChildFragmentManager().findFragmentById(R.id.ContainerRubroFragments) instanceof SearchResultFragment;
-            sharedPref.edit().putBoolean("hasSearched", hasSearched).commit();
-            if (!hasSearched) {
-                Fragment shownFrag = adapter.getItem(viewPagerMain.getCurrentItem());
-                if (shownFrag != null) {
-                    for (int i = 0; i < shownFrag.getChildFragmentManager().getBackStackEntryCount(); i++) {
-                        shownFrag.getChildFragmentManager().popBackStack();
+            if (holderRubrosFragment.isAdded()) {
+                hasSearched = viewPagerMain.getCurrentItem() == 0 &&
+                        holderRubrosFragment.getChildFragmentManager().findFragmentById(R.id.ContainerRubroFragments) instanceof SearchResultFragment;
+                sharedPref.edit().putBoolean("hasSearched", hasSearched).commit();
+                if (!hasSearched) {
+                    Fragment shownFrag = adapter.getItem(viewPagerMain.getCurrentItem());
+                    if (shownFrag != null) {
+                        for (int i = 0; i < shownFrag.getChildFragmentManager().getBackStackEntryCount(); i++) {
+                            //shownFrag.getChildFragmentManager().popBackStack();
+                        }
                     }
                 }
             }
@@ -178,7 +184,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         hasSearched = false;
         sharedPref.edit().putBoolean("hasSearched", hasSearched).commit();
     }
-
 
     @Override
     protected void onResume() {
@@ -296,35 +301,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         }
     }
 
-    private class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
-
-        public ViewPagerAdapter(FragmentManager manager) {
-            super(manager);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return mFragmentList.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mFragmentList.size();
-        }
-
-        public void addFragment(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mFragmentTitleList.get(position);
-        }
-    }
-
     /**
      * Oyente de la toolbar_main
      *
@@ -380,6 +356,35 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     public Location getLocation() {
         return location;
+    }
+
+    private class ViewPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        public ViewPagerAdapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
     }
 
 }

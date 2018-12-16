@@ -194,5 +194,6 @@
     <string name="chats">Chats</string>
     <string name="buscar">Search</string>
     <string name="contactos">Contacts</string>
+    <string name="ubicacion">Location</string>
 
 </resources>

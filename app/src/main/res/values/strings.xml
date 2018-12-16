@@ -193,6 +193,7 @@
     <string name="chats">Chats</string>
     <string name="buscar">buscar</string>
     <string name="contactos">Contactos</string>
+    <string name="ubicacion">ubicacion</string>
 
 
 </resources>

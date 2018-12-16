@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.visoft.network">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
-
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -18,7 +18,11 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:fullBackupContent="@xml/backup_descriptor"
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning"
+        tools:replace="android:appComponentFactory">
+
         <activity
             android:name=".MainActivity"
             android:windowSoftInputMode="adjustResize">
@@ -28,19 +32,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SigninActivity" />
-        <activity android:name=".OwnUserProfileActivity" />
-        <activity android:name=".TurnProActivity" />
+        <activity android:name=".SignIn.SigninActivity" />
+        <activity android:name=".Profiles.OwnUserProfileActivity" />
+        <activity android:name=".TurnProFragments.TurnProActivity" />
+        <activity android:name=".MainPageChats.SpecificChatActivity" />
+        <activity android:name=".Profiles.ProfileActivity" />
+        <activity android:name=".Profiles.UserReviewActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".ProfileActivity" />
-        <activity android:name=".UserReviewActivity" />
-
         <service
-            android:name="com.visoft.network.MessagingService"
+            android:name="com.visoft.network.MainPageChats.MessagingService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>

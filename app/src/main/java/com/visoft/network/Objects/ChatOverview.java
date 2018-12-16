@@ -1,7 +1,8 @@
 package com.visoft.network.Objects;
 
 public class ChatOverview {
-    private String receiver, lastMessage, author, chatID;
+    private String receiver, author, chatID;
+    private String lastMessage;
     private long timeStamp;
 
     public long getTimeStamp() {

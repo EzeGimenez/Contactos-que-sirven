@@ -12,82 +12,90 @@ public class User implements Serializable {
     protected boolean isPro, hasPic;
     protected String instanceID;
 
-    public String getInstanceID() {
-        return instanceID;
-    }
-
-    public void setInstanceID(String instanceID) {
-        this.instanceID = instanceID;
-    }
-
-
     /**
      * Constructor de la clase
      */
     public User() {
     }
 
+    public String getInstanceID() {
+        return instanceID;
+    }
+
+    public User setInstanceID(String instanceID) {
+        this.instanceID = instanceID;
+        return this;
+    }
+
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String name) {
+    public User setUsername(String name) {
         this.username = name;
+        return this;
     }
 
     public float getRating() {
         return rating;
     }
 
-    public void setRating(float rating) {
+    public User setRating(float rating) {
         this.rating = rating;
+        return this;
     }
 
     public int getNumberReviews() {
         return numberReviews;
     }
 
-    public void setNumberReviews(int numberReviews) {
+    public User setNumberReviews(int numberReviews) {
         this.numberReviews = numberReviews;
+        return this;
     }
 
     public boolean getIsPro() {
         return isPro;
     }
 
-    public void setPro(boolean pro) {
+    public User setPro(boolean pro) {
         isPro = pro;
+        return this;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public User setEmail(String email) {
         this.email = email;
+        return this;
     }
 
     public String getUid() {
         return uid;
     }
 
-    public void setUid(String uid) {
+    public User setUid(String uid) {
         this.uid = uid;
+        return this;
     }
 
     public boolean getHasPic() {
         return this.hasPic;
     }
 
-    public void setHasPic(boolean p) {
+    public User setHasPic(boolean p) {
         this.hasPic = p;
+        return this;
     }
 
     public int getImgVersion() {
         return imgVersion;
     }
 
-    public void setImgVersion(int imgVersion) {
+    public User setImgVersion(int imgVersion) {
         this.imgVersion = imgVersion;
+        return this;
     }
 }

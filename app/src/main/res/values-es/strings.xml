@@ -170,7 +170,7 @@
     <string name="calificar">Hacer una reseña</string>
     <string name="eliminar_cuenta">Eliminar cuenta</string>
     <string name="seguro_eliminar">Estás seguro de querer eliminar la cuenta?</string>
-    <string name="añadirContacto">Añadir a Agenda</string>
+    <string name="añadirContacto">Añadir a Contactos</string>
     <string name="removerContacto">Remover de Agenda</string>
     <string name="Contactos">Agenda</string>
     <string name="shareUser">Compartir Usuario</string>
@@ -191,4 +191,5 @@
     <string name="chats">Chats</string>
     <string name="buscar">buscar</string>
     <string name="contactos">Contactos</string>
+    <string name="ubicacion">ubicacion</string>
 </resources>

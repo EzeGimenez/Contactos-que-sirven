@@ -9,7 +9,7 @@ public abstract class Constants {
      * Fragment Tags
      */
     public static final String LOGIN_FRAGMENT_TAG = "SignInFragment";
-    public static final String SIGNUP_FRAGMENT_TAG = "SignUpFragment";
+    public static final String SIGNUP_FRAGMENT_TAG = "SignUpActivity";
     public static final String MAIN_PAGE_FRAGMENT_TAG = "MainPageFragment";
     public static final String PRO_USER_FRAGMENT_TAG = "ProUserFragment";
     public static final String DEFAULT_USER_FRAGMENT_TAG = "DefaultUserFragment";
@@ -52,5 +52,5 @@ public abstract class Constants {
     public static final int MAX_RESULTS_SIZE = 20;
 
     public static final String NOTIFICATION_CHAT_CHANNEL_ID = "notification_channel";
-    public static final CharSequence NOTIFICATION_CHAT_CHANNEL_NAME = "chatNot";
+    public static final String NOTIFICATION_CHAT_CHANNEL_NAME = "chatNot";
 }
