@@ -113,7 +113,7 @@
 
     <string name="transformar_en_perfil_de_trabajo">Transformar en perfil de trabajo</string>
     <string name="editar_perfil">Editar Perfil</string>
-    <string name="aceptar">aceptar</string>
+    <string name="aceptar">ACEPTAR</string>
     <string name="app_name">NetWork</string>
     <string name="previo">Previo</string>
     <string name="siguiente">Siguiente</string>
@@ -137,7 +137,7 @@
     <string name="selecciona_area_trabajo">Selecciona un área de trabajo</string>
     <string name="selecciona_rango_trabajo">Selecciona el rango de trabajo</string>
     <string name="reviews">Reseñas</string>
-    <string name="cancelar">Cancelar</string>
+    <string name="cancelar">CANCELAR</string>
     <string name="finalizar">Finalizar</string>
     <string name="credenciales_erroneas">Credenciales erróneas</string>
     <string name="sesion_iniciada">Sesión iniciada</string>

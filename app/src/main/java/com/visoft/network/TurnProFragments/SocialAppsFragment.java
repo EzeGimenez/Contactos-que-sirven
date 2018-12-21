@@ -4,9 +4,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,15 +13,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.visoft.network.Objects.ProUser;
+import com.visoft.network.Objects.UserPro;
 import com.visoft.network.R;
+import com.visoft.network.custom_views.CustomDialog;
 
 
 public class SocialAppsFragment extends Fragment implements View.OnClickListener {
-    private ProUser proUser;
+    private UserPro proUser;
 
-    //Componentes gráficas
-    private ConstraintLayout containerAñadidas, containerNoAñadidas;
     private ImageView btnInstagramAdded, btnFacebookAdded, btnMailAdded, btnWhatsappAdded;
     private ImageView btnInstagram, btnFacebook, btnMail, btnWhatsapp;
 
@@ -31,7 +28,7 @@ public class SocialAppsFragment extends Fragment implements View.OnClickListener
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        proUser = (ProUser) getArguments().getSerializable("user");
+        proUser = (UserPro) getArguments().getSerializable("user");
 
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_social_apps, container, false);
@@ -45,9 +42,7 @@ public class SocialAppsFragment extends Fragment implements View.OnClickListener
         tvInfo.setText(R.string.selecciona_social_networks);
 
         //Inicializacion de variables gráficas
-        containerAñadidas = view.findViewById(R.id.ContainerAppsAñadidas);
-        containerNoAñadidas = view.findViewById(R.id.ContainerAppsNoAñadidas);
-
+        //Componentes gráficas
         btnInstagramAdded = view.findViewById(R.id.btnInstagramA);
         btnFacebookAdded = view.findViewById(R.id.btnFacebookA);
         btnMailAdded = view.findViewById(R.id.btnMailA);
@@ -76,13 +71,12 @@ public class SocialAppsFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        CustomDialog dialog = new CustomDialog(getContext());
 
         String title = "";
         String msg = "";
         DialogInterface.OnClickListener listenerPos = null, listenerNeg = null;
-        final EditText editText = new EditText(getContext());
-
+        final EditText editText = (EditText) getLayoutInflater().inflate(R.layout.edit_text, null, false);
 
         switch (v.getId()) {
             case R.id.btnInstagram:
@@ -91,7 +85,7 @@ public class SocialAppsFragment extends Fragment implements View.OnClickListener
                 msg = getString(R.string.introduzcaUsuarioInstagram);
                 editText.setInputType(InputType.TYPE_CLASS_TEXT);
 
-                builder.setView(editText, 100, 0, 100, 0);
+                dialog.setView(editText);
                 listenerPos = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -110,7 +104,7 @@ public class SocialAppsFragment extends Fragment implements View.OnClickListener
                 editText.setInputType(InputType.TYPE_CLASS_TEXT);
                 title = "Facebook";
                 msg = getString(R.string.introduzcaUsuarioFacebook);
-                builder.setView(editText, 100, 0, 100, 0);
+                dialog.setView(editText);
                 listenerPos = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -130,7 +124,7 @@ public class SocialAppsFragment extends Fragment implements View.OnClickListener
                 title = "Whatsapp";
                 editText.setText(proUser.getTelefono1());
                 msg = getString(R.string.introduzcaNumeroWhatsapp);
-                builder.setView(editText, 100, 0, 100, 0);
+                dialog.setView(editText);
                 listenerPos = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -229,12 +223,12 @@ public class SocialAppsFragment extends Fragment implements View.OnClickListener
 
         }
 
-        builder
+        dialog
                 .setTitle(title)
                 .setMessage(msg)
-                .setPositiveButton(R.string.aceptar, listenerPos)
-                .setNegativeButton(R.string.cancelar, listenerNeg);
-        builder.create().show();
+                .setPositiveButton(getString(R.string.aceptar), listenerPos)
+                .setNegativeButton(getString(R.string.cancelar), listenerNeg);
+        dialog.show();
     }
 
     private void iniciarUI() {

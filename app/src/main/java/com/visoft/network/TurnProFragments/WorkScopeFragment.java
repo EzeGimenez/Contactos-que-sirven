@@ -14,9 +14,9 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
-import com.visoft.network.Objects.ProUser;
+import com.visoft.network.Objects.UserPro;
 import com.visoft.network.R;
-import com.visoft.network.Util.MapHighlighter;
+import com.visoft.network.funcionalidades.MapHighlighter;
 
 public class WorkScopeFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap map;
@@ -80,7 +80,7 @@ public class WorkScopeFragment extends Fragment implements OnMapReadyCallback {
     }
 
 
-    public void setCameraBounds(ProUser user) {
+    public void setCameraBounds(UserPro user) {
         LatLng target = map.getCameraPosition().target;
         user.setMapZoom(map.getCameraPosition().zoom);
         user.setMapCenterLat(target.latitude);

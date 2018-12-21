@@ -23,12 +23,12 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.visoft.network.Objects.ChatOverview;
-import com.visoft.network.Objects.ProUser;
 import com.visoft.network.Objects.User;
 import com.visoft.network.R;
 import com.visoft.network.Util.Constants;
 import com.visoft.network.Util.Database;
 import com.visoft.network.Util.GlideApp;
+import com.visoft.network.funcionalidades.GsonerUser;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -104,15 +104,8 @@ public class AllChatsFragment extends Fragment {
             userRef.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    User user = dataSnapshot.getValue(User.class);
-                    if (user == null || user.getIsPro()) {
-                        ProUser proUser = dataSnapshot.getValue(ProUser.class);
-                        if (proUser != null) {
-                            mapUIDUser.put(proUser.getUid(), proUser);
-                        }
-                    } else {
-                        mapUIDUser.put(user.getUid(), user);
-                    }
+                    User user = GsonerUser.getGson().fromJson(dataSnapshot.getValue(String.class), User.class);
+                    mapUIDUser.put(user.getUid(), user);
                     setAdapter();
                 }
 

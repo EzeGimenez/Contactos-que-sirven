@@ -140,7 +140,7 @@
     <string name="selecciona_area_trabajo">Choose a generic working area</string>
     <string name="selecciona_rango_trabajo">Select your working scope</string>
     <string name="reviews">Reviews</string>
-    <string name="cancelar">Cancel</string>
+    <string name="cancelar">CANCEL</string>
     <string name="finalizar">Finish</string>
     <string name="credenciales_erroneas">Wrong credentials</string>
     <string name="sesion_iniciada">Signed in</string>

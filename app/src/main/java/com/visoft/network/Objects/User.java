@@ -1,11 +1,22 @@
 package com.visoft.network.Objects;
 
+import android.view.View;
+
+import com.visoft.network.MainPageSearch.FragmentSearchResults;
+import com.visoft.network.MainPageSearch.VisitorUser;
+import com.visoft.network.R;
+
 import java.io.Serializable;
+import java.util.List;
+
+import eu.davidea.flexibleadapter.FlexibleAdapter;
+import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
+import eu.davidea.flexibleadapter.items.IFlexible;
 
 /**
- * Clase User, usada para almacenar la informacion de un usuario
+ * Clase UserNormal, usada para almacenar la informacion de un usuario
  */
-public class User implements Serializable {
+public abstract class User extends AbstractFlexibleItem<FragmentSearchResults.ViewHolderProUser> implements Serializable {
     protected String username, email, uid;
     protected float rating;
     protected int numberReviews, imgVersion;
@@ -16,6 +27,31 @@ public class User implements Serializable {
      * Constructor de la clase
      */
     public User() {
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof User) {
+            return getUid().equals(((User) o).getUid());
+        }
+        return false;
+    }
+
+    @Override
+    public int getLayoutRes() {
+        return R.layout.pro_user_layout;
+    }
+
+    @Override
+    public FragmentSearchResults.ViewHolderProUser createViewHolder(View view, FlexibleAdapter<IFlexible> adapter) {
+        return new FragmentSearchResults.ViewHolderProUser(view, adapter);
+    }
+
+    @Override
+    public void bindViewHolder(FlexibleAdapter<IFlexible> adapter, FragmentSearchResults.ViewHolderProUser holder, int position, List<Object> payloads) {
+        holder.ratingBar.setRating(getRating());
+        holder.tvNumReviews.setText(getNumberReviews() + "");
+        holder.tvUsername.setText(getUsername());
     }
 
     public String getInstanceID() {
@@ -98,4 +134,6 @@ public class User implements Serializable {
         this.imgVersion = imgVersion;
         return this;
     }
+
+    public abstract void acept(VisitorUser v);
 }

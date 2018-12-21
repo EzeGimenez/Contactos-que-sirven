@@ -24,25 +24,25 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.iarcuschin.simpleratingbar.SimpleRatingBar;
-import com.visoft.network.Objects.ProUser;
 import com.visoft.network.Objects.QualityInfo;
 import com.visoft.network.Objects.Review;
+import com.visoft.network.Objects.User;
+import com.visoft.network.Objects.UserPro;
 import com.visoft.network.R;
 import com.visoft.network.Util.Constants;
 import com.visoft.network.Util.Database;
+import com.visoft.network.funcionalidades.GsonerUser;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class UserReviewActivity extends AppCompatActivity {
-    private final int MAX_SLIDES = 4;
     private Review review;
     private DatabaseReference database;
     private QualityInfo qualityInfo;
-    private ProUser proUserReviewed;
+    private UserPro proUserReviewed;
     private Map<Integer, View> mapPage;
     private FirebaseAuth mAuth;
-    private CountDownTimer timer;
 
     //Componentes gráficas
     private Button btnNext, btnPrev;
@@ -56,8 +56,8 @@ public class UserReviewActivity extends AppCompatActivity {
 
         database = Database.getDatabase().getReference();
         mAuth = FirebaseAuth.getInstance();
-        mapPage = new HashMap<Integer, View>();
-        proUserReviewed = (ProUser) getIntent().getSerializableExtra("user");
+        mapPage = new HashMap<>();
+        proUserReviewed = (UserPro) getIntent().getSerializableExtra("user");
 
         database.child(Constants.FIREBASE_QUALITY_CONTAINER_NAME)
                 .child(proUserReviewed.getUid())
@@ -122,7 +122,7 @@ public class UserReviewActivity extends AppCompatActivity {
         }
 
         showLoadingScreen();
-        timer = new CountDownTimer(8000, 1000) {
+        CountDownTimer timer = new CountDownTimer(8000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
 
@@ -171,10 +171,11 @@ public class UserReviewActivity extends AppCompatActivity {
         saveProUser(proUserReviewed);
     }
 
-    private void saveProUser(ProUser user) {
+    private void saveProUser(UserPro user) {
+        String json = GsonerUser.getGson().toJson(user, User.class);
         database.child(Constants.FIREBASE_USERS_CONTAINER_NAME)
                 .child(proUserReviewed.getUid())
-                .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                .setValue(json).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 hideLoadingScreen();
@@ -275,6 +276,7 @@ public class UserReviewActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
+            int MAX_SLIDES = 4;
             return MAX_SLIDES;
         }
 

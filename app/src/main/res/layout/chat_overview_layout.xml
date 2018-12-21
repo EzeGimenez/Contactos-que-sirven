@@ -25,7 +25,7 @@
         android:layout_marginTop="8dp"
         android:text="Username"
         android:textAllCaps="true"
-        android:textColor="@color/primaryAccent"
+        android:textColor="@color/colorAccentPrimary"
         android:transitionName="username"
         app:layout_constraintBottom_toTopOf="@+id/tvLastMessage"
         app:layout_constraintEnd_toStartOf="@+id/timeStamp"

@@ -21,7 +21,7 @@ android {
 
 dependencies {
     implementation 'eu.davidea:flexible-adapter:5.0.0'
-
+    implementation 'com.google.android.gms:play-services-location:16.0.0'
     implementation 'com.google.code.gson:gson:2.8.2'
     implementation 'com.google.firebase:firebase-core:16.0.6'
     implementation 'com.google.firebase:firebase-messaging:17.3.4'

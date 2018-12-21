@@ -9,8 +9,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,13 +19,16 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -37,37 +38,33 @@ import com.google.firebase.database.ValueEventListener;
 import com.visoft.network.MainPageChats.AllChatsFragment;
 import com.visoft.network.MainPageChats.ChatsFragment;
 import com.visoft.network.MainPageContacts.MainContactsFragment;
-import com.visoft.network.MainPageSearch.HolderRubrosFragment;
-import com.visoft.network.MainPageSearch.MainPageFragment;
-import com.visoft.network.MainPageSearch.SearchResultFragment;
-import com.visoft.network.Profiles.OwnUserProfileActivity;
-import com.visoft.network.SignIn.SigninActivity;
+import com.visoft.network.MainPageSearch.HolderFirstTab;
+import com.visoft.network.Profiles.ProfileActivityOwnUser;
+import com.visoft.network.SignIn.SignInActivity;
 import com.visoft.network.Util.Constants;
 import com.visoft.network.Util.Database;
+import com.visoft.network.funcionalidades.AccountActivity;
+import com.visoft.network.funcionalidades.AccountManager;
+import com.visoft.network.funcionalidades.AccountManagerFirebase;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements LocationListener {
+public class MainActivity extends AccountActivity {
     public static final String RECEIVER_INTENT = "RECEIVER_INTENT";
     public static final String RECEIVER_MESSAGE = "RECEIVER_MESSAGE";
     public static boolean isRunning;
     private FirebaseAuth mAuth;
-    private LocationManager locationManager;
-    private Location location;
-    private boolean hasSearched;
     private SharedPreferences sharedPref;
     private DatabaseReference database;
-    private ViewPagerAdapter adapter;
-    private HolderRubrosFragment holderRubrosFragment;
+
+    private HolderFirstTab fragmentGeneral;
     private ChatsFragment chatsFragment;
     private MainContactsFragment mainContactsFragment;
+
     private BroadcastReceiver broadcastReceiver;
     private TabLayout tabLayout;
 
-    //Componentes graficas
-    private Toolbar toolbar;
     private Menu menu;
     private ViewPager viewPagerMain;
 
@@ -79,7 +76,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         database = Database.getDatabase().getReference();
         sharedPref = getSharedPreferences(Constants.SHARED_PREF_NAME, MODE_PRIVATE);
         mAuth = FirebaseAuth.getInstance();
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         broadcastReceiver = new BroadcastReceiver() {
             @Override
@@ -88,20 +84,34 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             }
         };
 
+        AccountManager accountManager = AccountManagerFirebase.getInstance(this);
+        accountManager.getCurrentUser(1);
+
+        fragmentGeneral = fragmentGeneral == null ? new HolderFirstTab() : fragmentGeneral;
+        chatsFragment = chatsFragment == null ? new ChatsFragment() : chatsFragment;
+        mainContactsFragment = mainContactsFragment == null ? new MainContactsFragment() : mainContactsFragment;
+
         //Creacion de toolbar_main
-        toolbar = findViewById(R.id.toolbar);
+        //Componentes graficas
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.black_transparent)));
 
-        //Getting one location
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 0);
-        } else {
-            location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-            if (location == null || location.getTime() <= Calendar.getInstance().getTimeInMillis() - 2 * 60 * 1000) {
-                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
-            }
+        FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
         }
+        mFusedLocationClient.getLastLocation()
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        if (location != null) {
+                            fragmentGeneral.setLocation(new LatLng(location.getLatitude(), location.getAltitude()));
+                        } else {
+                            fragmentGeneral.setLocation(null);
+                        }
+                    }
+                });
     }
 
     public void notifyNewMessage() {
@@ -112,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
         AllChatsFragment allChatsFragment = (AllChatsFragment) chatsFragment.getChildFragmentManager().findFragmentByTag(Constants.ALL_CHATS_FRAGMENT_NAME);
         allChatsFragment.refresh();
-        sharedPref.edit().putBoolean("unreadMessages", false).commit();
+        sharedPref.edit().putBoolean("unreadMessages", false).apply();
     }
 
     @Override
@@ -132,57 +142,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     }
 
     @Override
-    public void onBackPressed() {
-        if (viewPagerMain.getCurrentItem() == 0) {
-            FragmentManager fm = holderRubrosFragment.getChildFragmentManager();
-            if (fm.findFragmentById(R.id.ContainerRubroFragments) instanceof MainPageFragment) {
-                finish();
-            } else {
-                fm.popBackStack();
-            }
-        } else {
-            Fragment shownFrag = adapter.getItem(viewPagerMain.getCurrentItem());
-            if (shownFrag != null && shownFrag.getChildFragmentManager().getBackStackEntryCount() > 0) {
-                shownFrag.getChildFragmentManager().popBackStack();
-            } else {
-                finish();
-            }
-        }
-    }
-
-    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
         }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (viewPagerMain != null) {
-            if (holderRubrosFragment.isAdded()) {
-                hasSearched = viewPagerMain.getCurrentItem() == 0 &&
-                        holderRubrosFragment.getChildFragmentManager().findFragmentById(R.id.ContainerRubroFragments) instanceof SearchResultFragment;
-                sharedPref.edit().putBoolean("hasSearched", hasSearched).commit();
-                if (!hasSearched) {
-                    Fragment shownFrag = adapter.getItem(viewPagerMain.getCurrentItem());
-                    if (shownFrag != null) {
-                        for (int i = 0; i < shownFrag.getChildFragmentManager().getBackStackEntryCount(); i++) {
-                            //shownFrag.getChildFragmentManager().popBackStack();
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        hasSearched = false;
-        sharedPref.edit().putBoolean("hasSearched", hasSearched).commit();
     }
 
     @Override
@@ -238,18 +202,15 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             goToProfileItem.setVisible(true);
 
             viewPagerMain = findViewById(R.id.ViewPagerMain);
-            adapter = new ViewPagerAdapter(getSupportFragmentManager());
+            ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 
-            holderRubrosFragment = holderRubrosFragment == null ? new HolderRubrosFragment() : holderRubrosFragment;
-            chatsFragment = chatsFragment == null ? new ChatsFragment() : chatsFragment;
-            mainContactsFragment = mainContactsFragment == null ? new MainContactsFragment() : mainContactsFragment;
 
             tabLayout = findViewById(R.id.tabLayoutMain);
             tabLayout.setupWithViewPager(viewPagerMain);
-            adapter.addFragment(holderRubrosFragment, getString(R.string.buscar));
-            adapter.addFragment(chatsFragment, getString(R.string.chats));
-            adapter.addFragment(mainContactsFragment, getString(R.string.contactos));
-            viewPagerMain.setAdapter(adapter);
+            viewPagerAdapter.addFragment(fragmentGeneral, getString(R.string.buscar));
+            viewPagerAdapter.addFragment(chatsFragment, getString(R.string.chats));
+            viewPagerAdapter.addFragment(mainContactsFragment, getString(R.string.contactos));
+            viewPagerMain.setAdapter(viewPagerAdapter);
 
             tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                 @Override
@@ -272,16 +233,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
                 @Override
                 public void onTabUnselected(TabLayout.Tab tab) {
-                    //Check whether searchResultsFragment was visible
-                    if (tab.getPosition() == 0) {
-                        hasSearched = false;
-                        Fragment shownFrag = holderRubrosFragment.getChildFragmentManager().findFragmentById(R.id.ContainerRubroFragments);
-                        if (shownFrag instanceof SearchResultFragment) {
-                            hasSearched = true;
-                        }
-
-                        sharedPref.edit().putBoolean("hasSearched", hasSearched).commit();
-                    }
                 }
 
                 @Override
@@ -290,28 +241,23 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 }
             });
             tabLayout.getTabAt(1).setCustomView(R.layout.chat_notified);
+
             if (!sharedPref.getBoolean("unreadMessages", false)) {
                 tabLayout.getTabAt(1).getCustomView().findViewById(R.id.notImg).setVisibility(View.INVISIBLE);
             }
 
         } else {
             goToProfileItem.setVisible(false);
-            Intent intent = new Intent(this, SigninActivity.class);
+            Intent intent = new Intent(this, SignInActivity.class);
             startActivity(intent);
         }
     }
 
-    /**
-     * Oyente de la toolbar_main
-     *
-     * @param item
-     * @return
-     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.goToProfile:
-                Intent intent = new Intent(this, OwnUserProfileActivity.class);
+                Intent intent = new Intent(this, ProfileActivityOwnUser.class);
                 startActivity(intent);
                 return true;
             default:
@@ -334,28 +280,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     }
 
     @Override
-    public void onLocationChanged(Location location) {
-        this.location = location;
-        locationManager.removeUpdates(this);
-    }
+    public void onRequestResult(boolean result, int requestCode, Bundle data) {
 
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
-    }
-
-    public Location getLocation() {
-        return location;
     }
 
     private class ViewPagerAdapter extends FragmentPagerAdapter {

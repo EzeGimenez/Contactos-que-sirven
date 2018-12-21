@@ -5,7 +5,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,15 +15,15 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
-import com.visoft.network.Objects.ProUser;
 import com.visoft.network.Objects.User;
+import com.visoft.network.Objects.UserPro;
 import com.visoft.network.R;
 import com.visoft.network.Util.Constants;
 import com.visoft.network.Util.Database;
+import com.visoft.network.funcionalidades.AccountActivity;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends AccountActivity {
     private User shownUser;
-    private Toolbar toolbar;
     private Menu menu;
     private boolean esContacto = false;
     private FirebaseAuth mAuth;
@@ -52,13 +51,13 @@ public class ProfileActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         if (shownUser.getIsPro()) {
 
-            fragment = new ProUserFragment();
+            fragment = new UserProFragment();
             tag = Constants.PRO_USER_FRAGMENT_TAG;
-            ProUser proUser = (ProUser) shownUser;
+            UserPro proUser = (UserPro) shownUser;
             bundle.putSerializable("user", proUser);
 
         } else {
-            fragment = new DefaultUserFragment();
+            fragment = new UserFragment();
             tag = Constants.DEFAULT_USER_FRAGMENT_TAG;
             bundle.putSerializable("user", shownUser);
         }
@@ -69,7 +68,7 @@ public class ProfileActivity extends AppCompatActivity {
                 .commit();
 
         //Toolbar
-        toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.arrow_back);
 
         setSupportActionBar(toolbar);
@@ -159,5 +158,10 @@ public class ProfileActivity extends AppCompatActivity {
             menu.findItem(R.id.calificar).setVisible(false);
         }
         return true;
+    }
+
+    @Override
+    public void onRequestResult(boolean result, int requestCode, Bundle data) {
+
     }
 }

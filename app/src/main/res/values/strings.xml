@@ -138,7 +138,7 @@
     <string name="selecciona_area_trabajo">Selecciona un área de trabajo</string>
     <string name="selecciona_rango_trabajo">Selecciona el rango de trabajo</string>
     <string name="reviews">Reseñas</string>
-    <string name="cancelar">Cancelar</string>
+    <string name="cancelar">CANCELAR</string>
     <string name="finalizar">Finalizar</string>
     <string name="credenciales_erroneas">Credenciales erróneas</string>
     <string name="sesion_iniciada">Sesión iniciada</string>
@@ -156,7 +156,7 @@
     <string name="domingo">Domingo</string>
     <string name="revisaConexion">Revisa tu conexión</string>
     <string name="resultsFor">Resultados de búsqueda para:</string>
-    <string name="aceptar">aceptar</string>
+    <string name="aceptar">ACEPTAR</string>
     <string name="calificar_profesional">Calificar Profesional</string>
     <string name="transformar_en_perfil_de_trabajo">Transformar en perfil de trabajo</string>
     <string name="editar_perfil">Editar Perfil</string>

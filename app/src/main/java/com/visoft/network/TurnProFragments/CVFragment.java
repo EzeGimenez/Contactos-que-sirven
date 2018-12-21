@@ -13,10 +13,10 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.visoft.network.Objects.ProUser;
+import com.visoft.network.Objects.UserPro;
 import com.visoft.network.R;
 import com.visoft.network.Util.Constants;
-import com.visoft.network.Util.ErrorAnimator;
+import com.visoft.network.funcionalidades.ErrorAnimator;
 
 
 public class CVFragment extends Fragment {
@@ -75,7 +75,7 @@ public class CVFragment extends Fragment {
         return etCV.getText().toString().length() <= Constants.MAX_CARACTERES;
     }
 
-    public void setCv(ProUser user) {
+    public void setCv(UserPro user) {
         user.setCvText(etCV.getText().toString());
     }
 

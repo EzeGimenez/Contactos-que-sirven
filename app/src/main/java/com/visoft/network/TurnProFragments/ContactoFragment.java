@@ -13,9 +13,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.visoft.network.Objects.ProUser;
+import com.visoft.network.Objects.UserPro;
 import com.visoft.network.R;
-import com.visoft.network.Util.ErrorAnimator;
+import com.visoft.network.funcionalidades.ErrorAnimator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -80,7 +80,7 @@ public class ContactoFragment extends Fragment {
         return !etTel1.getText().toString().trim().equals("");
     }
 
-    public void setContactInfo(ProUser user) {
+    public void setContactInfo(UserPro user) {
         user.setShowEmail(cbEmail.isChecked());
         user.setTelefono1(etTel1.getText().toString());
         user.setTelefono2(etTel2.getText().toString());

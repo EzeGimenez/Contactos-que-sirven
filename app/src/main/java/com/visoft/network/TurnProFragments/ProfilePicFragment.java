@@ -21,7 +21,7 @@ import com.google.firebase.storage.StorageReference;
 import com.visoft.network.R;
 import com.visoft.network.Util.Constants;
 import com.visoft.network.Util.GlideApp;
-import com.visoft.network.Util.ImagePicker;
+import com.visoft.network.funcionalidades.ImagePicker;
 
 import static android.app.Activity.RESULT_CANCELED;
 

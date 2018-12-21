@@ -22,21 +22,24 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.visoft.network.Objects.ProUser;
 import com.visoft.network.Objects.QualityInfo;
 import com.visoft.network.Objects.User;
-import com.visoft.network.Profiles.OwnUserProfileActivity;
+import com.visoft.network.Objects.UserNormal;
+import com.visoft.network.Objects.UserPro;
+import com.visoft.network.Profiles.ProfileActivityOwnUser;
 import com.visoft.network.R;
 import com.visoft.network.Util.Constants;
 import com.visoft.network.Util.Database;
 import com.visoft.network.Util.DatabaseTimer;
+import com.visoft.network.funcionalidades.AccountManagerFirebase;
+import com.visoft.network.funcionalidades.GsonerUser;
 
 import java.io.ByteArrayOutputStream;
 
 public class TurnProActivity extends AppCompatActivity {
     private FragmentManager fragmentManager;
-    private ProUser proUser;
-    private User user;
+    private UserPro proUser;
+    private UserNormal user;
     private DatabaseReference database;
     private FirebaseAuth mAuth;
     private DatabaseTimer timer;
@@ -45,7 +48,6 @@ public class TurnProActivity extends AppCompatActivity {
 
     //Componentes gráficas
     private Button btnPrev, btnNext;
-    private TextView tvInfo;
     private ConstraintLayout containerProgressBar;
 
     @Override
@@ -58,15 +60,15 @@ public class TurnProActivity extends AppCompatActivity {
         //Inicializacion variables
         btnPrev = findViewById(R.id.btnPrev);
         btnNext = findViewById(R.id.btnNext);
-        tvInfo = findViewById(R.id.tvInfo);
+        TextView tvInfo = findViewById(R.id.tvInfo);
         containerProgressBar = findViewById(R.id.progressBarContainer);
 
-        proUser = (ProUser) getIntent().getSerializableExtra("proUser");
+        proUser = (UserPro) getIntent().getSerializableExtra("proUser");
 
         if (proUser == null) {
-            proUser = new ProUser();
+            proUser = new UserPro();
             isEditing = false;
-            user = (User) getIntent().getSerializableExtra("user");
+            user = (UserNormal) getIntent().getSerializableExtra("user");
         }
 
         database = Database.getDatabase().getReference();
@@ -289,7 +291,7 @@ public class TurnProActivity extends AppCompatActivity {
         Fragment actualFragment = fragmentManager.findFragmentById(R.id.ContainerTurnProFragments);
         if (actualFragment instanceof RubroGeneralFragment) {
 
-            Intent intent = new Intent(this, OwnUserProfileActivity.class);
+            Intent intent = new Intent(this, ProfileActivityOwnUser.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             finish();
@@ -328,7 +330,7 @@ public class TurnProActivity extends AppCompatActivity {
                 btnNext.setEnabled(false);
                 btnPrev.setEnabled(false);
             } else {
-                Intent intent = new Intent(this, OwnUserProfileActivity.class);
+                Intent intent = new Intent(this, ProfileActivityOwnUser.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();
@@ -446,13 +448,16 @@ public class TurnProActivity extends AppCompatActivity {
     }
 
     private void saveInUser() {
+        String json = GsonerUser.getGson().toJson(proUser, User.class);
         database.child(Constants.FIREBASE_USERS_CONTAINER_NAME)
-                .child(mAuth.getCurrentUser().getUid()).setValue(proUser).addOnCompleteListener(new OnCompleteListener<Void>() {
+                .child(mAuth.getCurrentUser().getUid()).setValue(json).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 saveInRubro();
             }
         });
+
+        AccountManagerFirebase.getInstance(null).invalidate();
     }
 
     private void saveInRubro() {
@@ -462,7 +467,7 @@ public class TurnProActivity extends AppCompatActivity {
                 .setValue(true).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                Intent intent = new Intent(getApplication(), OwnUserProfileActivity.class);
+                Intent intent = new Intent(getApplication(), ProfileActivityOwnUser.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 timer.cancel();
@@ -488,7 +493,7 @@ public class TurnProActivity extends AppCompatActivity {
     }
 
     private void goBack() {
-        Intent intent = new Intent(getApplication(), OwnUserProfileActivity.class);
+        Intent intent = new Intent(getApplication(), ProfileActivityOwnUser.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         hideLoadingScreen();

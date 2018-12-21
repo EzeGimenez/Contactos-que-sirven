@@ -1,70 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    tools:context=".MainPageChats.SpecificChatActivity">
+    android:orientation="vertical">
 
-    <android.support.constraint.ConstraintLayout
+    <LinearLayout
         android:id="@+id/ContainerReceiver"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="50dp"
+        android:gravity="center_vertical">
 
         <ImageButton
             android:id="@+id/buttonBack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
             android:background="@null"
-            android:src="@drawable/arrow_back"
-            app:layout_constraintBottom_toBottomOf="@id/ivPic"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/ivPic" />
+            android:src="@drawable/arrow_back" />
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/ivPic"
             android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_margin="8dp"
-            android:src="@drawable/profile_pic"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/buttonBack"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="match_parent"
+            android:src="@drawable/profile_pic" />
 
         <TextView
             android:id="@+id/tvReceiver"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginStart="16dp"
             android:textAllCaps="true"
-            android:textColor="@color/primaryAccent"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="@+id/ivPic"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/ivPic"
-            app:layout_constraintTop_toTopOf="@+id/ivPic" />
-    </android.support.constraint.ConstraintLayout>
+            android:textColor="@color/colorAccentPrimary"
+            android:textSize="16sp" />
+    </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/listViewSpecificChat"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
-        android:divider="@null"
-        android:dividerHeight="0dp"
-        android:windowSoftInputMode="adjustPan"
-        app:layout_constraintBottom_toTopOf="@id/msgContainer"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ContainerReceiver" />
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ContainerReceiver"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="68dp"
+        android:windowSoftInputMode="adjustResize" />
 
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>

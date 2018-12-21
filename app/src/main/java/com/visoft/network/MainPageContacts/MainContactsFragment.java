@@ -14,7 +14,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,13 +21,16 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.iarcuschin.simpleratingbar.SimpleRatingBar;
-import com.visoft.network.Objects.ProUser;
 import com.visoft.network.Objects.User;
+import com.visoft.network.Objects.UserPro;
 import com.visoft.network.Profiles.ProfileActivity;
 import com.visoft.network.R;
 import com.visoft.network.Util.Constants;
 import com.visoft.network.Util.Database;
 import com.visoft.network.Util.GlideApp;
+import com.visoft.network.funcionalidades.AccountManager;
+import com.visoft.network.funcionalidades.AccountManagerFirebase;
+import com.visoft.network.funcionalidades.GsonerUser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,7 +41,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MainContactsFragment extends Fragment {
     StorageReference storage;
     private ArrayList<User> contacts;
-    private FirebaseAuth mAuth;
     private DatabaseReference contactsRef, userRef;
     private int j, i;
     private ListViewAdapter adapter;
@@ -50,7 +51,7 @@ public class MainContactsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_contacts, null);
+        return inflater.inflate(R.layout.activity_contacts, container, false);
     }
 
     @Override
@@ -58,11 +59,11 @@ public class MainContactsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         listView = view.findViewById(R.id.listViewContacts);
 
-        mAuth = FirebaseAuth.getInstance();
+        AccountManager accountManager = AccountManagerFirebase.getInstance(null);
 
         contactsRef = Database.getDatabase()
                 .getReference(Constants.FIREBASE_CONTACTS_CONTAINER_NAME)
-                .child(mAuth.getCurrentUser().getUid());
+                .child(accountManager.getCurrentUser(1).getUid());
 
         contactsRef.keepSynced(true);
 
@@ -103,7 +104,7 @@ public class MainContactsFragment extends Fragment {
     private void setAdapter() {
         if (i == j) {
             if (contacts.size() > 0) {
-                adapter = new ListViewAdapter(getContext(), R.layout.profile_search_result_row, contacts);
+                adapter = new ListViewAdapter(getContext(), R.layout.pro_user_layout, contacts);
                 listView.setAdapter(adapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
@@ -122,15 +123,8 @@ public class MainContactsFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 j++;
-                User user = dataSnapshot.getValue(User.class);
-                if (user == null || user.getIsPro()) {
-                    ProUser proUser = dataSnapshot.getValue(ProUser.class);
-                    if (proUser != null) {
-                        contacts.add(proUser);
-                    }
-                } else {
-                    contacts.add(user);
-                }
+                User user = GsonerUser.getGson().fromJson(dataSnapshot.getValue(String.class), User.class);
+                contacts.add(user);
                 setAdapter();
             }
 
@@ -160,7 +154,7 @@ public class MainContactsFragment extends Fragment {
 
             if (convertView == null) {
                 holder = new ViewHolder();
-                convertView = inflater.inflate(R.layout.profile_search_result_row, null);
+                convertView = inflater.inflate(R.layout.pro_user_layout, null);
 
                 holder.ivPic = convertView.findViewById(R.id.ivProfilePic);
                 holder.tvUsername = convertView.findViewById(R.id.tvUsername);
@@ -176,7 +170,7 @@ public class MainContactsFragment extends Fragment {
             User user = list.get(position);
             String subRubro = "";
             if (user.getIsPro()) {
-                ProUser proUser = (ProUser) user;
+                UserPro proUser = (UserPro) user;
                 int id = getResources().getIdentifier(proUser.getRubroEspecifico(),
                         "string",
                         getActivity().getPackageName());

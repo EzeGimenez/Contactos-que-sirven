@@ -7,6 +7,6 @@
         android:height="100dp" />
     <stroke
         android:width="1dp"
-        android:color="@color/primaryAccent" />
+        android:color="@color/colorAccentPrimary" />
     <solid android:color="@color/primaryAccentTransparent" />
 </shape>

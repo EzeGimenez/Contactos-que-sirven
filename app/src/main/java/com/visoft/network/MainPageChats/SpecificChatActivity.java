@@ -1,5 +1,6 @@
 package com.visoft.network.MainPageChats;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -7,9 +8,12 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -27,34 +31,35 @@ import com.visoft.network.R;
 import com.visoft.network.Util.Constants;
 import com.visoft.network.Util.Database;
 import com.visoft.network.Util.GlideApp;
-import com.visoft.network.Util.Gsoner;
-import com.visoft.network.Util.Messenger;
+import com.visoft.network.funcionalidades.GsonerMessages;
+import com.visoft.network.funcionalidades.Messenger;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class SpecificChatActivity extends AppCompatActivity {
     public static boolean isRunning;
-    private String chatID;
     private User receiver;
     private FirebaseRecyclerAdapter<String, ViewHolderChats> recyclerViewAdapter;
-    private DatabaseReference messagesRef;
-
-    private int currentCantOfMessages;
 
     //Componentes gráficas
-    private RecyclerView listView;
+    private RecyclerView recyclerView;
+
+    private static float dpToPx(Context context, float valueInDp) {
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, valueInDp, metrics);
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.specific_chat_activity);
 
-        chatID = getIntent().getStringExtra("chatid");
+        String chatID = getIntent().getStringExtra("chatid");
         receiver = (User) getIntent().getSerializableExtra("receiver");
         DatabaseReference database = Database.getDatabase().getReference();
 
-        listView = findViewById(R.id.listViewSpecificChat);
+        recyclerView = findViewById(R.id.listViewSpecificChat);
         ((TextView) findViewById(R.id.tvReceiver)).setText(receiver.getUsername());
         CircleImageView ivPic = findViewById(R.id.ivPic);
 
@@ -85,38 +90,32 @@ public class SpecificChatActivity extends AppCompatActivity {
             ivPic.setImageDrawable(getResources().getDrawable(R.drawable.profile_pic));
         }
 
-        new Messenger(this, FirebaseAuth.getInstance().getCurrentUser().getUid(), receiver.getUid(), (ViewGroup) findViewById(R.id.rootView), listView, database);
+        new Messenger(this, FirebaseAuth.getInstance().getCurrentUser().getUid(), receiver.getUid(), (ViewGroup) findViewById(R.id.rootView), recyclerView, database);
 
-        messagesRef = Database
+        DatabaseReference messagesRef = Database
                 .getDatabase()
                 .getReference(Constants.FIREBASE_MESSAGES_CONTAINER_NAME)
                 .child(chatID);
-        final Query query = messagesRef.limitToLast(10);
 
-        currentCantOfMessages = 10;
-
-        recyclerViewAdapter = new ListViewChatsAdapter(String.class, 0, ViewHolderChats.class, query);
-        listView.setLayoutManager(new LinearLayoutManager(SpecificChatActivity.this));
-        listView.setAdapter(recyclerViewAdapter);
+        recyclerViewAdapter = new ListViewChatsAdapter(String.class, 0, ViewHolderChats.class, messagesRef);
+        recyclerView.setLayoutManager(new LinearLayoutManager(SpecificChatActivity.this));
+        recyclerView.setAdapter(recyclerViewAdapter);
 
         // Scroll to bottom on new messages
         recyclerViewAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
-                listView.smoothScrollToPosition(recyclerViewAdapter.getItemCount());
+                recyclerView.smoothScrollToPosition(recyclerViewAdapter.getItemCount());
             }
         });
 
-        listView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        final View activityRootView = findViewById(R.id.rootView);
+        activityRootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-
-                if (!recyclerView.canScrollVertically(-1)) {
-                    currentCantOfMessages += 10;
-                    Query q = messagesRef.limitToLast(currentCantOfMessages);
-                    recyclerViewAdapter = new ListViewChatsAdapter(String.class, 0, ViewHolderChats.class, q);
-                    listView.setAdapter(recyclerViewAdapter);
+            public void onGlobalLayout() {
+                int heightDiff = activityRootView.getRootView().getHeight() - activityRootView.getHeight();
+                if (heightDiff > dpToPx(getApplication(), 200)) { // if more than 200 dp, it's probably a keyboard...
+                    recyclerView.smoothScrollToPosition(recyclerViewAdapter.getItemCount());
                 }
             }
         });
@@ -145,7 +144,7 @@ public class SpecificChatActivity extends AppCompatActivity {
 
         public ListViewChatsAdapter(Class<String> modelClass, int modelLayout, Class<ViewHolderChats> viewHolderClass, Query ref) {
             super(modelClass, modelLayout, viewHolderClass, ref);
-            gson = Gsoner.getGson();
+            gson = GsonerMessages.getGson();
 
         }
 
