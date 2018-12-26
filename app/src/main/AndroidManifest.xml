@@ -30,7 +30,9 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".SignIn.SignInActivity" />
+        <activity
+            android:name=".SignIn.SignInActivity"
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".Profiles.ProfileActivityOwnUser" />
         <activity android:name=".TurnProFragments.TurnProActivity" />
         <activity

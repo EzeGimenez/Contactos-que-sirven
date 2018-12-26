@@ -135,12 +135,11 @@ public class MainContactsFragment extends Fragment {
         });
     }
 
-
     private class ListViewAdapter extends ArrayAdapter<User> {
         private LayoutInflater inflater;
         private List<User> list;
 
-        public ListViewAdapter(@NonNull Context context, int resource, @NonNull List<User> objects) {
+        ListViewAdapter(@NonNull Context context, int resource, @NonNull List<User> objects) {
             super(context, resource, objects);
             this.inflater = LayoutInflater.from(context);
             this.list = objects;

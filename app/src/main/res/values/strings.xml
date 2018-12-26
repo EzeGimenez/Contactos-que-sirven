@@ -129,7 +129,7 @@
     <string name="contrase_a">Contraseña</string>
     <string name="iniciar_sesi_n">Iniciar Sesión</string>
     <string name="crear_usuario">Crear Usuario</string>
-    <string name="email">email</string>
+    <string name="email">Email</string>
     <string name="confirmar_contrase_a">Confirmar Contraseña</string>
     <string name="usuario">Usuario</string>
     <string name="complete_info_contacto">Complete la información de contacto</string>
@@ -194,6 +194,13 @@
     <string name="buscar">buscar</string>
     <string name="contactos">Contactos</string>
     <string name="ubicacion">ubicacion</string>
+    <string name="email_erroneo">Email erroneo</string>
+    <string name="worng_password">password erroneo</string>
+    <string name="wrong_username">username wrong</string>
+    <string name="error_sign_up">No se pudo crear usuario</string>
+    <string name="error_iniciar_sesion">error al iniciar sesion</string>
+    <string name="error_google">Error al iniciar sesion con Google</string>
+    <string name="passwords_dont_match">No coinciden contraseñas</string>
 
 
 </resources>

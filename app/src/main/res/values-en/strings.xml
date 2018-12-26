@@ -195,5 +195,12 @@
     <string name="buscar">Search</string>
     <string name="contactos">Contacts</string>
     <string name="ubicacion">Location</string>
+    <string name="email_erroneo">Wrong Email</string>
+    <string name="worng_password">Wrong password</string>
+    <string name="wrong_username">Wrong username</string>
+    <string name="error_sign_up">Error while creating an account, please try again</string>
+    <string name="error_iniciar_sesion">Check your credentials and try again</string>
+    <string name="error_google">Error while logging in with Google</string>
+    <string name="passwords_dont_match">Passwords don\'t match</string>
 
 </resources>

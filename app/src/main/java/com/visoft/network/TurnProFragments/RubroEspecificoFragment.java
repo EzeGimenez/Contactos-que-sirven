@@ -62,26 +62,26 @@ public class RubroEspecificoFragment extends Fragment {
 
     private class RubrosGeneralesAdapter extends ArrayAdapter<String> {
         private String[] rubrosArray;
-        private Context context;
 
-        public RubrosGeneralesAdapter(Context context, String[] rubros) {
-            super(context, R.layout.rubros_especificos_row, rubros);
+        RubrosGeneralesAdapter(Context context, String[] rubros) {
+            super(context, R.layout.rubros_generales_row, rubros);
             this.rubrosArray = rubros;
-            this.context = context;
         }
 
         @NonNull
         @Override
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
             LayoutInflater inflater = getLayoutInflater();
-            View view = inflater.inflate(R.layout.rubros_especificos_row, parent, false);
-            TextView tvRubro = view.findViewById(R.id.tvRubro);
+            if (convertView == null) {
+                convertView = inflater.inflate(R.layout.rubros_generales_row, parent, false);
+            }
+            TextView tvRubro = convertView.findViewById(R.id.tvRubro);
 
             int id = getResources().getIdentifier(rubrosArray[position],
                     "string",
                     getActivity().getPackageName());
             tvRubro.setText(getString(id));
-            return view;
+            return convertView;
         }
     }
 }

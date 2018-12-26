@@ -4,9 +4,12 @@ import android.location.Location;
 import android.support.annotation.NonNull;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.visoft.network.MainPageSearch.VisitorUserGetProUser;
@@ -15,6 +18,7 @@ import com.visoft.network.Objects.UserPro;
 import com.visoft.network.Util.Constants;
 import com.visoft.network.Util.Database;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -38,30 +42,47 @@ public class SearcherProUser {
     }
 
     private void getFromDatabase() {
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                VisitorUserGetProUser visitor = new VisitorUserGetProUser();
-                for (DataSnapshot d : dataSnapshot.getChildren()) {
-                    if (d != null) {
-                        User u = gson.fromJson(d.getValue(String.class), User.class);
 
-                        u.acept(visitor);
+        String mock = "data refresh";
+
+        Query query = ref;
+
+        query.keepSynced(true);
+
+        ref.child("mock").setValue(mock).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                ref.child("mock").removeValue();
+
+                ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        VisitorUserGetProUser visitor = new VisitorUserGetProUser();
+                        for (DataSnapshot d : dataSnapshot.getChildren()) {
+                            if (d != null) {
+                                User u = gson.fromJson(d.getValue(String.class), User.class);
+
+                                u.acept(visitor);
+                            }
+                        }
+
+                        proUsers = visitor.getList();
+                        Collections.sort(proUsers, new ProUserComparator());
                     }
-                }
 
-                proUsers = visitor.getList();
-                Collections.sort(proUsers, new ProUserComparator());
-            }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                    }
+                });
             }
         });
     }
 
     public List<UserPro> getProUsers() {
+        if (proUsers == null) {
+            proUsers = new ArrayList<>();
+        }
         return proUsers;
     }
 

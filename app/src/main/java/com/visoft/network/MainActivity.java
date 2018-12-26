@@ -35,7 +35,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
-import com.visoft.network.MainPageChats.AllChatsFragment;
 import com.visoft.network.MainPageChats.ChatsFragment;
 import com.visoft.network.MainPageContacts.MainContactsFragment;
 import com.visoft.network.MainPageSearch.HolderFirstTab;
@@ -52,7 +51,7 @@ import java.util.List;
 
 public class MainActivity extends AccountActivity {
     public static final String RECEIVER_INTENT = "RECEIVER_INTENT";
-    public static final String RECEIVER_MESSAGE = "RECEIVER_MESSAGE";
+
     public static boolean isRunning;
     private FirebaseAuth mAuth;
     private SharedPreferences sharedPref;
@@ -119,9 +118,6 @@ public class MainActivity extends AccountActivity {
             View view = tabLayout.getTabAt(1).getCustomView();
             view.findViewById(R.id.notImg).setVisibility(View.VISIBLE);
         }
-
-        AllChatsFragment allChatsFragment = (AllChatsFragment) chatsFragment.getChildFragmentManager().findFragmentByTag(Constants.ALL_CHATS_FRAGMENT_NAME);
-        allChatsFragment.refresh();
         sharedPref.edit().putBoolean("unreadMessages", false).apply();
     }
 
@@ -204,12 +200,12 @@ public class MainActivity extends AccountActivity {
             viewPagerMain = findViewById(R.id.ViewPagerMain);
             ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 
-
             tabLayout = findViewById(R.id.tabLayoutMain);
             tabLayout.setupWithViewPager(viewPagerMain);
             viewPagerAdapter.addFragment(fragmentGeneral, getString(R.string.buscar));
             viewPagerAdapter.addFragment(chatsFragment, getString(R.string.chats));
             viewPagerAdapter.addFragment(mainContactsFragment, getString(R.string.contactos));
+            viewPagerMain.setOffscreenPageLimit(3);
             viewPagerMain.setAdapter(viewPagerAdapter);
 
             tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -219,15 +215,11 @@ public class MainActivity extends AccountActivity {
                         //Search for the result
                     }
                     if (tab.getPosition() == 1) {
-                        Fragment shownFrag = chatsFragment.getChildFragmentManager().findFragmentById(R.id.ContainerFragmentChats);
-                        if (shownFrag instanceof AllChatsFragment) {
-                            ((AllChatsFragment) shownFrag).refresh();
-                        }
                         View view = tab.getCustomView();
                         if (view != null) {
                             view.findViewById(R.id.notImg).setVisibility(View.INVISIBLE);
                         }
-                        sharedPref.edit().putBoolean("unreadMessages", false).commit();
+                        sharedPref.edit().putBoolean("unreadMessages", false).apply();
                     }
                 }
 
@@ -248,9 +240,13 @@ public class MainActivity extends AccountActivity {
 
         } else {
             goToProfileItem.setVisible(false);
-            Intent intent = new Intent(this, SignInActivity.class);
-            startActivity(intent);
+            showLogInScreen();
         }
+    }
+
+    private void showLogInScreen() {
+        Intent intent = new Intent(this, SignInActivity.class);
+        startActivity(intent);
     }
 
     @Override
@@ -281,7 +277,6 @@ public class MainActivity extends AccountActivity {
 
     @Override
     public void onRequestResult(boolean result, int requestCode, Bundle data) {
-
     }
 
     private class ViewPagerAdapter extends FragmentPagerAdapter {

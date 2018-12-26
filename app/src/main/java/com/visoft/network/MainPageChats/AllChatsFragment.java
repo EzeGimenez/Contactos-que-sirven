@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -55,8 +56,9 @@ public class AllChatsFragment extends Fragment {
 
         mAuth = FirebaseAuth.getInstance();
         database = Database.getDatabase().getReference();
+
         populateChats();
-        // Inflate the layout for this fragment
+
         return inflater.inflate(R.layout.fragment_all_chats, container, false);
     }
 
@@ -67,20 +69,20 @@ public class AllChatsFragment extends Fragment {
     }
 
     private void populateChats() {
-        chatOverviews = new ArrayList<>();
-        chatUIDS = new ArrayList<>();
-        mapUIDUser = new HashMap<>();
-
         DatabaseReference userChatRef = database
                 .child(Constants.FIREBASE_CHATS_CONTAINER_NAME)
                 .child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid());
 
-        userChatRef.keepSynced(true);
+        Query q = userChatRef;
+        q.keepSynced(true);
 
         userChatRef
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+                .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        chatOverviews = new ArrayList<>();
+                        chatUIDS = new ArrayList<>();
+                        mapUIDUser = new HashMap<>();
                         for (DataSnapshot ds : dataSnapshot.getChildren()) {
                             chatUIDS.add(ds.getKey());
                             ChatOverview chatOverview = ds.getValue(ChatOverview.class);
@@ -146,11 +148,6 @@ public class AllChatsFragment extends Fragment {
                 });
             }
         }
-
-    }
-
-    public void refresh() {
-        populateChats();
     }
 
     private class ListViewChatsAdapter extends ArrayAdapter<ChatOverview> {

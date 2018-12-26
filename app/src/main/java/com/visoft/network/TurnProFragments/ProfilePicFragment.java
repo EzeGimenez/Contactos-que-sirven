@@ -58,7 +58,6 @@ public class ProfilePicFragment extends Fragment {
             }
         });
 
-
         Bundle args = getArguments();
         if (args != null) {
             ImageView ivPic = getView().findViewById(R.id.ivPic);

@@ -29,6 +29,7 @@ import com.visoft.network.Objects.ChatOverview;
 import com.visoft.network.Objects.User;
 import com.visoft.network.Objects.UserNormal;
 import com.visoft.network.Objects.UserPro;
+import com.visoft.network.R;
 import com.visoft.network.Util.Constants;
 import com.visoft.network.Util.Database;
 import com.visoft.network.exceptions.InvalidEmailException;
@@ -99,7 +100,9 @@ public class AccountManagerFirebase implements AccountManager {
                     bundle.putSerializable("user", u);
                     notifyAccountActivity(true, requestCode, bundle);
                 } else {
-                    notifyAccountActivity(false, requestCode, null);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("error", act.getString(R.string.error_sign_up));
+                    notifyAccountActivity(false, requestCode, bundle);
                 }
             }
         });
@@ -113,6 +116,9 @@ public class AccountManagerFirebase implements AccountManager {
                     String json = dataSnapshot.getValue(String.class);
                     user = GsonerUser.getGson().fromJson(json, User.class);
 
+                    user.setInstanceID(FirebaseInstanceId.getInstance().getToken());
+                    dataSnapshot.getRef().setValue(GsonerUser.getGson().toJson(user, User.class));
+
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("user", user);
                     notifyAccountActivity(true, requestCode, bundle);
@@ -121,6 +127,7 @@ public class AccountManagerFirebase implements AccountManager {
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
 
+                    notifyAccountActivity(false, requestCode, null);
                 }
             });
 
@@ -180,7 +187,9 @@ public class AccountManagerFirebase implements AccountManager {
                                 getUserFromDatabase(requestCode);
                             }
                         } else {
-                            notifyAccountActivity(false, requestCode, null);
+                            Bundle bundle = new Bundle();
+                            bundle.putString("error", act.getString(R.string.error_google));
+                            notifyAccountActivity(false, requestCode, bundle);
                         }
                     }
                 });
@@ -198,10 +207,10 @@ public class AccountManagerFirebase implements AccountManager {
             } catch (ApiException e) {
                 e.printStackTrace();
             }
-
-
         } else {
-            notifyAccountActivity(false, requestCode, null);
+            Bundle bundle = new Bundle();
+            bundle.putString("error", act.getString(R.string.error_google));
+            notifyAccountActivity(false, requestCode, bundle);
         }
     }
 
@@ -307,6 +316,10 @@ public class AccountManagerFirebase implements AccountManager {
                         if (task.isSuccessful()) {
                             fbUser = mAuth.getCurrentUser();
                             getUserFromDatabase(requestCode);
+                        } else {
+                            Bundle bundle = new Bundle();
+                            bundle.putString("error", act.getString(R.string.error_iniciar_sesion));
+                            notifyAccountActivity(false, requestCode, bundle);
                         }
                     }
                 });
@@ -344,6 +357,10 @@ public class AccountManagerFirebase implements AccountManager {
                             registerUserInDatabase(createUser(), requestCode);
                         }
                     });
+                } else {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("error", act.getString(R.string.error_sign_up));
+                    notifyAccountActivity(false, requestCode, bundle);
                 }
             }
         });
@@ -357,15 +374,15 @@ public class AccountManagerFirebase implements AccountManager {
      */
     private void checkCredentials(String email, String password, String username) throws InvalidEmailException, InvalidPasswordException, InvalidUsernameException {
         if (email == null || email.length() < 3 || !email.contains("@")) {
-            throw new InvalidEmailException("email erroneo");
+            throw new InvalidEmailException(act.getString(R.string.email_erroneo));
         }
 
         if (password == null || password.length() < 6) {
-            throw new InvalidPasswordException("password erroneo");
+            throw new InvalidPasswordException(act.getString(R.string.worng_password));
         }
 
         if (username == null || username.length() < 4) {
-            throw new InvalidUsernameException("username wrong");
+            throw new InvalidUsernameException(act.getString(R.string.wrong_username));
         }
 
     }

@@ -132,6 +132,7 @@ public class TurnProActivity extends AppCompatActivity {
             rubroEspecificoFragment.setArguments(fragmentConfig);
             proUser.setRubroGeneral(rubroGeneral);
             fragmentManager.beginTransaction()
+                    .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
                     .replace(R.id.ContainerTurnProFragments, rubroEspecificoFragment, Constants.RUBRO_ESPECIFICO_FRAGMENT_TAG)
                     .addToBackStack(Constants.RUBRO_GENERAL_FRAGMENT_TAG)
                     .commit();
@@ -149,6 +150,7 @@ public class TurnProActivity extends AppCompatActivity {
 
             rubroEspecificoFragment.setArguments(fragmentConfig);
             fragmentManager.beginTransaction()
+                    .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
                     .replace(R.id.ContainerTurnProFragments, rubroEspecificoFragment, Constants.RUBRO_ESPECIFICO_FRAGMENT_TAG2)
                     .addToBackStack(Constants.RUBRO_ESPECIFICO_FRAGMENT_TAG)
                     .commit();
@@ -165,6 +167,7 @@ public class TurnProActivity extends AppCompatActivity {
 
             FragmentTransaction transaction = fragmentManager.beginTransaction();
             transaction
+                    .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
                     .replace(R.id.ContainerTurnProFragments, fragment, Constants.WORK_SCOPE_FRAGMENT_TAG)
                     .addToBackStack(Constants.RUBRO_ESPECIFICO_FRAGMENT_TAG2)
                     .commit();
@@ -193,6 +196,7 @@ public class TurnProActivity extends AppCompatActivity {
             }
 
             transaction
+                    .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
                     .replace(R.id.ContainerTurnProFragments, fragment, Constants.CHOOSE_PIC_FRAGMENT_TAG)
                     .addToBackStack(Constants.WORK_SCOPE_FRAGMENT_TAG)
                     .commit();
@@ -223,6 +227,7 @@ public class TurnProActivity extends AppCompatActivity {
             }
 
             transaction
+                    .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
                     .replace(R.id.ContainerTurnProFragments, fragment, Constants.CONTACTO_FRAGMENT_TAG)
                     .addToBackStack(Constants.CHOOSE_PIC_FRAGMENT_TAG)
                     .commit();
@@ -244,6 +249,7 @@ public class TurnProActivity extends AppCompatActivity {
                 fragment.setArguments(bundle);
 
                 transaction
+                        .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
                         .replace(R.id.ContainerTurnProFragments, fragment, Constants.SOCIAL_FRAGMENT_TAG)
                         .addToBackStack(Constants.CONTACTO_FRAGMENT_TAG)
                         .commit();
@@ -266,6 +272,7 @@ public class TurnProActivity extends AppCompatActivity {
             }
 
             transaction
+                    .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
                     .replace(R.id.ContainerTurnProFragments, fragment, Constants.CV_FRAGMENT_TAG)
                     .addToBackStack(Constants.CONTACTO_FRAGMENT_TAG)
                     .commit();
@@ -300,6 +307,7 @@ public class TurnProActivity extends AppCompatActivity {
 
             Fragment rubroGeneralFragment = fragmentManager.findFragmentByTag(Constants.RUBRO_GENERAL_FRAGMENT_TAG);
             fragmentManager.beginTransaction()
+                    .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right)
                     .replace(R.id.ContainerTurnProFragments, rubroGeneralFragment, Constants.RUBRO_GENERAL_FRAGMENT_TAG)
                     .commit();
 
@@ -311,6 +319,7 @@ public class TurnProActivity extends AppCompatActivity {
 
             Fragment rubroEspecificoFragment = fragmentManager.findFragmentByTag(Constants.RUBRO_ESPECIFICO_FRAGMENT_TAG);
             fragmentManager.beginTransaction()
+                    .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right)
                     .replace(R.id.ContainerTurnProFragments, rubroEspecificoFragment, Constants.RUBRO_ESPECIFICO_FRAGMENT_TAG)
                     .commit();
 
@@ -323,6 +332,7 @@ public class TurnProActivity extends AppCompatActivity {
             if (!isEditing) {
                 Fragment rubroEspecificoFragment = fragmentManager.findFragmentByTag(Constants.RUBRO_ESPECIFICO_FRAGMENT_TAG2);
                 fragmentManager.beginTransaction()
+                        .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right)
                         .replace(R.id.ContainerTurnProFragments, rubroEspecificoFragment, Constants.RUBRO_ESPECIFICO_FRAGMENT_TAG2)
                         .commit();
 
@@ -340,6 +350,7 @@ public class TurnProActivity extends AppCompatActivity {
 
             Fragment workScopeFragment = fragmentManager.findFragmentByTag(Constants.WORK_SCOPE_FRAGMENT_TAG);
             fragmentManager.beginTransaction()
+                    .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right)
                     .replace(R.id.ContainerTurnProFragments, workScopeFragment, Constants.WORK_SCOPE_FRAGMENT_TAG)
                     .commit();
 
@@ -348,7 +359,6 @@ public class TurnProActivity extends AppCompatActivity {
             }
 
         } else if (actualFragment instanceof ContactoFragment) {
-
             Fragment choosePicFragment = fragmentManager.findFragmentByTag(Constants.CHOOSE_PIC_FRAGMENT_TAG);
             if (bitmap != null) {
                 Bundle bundle = new Bundle();
@@ -359,6 +369,7 @@ public class TurnProActivity extends AppCompatActivity {
                 choosePicFragment.setArguments(bundle);
             }
             fragmentManager.beginTransaction()
+                    .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right)
                     .replace(R.id.ContainerTurnProFragments, choosePicFragment, Constants.CHOOSE_PIC_FRAGMENT_TAG)
                     .commit();
 
@@ -373,6 +384,7 @@ public class TurnProActivity extends AppCompatActivity {
             contactoFragment.setArguments(bundle);
 
             fragmentManager.beginTransaction()
+                    .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right)
                     .replace(R.id.ContainerTurnProFragments, contactoFragment, Constants.CONTACTO_FRAGMENT_TAG)
                     .commit();
 
@@ -380,6 +392,7 @@ public class TurnProActivity extends AppCompatActivity {
 
             Fragment contactoFragment = fragmentManager.findFragmentByTag(Constants.SOCIAL_FRAGMENT_TAG);
             fragmentManager.beginTransaction()
+                    .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right)
                     .replace(R.id.ContainerTurnProFragments, contactoFragment, Constants.SOCIAL_FRAGMENT_TAG)
                     .commit();
 

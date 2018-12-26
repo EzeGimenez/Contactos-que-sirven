@@ -45,6 +45,9 @@ public class FragmentSearchResults extends FragmentFirstTab {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (searcherProUser == null) {
+            setLocation(null);
+        }
         final List<UserPro> list = searcherProUser.getProUsers();
 
         AccountManager accountManager = AccountManagerFirebase.getInstance(null);

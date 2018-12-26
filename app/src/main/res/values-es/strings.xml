@@ -192,4 +192,11 @@
     <string name="buscar">buscar</string>
     <string name="contactos">Contactos</string>
     <string name="ubicacion">ubicacion</string>
+    <string name="email_erroneo">Email erroneo</string>
+    <string name="worng_password">password erroneo</string>
+    <string name="wrong_username">Usuario incorrecto</string>
+    <string name="error_sign_up">No se pudo crear usuario</string>
+    <string name="error_iniciar_sesion">Error al iniciar sesion</string>
+    <string name="error_google">Error al iniciar sesion con Google</string>
+    <string name="passwords_dont_match">No coinciden contraseñas</string>
 </resources>

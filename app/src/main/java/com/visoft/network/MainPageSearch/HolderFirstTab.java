@@ -22,10 +22,27 @@ public class HolderFirstTab extends Fragment {
     private FragmentFirstTab fragmentGeneral, fragmentEspecifico1, fragmentEspecifico2, fragmentSearchResult;
     private String actual;
 
-    private String idGeneral = "general", idEspecifico1 = "esp1", idEspecifico2 = "esp2", idSearchResult = "search";
+    private String idGeneral = "general";
+    private String idSearchResult = "search";
+    private SearchView.OnQueryTextListener listenerSearchView;
 
     public void setLocation(LatLng l) {
+        iniciarFragments();
         ((FragmentSearchResults) fragmentSearchResult).setLocation(l);
+    }
+
+    public void iniciarFragments() {
+        if (fragmentSearchResult == null) {
+            fragmentSearchResult = new FragmentSearchResults();
+            fragmentEspecifico1 = new FragmentSpecific1();
+            fragmentGeneral = new FragmentGeneral();
+            fragmentEspecifico2 = new FragmentSpecific2();
+
+            fragmentSearchResult.setHolder(this);
+            fragmentGeneral.setHolder(this);
+            fragmentEspecifico2.setHolder(this);
+            fragmentEspecifico1.setHolder(this);
+        }
     }
 
     @Override
@@ -33,52 +50,9 @@ public class HolderFirstTab extends Fragment {
         super.onCreate(savedInstanceState);
 
         fragmentManager = getChildFragmentManager();
+        iniciarFragments();
 
-        fragmentSearchResult = new FragmentSearchResults();
-        fragmentEspecifico1 = new FragmentSpecific1();
-        fragmentGeneral = new FragmentGeneral();
-        fragmentEspecifico2 = new FragmentSpecific2();
-
-        fragmentSearchResult.setHolder(this);
-        fragmentGeneral.setHolder(this);
-        fragmentEspecifico2.setHolder(this);
-        fragmentEspecifico1.setHolder(this);
-
-        fragmentManager.beginTransaction()
-                .add(containerId, fragmentGeneral, idGeneral).commit();
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_holder_first_tab, container, false);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        //BACK PRESS HANDLING
-        view.setFocusableInTouchMode(true);
-        view.requestFocus();
-        view.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (event.getAction() != KeyEvent.ACTION_DOWN) {
-                    return true;
-                }
-
-                if (keyCode == KeyEvent.KEYCODE_BACK) {
-                    back();
-                    return true;
-                }
-                return false;
-            }
-        });
-
-        //SEARCH VIEW
-        SearchView searchView = view.findViewById(R.id.searchView);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        listenerSearchView = new SearchView.OnQueryTextListener() {
 
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -114,7 +88,43 @@ public class HolderFirstTab extends Fragment {
 
                 return false;
             }
+        };
+
+        fragmentManager.beginTransaction()
+                .add(containerId, fragmentGeneral, idGeneral).commit();
+    }
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_holder_first_tab, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        //BACK PRESS HANDLING
+        view.setFocusableInTouchMode(true);
+        view.requestFocus();
+        view.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() != KeyEvent.ACTION_DOWN) {
+                    return true;
+                }
+
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    back();
+                    return true;
+                }
+                return false;
+            }
         });
+
+        //SEARCH VIEW
+        SearchView searchView = view.findViewById(R.id.searchView);
+        searchView.setOnQueryTextListener(listenerSearchView);
     }
 
     public void back() {
@@ -127,6 +137,8 @@ public class HolderFirstTab extends Fragment {
     }
 
     public void advance(Bundle bundle) {
+        String idEspecifico1 = "esp1";
+        String idEspecifico2 = "esp2";
         if (actual.equals(idGeneral)) {
 
             fragmentEspecifico1.setArguments(bundle);

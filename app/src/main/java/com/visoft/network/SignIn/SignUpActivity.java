@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,23 +20,16 @@ public class SignUpActivity extends AccountActivity implements View.OnClickListe
     private static final int RC_SIGNUP = 3;
 
     private EditText etEmail, etPassword, etConfirmPassword, etUsername;
-
     private LoadingScreen loadingScreen;
     private AccountManager accountManager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_sign_up);
+        setContentView(R.layout.activity_sign_up);
 
         this.accountManager = AccountManagerFirebase.getInstance(this);
         this.loadingScreen = new LoadingScreen(this, (ViewGroup) findViewById(R.id.rootView));
-
-        //Inicializar componentes gráficas
-        Toolbar toolbar = findViewById(R.id.toolbarSignUp);
-        setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(R.drawable.arrow_back);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         etUsername = findViewById(R.id.etUsername);
         etEmail = findViewById(R.id.etEmail);
@@ -66,7 +58,7 @@ public class SignUpActivity extends AccountActivity implements View.OnClickListe
                 showSnackBar(e.getMessage());
             }
         } else {
-            showSnackBar("no coinciden contraseñas");
+            showSnackBar(getString(R.string.passwords_dont_match));
         }
     }
 
@@ -93,6 +85,11 @@ public class SignUpActivity extends AccountActivity implements View.OnClickListe
             intent.putExtra("loggeo", true);
             setResult(RESULT_OK, intent);
             finish();
+        } else {
+            if (data != null) {
+                showSnackBar(data.getString("error"));
+            }
         }
     }
+
 }

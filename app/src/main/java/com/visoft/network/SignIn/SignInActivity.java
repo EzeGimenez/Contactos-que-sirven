@@ -3,13 +3,10 @@ package com.visoft.network.SignIn;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.visoft.network.R;
 import com.visoft.network.funcionalidades.AccountActivity;
 import com.visoft.network.funcionalidades.AccountManager;
@@ -17,7 +14,7 @@ import com.visoft.network.funcionalidades.AccountManagerFirebase;
 import com.visoft.network.funcionalidades.LoadingScreen;
 
 public class SignInActivity extends AccountActivity implements View.OnClickListener {
-    //CONSTANTS FIELDS
+
     private static final int RC_SIGNINEMAIL = 1, RC_SIGNINGOOGLE = 2, RC_SIGNUP = 4;
 
     private EditText emailET, passwordET;
@@ -32,12 +29,6 @@ public class SignInActivity extends AccountActivity implements View.OnClickListe
 
         this.accountManager = AccountManagerFirebase.getInstance(this);
         this.loadingScreen = new LoadingScreen(this, (ViewGroup) findViewById(R.id.rootView));
-
-        //Toolbar
-        Toolbar toolbar = findViewById(R.id.toolbarLogIn);
-        setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(R.drawable.arrow_back);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         //Initialization of UI Components
         emailET = findViewById(R.id.etUsername);
@@ -116,34 +107,20 @@ public class SignInActivity extends AccountActivity implements View.OnClickListe
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                break;
+    public void onRequestResult(boolean result, int requestCode, Bundle data) {
+        if (result) {
+            finish();
+        } else {
+            if (data != null) {
+                showSnackBar(data.getString("error"));
+            }
         }
-        return true;
+
+        loadingScreen.hide();
     }
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        if (mAuth.getCurrentUser() == null) {
-            Intent intent = new Intent(Intent.ACTION_MAIN);
-            intent.addCategory(Intent.CATEGORY_HOME);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        }
-    }
-
-    @Override
-    public void onRequestResult(boolean result, int requestCode, Bundle data) {
-        if (result) {
-            finish();
-        }
-
-        loadingScreen.hide();
+        finishAffinity();
     }
 }

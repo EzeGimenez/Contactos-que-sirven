@@ -17,10 +17,7 @@ import com.visoft.network.R;
 
 public class RubroGeneralFragment extends Fragment {
 
-    //Componentes gráficas
-    private ListView listView;
-
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.rubro_general_fragment, container, false);
@@ -33,7 +30,8 @@ public class RubroGeneralFragment extends Fragment {
         TextView tvInfo = getActivity().findViewById(R.id.tvInfo);
         tvInfo.setText(R.string.selecciona_area_trabajo);
 
-        listView = view.findViewById(R.id.listView);
+        //Componentes gráficas
+        ListView listView = view.findViewById(R.id.listView);
 
         final String[] rubrosAID = getResources().getStringArray(R.array.rubrosGeneralesID);
         listView.setAdapter(new RubrosGeneralesAdapter(getContext(), rubrosAID));
@@ -50,25 +48,25 @@ public class RubroGeneralFragment extends Fragment {
 
     private class RubrosGeneralesAdapter extends ArrayAdapter<String> {
         private String[] rubrosArray;
-        private Context context;
 
-        public RubrosGeneralesAdapter(Context context, String[] rubros) {
+        RubrosGeneralesAdapter(Context context, String[] rubros) {
             super(context, R.layout.rubros_generales_row, rubros);
             this.rubrosArray = rubros;
-            this.context = context;
         }
 
         @NonNull
         @Override
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
             LayoutInflater inflater = getLayoutInflater();
-            View view = inflater.inflate(R.layout.rubros_generales_row, parent, false);
-            TextView tvRubro = view.findViewById(R.id.tvRubro);
+            if (convertView == null) {
+                convertView = inflater.inflate(R.layout.rubros_generales_row, parent, false);
+            }
+            TextView tvRubro = convertView.findViewById(R.id.tvRubro);
             int id = getResources().getIdentifier(rubrosArray[position],
                     "string",
                     getActivity().getPackageName());
             tvRubro.setText(getString(id));
-            return view;
+            return convertView;
         }
     }
 }
