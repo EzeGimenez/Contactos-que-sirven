@@ -1,75 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/rootView"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/containerFragmentLogin"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
-    android:gravity="center">
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorPrimary"
-        android:gravity="center"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/tvUsername"
-            style="@style/descTextView"
-            android:clickable="true"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:text="@string/email" />
-
-        <EditText
-            android:id="@+id/etUsername"
-            style="@style/editText"
-            android:ems="10"
-            android:inputType="text|textEmailAddress"
-            android:singleLine="true" />
-
-        <TextView
-            style="@style/descTextView"
-            android:text="@string/contrase_a" />
-
-        <EditText
-            android:id="@+id/etPassword"
-            style="@style/editText"
-            android:ems="10"
-            android:inputType="textPassword"
-            android:singleLine="true" />
-
-        <com.google.android.gms.common.SignInButton
-            android:id="@+id/buttonSignInWithGoogle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <Button
-                android:id="@+id/buttonSignUp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:background="@drawable/edittext_background"
-                android:padding="10dp"
-                android:text="@string/crear_usuario"
-                android:textColor="@color/colorPrimary" />
-
-            <Button
-                android:id="@+id/buttonAcceptLogIn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:background="@drawable/edittext_background_orange"
-                android:padding="10dp"
-                android:text="@string/iniciar_sesi_n"
-                android:textColor="@color/colorPrimary" />
-
-        </LinearLayout>
-
-    </LinearLayout>
-</RelativeLayout>
+</LinearLayout>

@@ -191,6 +191,12 @@
     <string name="passwords_dont_match">No coinciden contraseñas</string>
     <string name="usuario_existente">El nombre de usuario ya existe</string>
     <string name="error_coneccion">Parece que no tiene internet</string>
+    <string name="iniciar_sesion_como_cliente">Iniciar Sesion como Cliente</string>
+    <string name="iniciar_sesion_como_profesional">Iniciar Sesion como Profesional</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="no_tienes_un_usuario">No tienes un usuario?</string>
 
 
 </resources>

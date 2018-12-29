@@ -192,5 +192,8 @@
     <string name="passwords_dont_match">Passwords don\'t match</string>
     <string name="usuario_existente">That username is already in use</string>
     <string name="error_coneccion">It seems that yout don\'t have a Internet connection</string>
+    <string name="iniciar_sesion_como_cliente">Log in as Client</string>
+    <string name="iniciar_sesion_como_profesional">Log in as Profesional</string>
+    <string name="no_tienes_un_usuario">Not an user yet?</string>
 
 </resources>
