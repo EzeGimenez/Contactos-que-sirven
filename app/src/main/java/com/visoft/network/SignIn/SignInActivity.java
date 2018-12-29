@@ -3,17 +3,17 @@ package com.visoft.network.SignIn;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.visoft.network.R;
-import com.visoft.network.funcionalidades.AccountActivity;
 import com.visoft.network.funcionalidades.AccountManager;
 import com.visoft.network.funcionalidades.AccountManagerFirebase;
 import com.visoft.network.funcionalidades.LoadingScreen;
 
-public class SignInActivity extends AccountActivity implements View.OnClickListener {
+public class SignInActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final int RC_SIGNINEMAIL = 1, RC_SIGNINGOOGLE = 2, RC_SIGNUP = 4;
 
@@ -27,7 +27,21 @@ public class SignInActivity extends AccountActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        this.accountManager = AccountManagerFirebase.getInstance(this);
+        this.accountManager = AccountManagerFirebase.getInstance(new AccountManagerFirebase.ListenerRequestResult() {
+            @Override
+            public void onRequestResult(boolean result, int requestCode, Bundle data) {
+                if (result) {
+                    finish();
+                } else {
+                    if (data != null) {
+                        showSnackBar(data.getString("error"));
+                    }
+                }
+
+                loadingScreen.hide();
+            }
+
+        }, this);
         this.loadingScreen = new LoadingScreen(this, (ViewGroup) findViewById(R.id.rootView));
 
         //Initialization of UI Components
@@ -104,19 +118,6 @@ public class SignInActivity extends AccountActivity implements View.OnClickListe
     private void showSnackBar(String msg) {
         Snackbar.make(findViewById(R.id.rootView),
                 msg, Snackbar.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onRequestResult(boolean result, int requestCode, Bundle data) {
-        if (result) {
-            finish();
-        } else {
-            if (data != null) {
-                showSnackBar(data.getString("error"));
-            }
-        }
-
-        loadingScreen.hide();
     }
 
     @Override

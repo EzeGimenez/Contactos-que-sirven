@@ -19,6 +19,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,14 +43,13 @@ import com.visoft.network.Profiles.ProfileActivityOwnUser;
 import com.visoft.network.SignIn.SignInActivity;
 import com.visoft.network.Util.Constants;
 import com.visoft.network.Util.Database;
-import com.visoft.network.funcionalidades.AccountActivity;
 import com.visoft.network.funcionalidades.AccountManager;
 import com.visoft.network.funcionalidades.AccountManagerFirebase;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AccountActivity {
+public class MainActivity extends AppCompatActivity {
     public static final String RECEIVER_INTENT = "RECEIVER_INTENT";
 
     public static boolean isRunning;
@@ -83,7 +83,13 @@ public class MainActivity extends AccountActivity {
             }
         };
 
-        AccountManager accountManager = AccountManagerFirebase.getInstance(this);
+        AccountManager accountManager = AccountManagerFirebase.getInstance(new AccountManagerFirebase.ListenerRequestResult() {
+            @Override
+            public void onRequestResult(boolean result, int requestCode, Bundle data) {
+
+            }
+        }, this);
+
         accountManager.getCurrentUser(1);
 
         fragmentGeneral = fragmentGeneral == null ? new HolderFirstTab() : fragmentGeneral;
@@ -273,10 +279,6 @@ public class MainActivity extends AccountActivity {
         this.menu = menu;
         updateLogIn();
         return true;
-    }
-
-    @Override
-    public void onRequestResult(boolean result, int requestCode, Bundle data) {
     }
 
     private class ViewPagerAdapter extends FragmentPagerAdapter {

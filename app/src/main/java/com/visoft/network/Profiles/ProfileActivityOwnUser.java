@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,12 +19,11 @@ import com.visoft.network.R;
 import com.visoft.network.TurnProFragments.TurnProActivity;
 import com.visoft.network.Util.Constants;
 import com.visoft.network.custom_views.CustomDialog;
-import com.visoft.network.funcionalidades.AccountActivity;
 import com.visoft.network.funcionalidades.AccountManager;
 import com.visoft.network.funcionalidades.AccountManagerFirebase;
 import com.visoft.network.funcionalidades.LoadingScreen;
 
-public class ProfileActivityOwnUser extends AccountActivity {
+public class ProfileActivityOwnUser extends AppCompatActivity {
     private static final int RC_CURRENTUSER = 1, RC_DELETEACCOUNT = 2;
 
     private static boolean isRunning;
@@ -39,7 +39,20 @@ public class ProfileActivityOwnUser extends AccountActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        this.accountManager = AccountManagerFirebase.getInstance(this);
+        this.accountManager = AccountManagerFirebase.getInstance(new AccountManagerFirebase.ListenerRequestResult() {
+            @Override
+            public void onRequestResult(boolean result, int requestCode, Bundle data) {
+                if (requestCode == RC_CURRENTUSER) {
+                    user = (User) data.get("user");
+                    invalidateOptionsMenu();
+                } else if (requestCode == RC_DELETEACCOUNT) {
+                    if (result) {
+                        finish();
+                    }
+                }
+                loadingScreen.hide();
+            }
+        }, this);
         this.loadingScreen = new LoadingScreen(this, (ViewGroup) findViewById(R.id.rootView));
 
         user = accountManager.getCurrentUser(RC_CURRENTUSER);
@@ -187,18 +200,5 @@ public class ProfileActivityOwnUser extends AccountActivity {
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
         super.onSaveInstanceState(outState, outPersistentState);
         isRunning = false;
-    }
-
-    @Override
-    public void onRequestResult(boolean result, int requestCode, Bundle data) {
-        if (requestCode == RC_CURRENTUSER) {
-            user = (User) data.get("user");
-            invalidateOptionsMenu();
-        } else if (requestCode == RC_DELETEACCOUNT) {
-            if (result) {
-                finish();
-            }
-        }
-        loadingScreen.hide();
     }
 }

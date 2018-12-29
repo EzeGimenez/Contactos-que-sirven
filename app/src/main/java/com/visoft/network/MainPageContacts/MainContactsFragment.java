@@ -59,24 +59,32 @@ public class MainContactsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         listView = view.findViewById(R.id.listViewContacts);
 
-        AccountManager accountManager = AccountManagerFirebase.getInstance(null);
+        AccountManager accountManager = AccountManagerFirebase.getInstance(new AccountManagerFirebase.ListenerRequestResult() {
+            @Override
+            public void onRequestResult(boolean result, int requestCode, Bundle data) {
+                if (result) {
+                    User user = (User) data.getSerializable("user");
+                    contactsRef = Database.getDatabase()
+                            .getReference(Constants.FIREBASE_CONTACTS_CONTAINER_NAME)
+                            .child(user.getUid());
 
-        contactsRef = Database.getDatabase()
-                .getReference(Constants.FIREBASE_CONTACTS_CONTAINER_NAME)
-                .child(accountManager.getCurrentUser(1).getUid());
+                    contactsRef.keepSynced(true);
 
-        contactsRef.keepSynced(true);
+                    userRef = Database.getDatabase()
+                            .getReference(Constants.FIREBASE_USERS_CONTAINER_NAME);
 
-        userRef = Database.getDatabase()
-                .getReference(Constants.FIREBASE_USERS_CONTAINER_NAME);
+                    storage = FirebaseStorage.getInstance().getReference();
 
-        storage = FirebaseStorage.getInstance().getReference();
+                    if (contacts != null && adapter != null) {
+                        contacts.clear();
+                        adapter.notifyDataSetChanged();
+                    }
+                    populateContacts();
+                }
+            }
+        }, null);
 
-        if (contacts != null && adapter != null) {
-            contacts.clear();
-            adapter.notifyDataSetChanged();
-        }
-        populateContacts();
+        accountManager.getCurrentUser(1);
     }
 
     private void populateContacts() {

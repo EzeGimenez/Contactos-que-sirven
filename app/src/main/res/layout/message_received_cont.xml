@@ -10,6 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
+        android:layout_marginEnd="100dp"
         android:background="@drawable/message_received_background"
         android:paddingEnd="10dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -35,6 +36,7 @@
                 android:id="@+id/tvText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:maxWidth="220dp"
                 android:text="Hi man, how are you?"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="16sp"
@@ -45,7 +47,6 @@
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:visibility="gone" />
-
 
         </RelativeLayout>
 
@@ -59,5 +60,7 @@
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/fillerView" />
+
     </android.support.constraint.ConstraintLayout>
+
 </android.support.constraint.ConstraintLayout>

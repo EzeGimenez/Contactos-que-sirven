@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -12,9 +13,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -41,9 +45,11 @@ import java.util.ArrayList;
 public class AccountManagerFirebase implements AccountManager {
 
     private static AccountManager instance;
-    private static AccountActivity act;
+    private static ListenerRequestResult listener;
+    private static AppCompatActivity act;
+
     private FirebaseAuth mAuth;
-    private DatabaseReference userRef;
+    private DatabaseReference usersRef;
     private User user;
     private FirebaseUser fbUser;
 
@@ -56,7 +62,7 @@ public class AccountManagerFirebase implements AccountManager {
                 .requestId()
                 .build();
 
-        userRef = Database.getDatabase()
+        usersRef = Database.getDatabase()
                 .getReference()
                 .child(Constants.FIREBASE_USERS_CONTAINER_NAME);
 
@@ -64,8 +70,10 @@ public class AccountManagerFirebase implements AccountManager {
         mAuth = FirebaseAuth.getInstance();
     }
 
-    public static AccountManager getInstance(AccountActivity a) {
+    public static AccountManager getInstance(ListenerRequestResult l, AppCompatActivity a) {
+        listener = l;
         act = a;
+
         if (instance == null) {
             instance = new AccountManagerFirebase();
         }
@@ -92,7 +100,7 @@ public class AccountManagerFirebase implements AccountManager {
 
     private void registerUserInDatabase(final UserNormal u, final int requestCode) {
         String json = GsonerUser.getGson().toJson(u, User.class);
-        userRef.child(fbUser.getUid()).setValue(json).addOnCompleteListener(new OnCompleteListener<Void>() {
+        usersRef.child(fbUser.getUid()).setValue(json).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
@@ -110,7 +118,7 @@ public class AccountManagerFirebase implements AccountManager {
 
     private void getUserFromDatabase(final int requestCode) {
         if (user == null) {
-            userRef.child(fbUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            usersRef.child(fbUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     String json = dataSnapshot.getValue(String.class);
@@ -142,6 +150,7 @@ public class AccountManagerFirebase implements AccountManager {
     @Override
     public User getCurrentUser(int requestCode) {
         if (user != null) {
+            getUserFromDatabase(requestCode);
             return user;
         } else {
             fbUser = mAuth.getCurrentUser();
@@ -296,8 +305,8 @@ public class AccountManagerFirebase implements AccountManager {
         userRef.delete();
     }
 
-    public void notifyAccountActivity(boolean result, int requestCode, Bundle data) {
-        act.onRequestResult(result, requestCode, data);
+    private void notifyAccountActivity(boolean result, int requestCode, Bundle data) {
+        listener.onRequestResult(result, requestCode, data);
     }
 
     //EMAIL
@@ -317,8 +326,7 @@ public class AccountManagerFirebase implements AccountManager {
                             fbUser = mAuth.getCurrentUser();
                             getUserFromDatabase(requestCode);
                         } else {
-                            Bundle bundle = new Bundle();
-                            bundle.putString("error", act.getString(R.string.error_iniciar_sesion));
+                            Bundle bundle = getBundleFromException(task.getException());
                             notifyAccountActivity(false, requestCode, bundle);
                         }
                     }
@@ -327,8 +335,13 @@ public class AccountManagerFirebase implements AccountManager {
 
     @Override
     public void logOut(int requestCode) {
+        usersRef.child(user.getUid())
+                .child("instanceID")
+                .setValue("");
+
         user = null;
         fbUser = null;
+
         mAuth.signOut();
     }
 
@@ -357,13 +370,33 @@ public class AccountManagerFirebase implements AccountManager {
                             registerUserInDatabase(createUser(), requestCode);
                         }
                     });
+
                 } else {
-                    Bundle bundle = new Bundle();
-                    bundle.putString("error", act.getString(R.string.error_sign_up));
+                    Bundle bundle = getBundleFromException(task.getException());
+
                     notifyAccountActivity(false, requestCode, bundle);
                 }
             }
         });
+    }
+
+    private Bundle getBundleFromException(Exception e) {
+        Bundle bundle = new Bundle();
+        String msg;
+
+        try {
+            throw e;
+        } catch (FirebaseAuthInvalidCredentialsException i) {
+            msg = act.getString(R.string.credenciales_erroneas);
+        } catch (FirebaseAuthUserCollisionException i) {
+            msg = act.getString(R.string.usuario_existente);
+        } catch (FirebaseNetworkException i) {
+            msg = act.getString(R.string.error_coneccion);
+        } catch (Exception i) {
+            msg = e.getMessage();
+        }
+        bundle.putString("error", msg);
+        return bundle;
     }
 
     /**
@@ -385,5 +418,9 @@ public class AccountManagerFirebase implements AccountManager {
             throw new InvalidUsernameException(act.getString(R.string.wrong_username));
         }
 
+    }
+
+    public abstract static class ListenerRequestResult {
+        public abstract void onRequestResult(boolean result, int requestCode, Bundle data);
     }
 }

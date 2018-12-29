@@ -142,7 +142,7 @@ public class SpecificChatActivity extends AppCompatActivity {
         private Gson gson;
         private LayoutInflater inflater;
 
-        public ListViewChatsAdapter(Class<String> modelClass, int modelLayout, Class<ViewHolderChats> viewHolderClass, Query ref) {
+        ListViewChatsAdapter(Class<String> modelClass, int modelLayout, Class<ViewHolderChats> viewHolderClass, Query ref) {
             super(modelClass, modelLayout, viewHolderClass, ref);
             gson = GsonerMessages.getGson();
 
@@ -159,10 +159,8 @@ public class SpecificChatActivity extends AppCompatActivity {
                     return new ViewHolderChats(inflater.inflate(R.layout.message_received_change, parent, false));
                 case 2: //sent message, previous one same person
                     return new ViewHolderChats(inflater.inflate(R.layout.message_sent_cont, parent, false));
-                case 3: //sent message, previous one is user
+                default: //sent message, previous one is user
                     return new ViewHolderChats(inflater.inflate(R.layout.message_sent_change, parent, false));
-                default:
-                    return null;
             }
         }
 

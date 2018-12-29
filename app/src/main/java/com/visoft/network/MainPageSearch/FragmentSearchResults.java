@@ -50,7 +50,13 @@ public class FragmentSearchResults extends FragmentFirstTab {
         }
         final List<UserPro> list = searcherProUser.getProUsers();
 
-        AccountManager accountManager = AccountManagerFirebase.getInstance(null);
+        AccountManager accountManager = AccountManagerFirebase.getInstance(new AccountManagerFirebase.ListenerRequestResult() {
+            @Override
+            public void onRequestResult(boolean result, int requestCode, Bundle data) {
+
+            }
+        }, null);
+
         Iterator<UserPro> it = list.iterator();
         while (it.hasNext()) {
             UserPro p = it.next();

@@ -115,7 +115,7 @@
     <string name="pequenaDescripcion">Escriba una reseña corta</string>
 
     <string name="app_name">NetWork</string>
-    <string name="oauthId">421055195921-q7vcj31bcr0lmhe9s4p9176r44ndma8m.apps.googleusercontent.com</string>
+    <string name="oauthId" translatable="false">421055195921-q7vcj31bcr0lmhe9s4p9176r44ndma8m.apps.googleusercontent.com</string>
     <string name="previo">Previo</string>
     <string name="siguiente">Siguiente</string>
     <string name="telefono_1">Telefono 1:</string>
@@ -124,8 +124,12 @@
     <string name="horario_atenci_n">Horario Atención</string>
     <string name="a">a</string>
     <string name="de">De</string>
-    <string name="ingrese_su_descripci_n">Ingrese su Descripción</string>
-    <string name="usuario_o_email">Usuario o Email</string>
+    <string name="credenciales_erroneas">Credenciales erróneas</string>
+    <string name="sesion_iniciada">Sesión iniciada</string>
+    <string name="error_al_iniciar_sesion">Hubo un error mientras se intentó iniciar sesión. Reinténtelo</string>
+    <string name="usuario_creado">Usuario creado satisfactoriamente</string>
+    <string name="error_al_registrarse">Hubo un error mientras se intentó crear el usuario. Reinténtelo</string>
+
     <string name="contrase_a">Contraseña</string>
     <string name="iniciar_sesi_n">Iniciar Sesión</string>
     <string name="crear_usuario">Crear Usuario</string>
@@ -140,11 +144,6 @@
     <string name="reviews">Reseñas</string>
     <string name="cancelar">CANCELAR</string>
     <string name="finalizar">Finalizar</string>
-    <string name="credenciales_erroneas">Credenciales erróneas</string>
-    <string name="sesion_iniciada">Sesión iniciada</string>
-    <string name="error_al_iniciar_sesion">Error al iniciar sesión</string>
-    <string name="usuario_creado">Usuario Creado</string>
-    <string name="error_al_registrarse">Error al registrarse</string>
     <string name="go_to_profile">Go to Profile</string>
     <string name="cerrar_sesi_n">Cerrar sesión</string>
     <string name="lunes">Lunes</string>
@@ -154,28 +153,20 @@
     <string name="viernes">Viernes</string>
     <string name="sabado">Sábado</string>
     <string name="domingo">Domingo</string>
-    <string name="revisaConexion">Revisa tu conexión</string>
-    <string name="resultsFor">Resultados de búsqueda para:</string>
     <string name="aceptar">ACEPTAR</string>
-    <string name="calificar_profesional">Calificar Profesional</string>
     <string name="transformar_en_perfil_de_trabajo">Transformar en perfil de trabajo</string>
     <string name="editar_perfil">Editar Perfil</string>
-    <string name="show_reviews">Mostrar Reseñas</string>
     <string name="registrarse">Registrarse</string>
-    <string name="search_view_hint">Buscar por Nombre o Rubro</string>
     <string name="descripcion_personal">Descripción personal</string>
     <string name="contact_info">Información de Contacto</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="selecciona_foto">Añade una foto</string>
     <string name="calificar">Hacer una reseña</string>
     <string name="eliminar_cuenta">Eliminar cuenta</string>
     <string name="seguro_eliminar">Estás seguro de querer eliminar la cuenta?</string>
     <string name="añadirContacto">Añadir a agenda</string>
     <string name="removerContacto">Remover Contacto</string>
-    <string name="Contactos">Agenda</string>
-    <string name="shareUser">Compartir Usuario</string>
     <string name="social_apps_noañadidas">Redes sociales a añadir</string>
     <string name="social_apps_añadidas">Redes sociales ya añadidas</string>
     <string name="introduzcaUsuarioInstagram">Introduzca su nombre de usuario de Instagram</string>
@@ -186,14 +177,11 @@
     <string name="removerFacebook">Está seguro que desea remover Facebook?</string>
     <string name="removerWhatsapp">Está seguro que desea remover Whatsapp?</string>
     <string name="removerMail">Está seguro que no desea mostrar su mail?</string>
-    <string name="enviarMail">Enviar Email…</string>
     <string name="selecciona_social_networks">Añade o elimina links a las redes sociales</string>
     <string name="chatHint">Escribe mensaje</string>
-    <string name="enviado">Enviado</string>
     <string name="chats">Chats</string>
     <string name="buscar">buscar</string>
     <string name="contactos">Contactos</string>
-    <string name="ubicacion">ubicacion</string>
     <string name="email_erroneo">Email erroneo</string>
     <string name="worng_password">password erroneo</string>
     <string name="wrong_username">username wrong</string>
@@ -201,6 +189,8 @@
     <string name="error_iniciar_sesion">error al iniciar sesion</string>
     <string name="error_google">Error al iniciar sesion con Google</string>
     <string name="passwords_dont_match">No coinciden contraseñas</string>
+    <string name="usuario_existente">El nombre de usuario ya existe</string>
+    <string name="error_coneccion">Parece que no tiene internet</string>
 
 
 </resources>

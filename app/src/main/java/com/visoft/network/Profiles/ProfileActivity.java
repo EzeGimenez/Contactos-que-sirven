@@ -5,6 +5,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,13 +21,11 @@ import com.visoft.network.Objects.UserPro;
 import com.visoft.network.R;
 import com.visoft.network.Util.Constants;
 import com.visoft.network.Util.Database;
-import com.visoft.network.funcionalidades.AccountActivity;
 
-public class ProfileActivity extends AccountActivity {
+public class ProfileActivity extends AppCompatActivity {
     private User shownUser;
     private Menu menu;
     private boolean esContacto = false;
-    private FirebaseAuth mAuth;
     private DatabaseReference userContacts;
 
     @Override
@@ -158,10 +157,5 @@ public class ProfileActivity extends AccountActivity {
             menu.findItem(R.id.calificar).setVisible(false);
         }
         return true;
-    }
-
-    @Override
-    public void onRequestResult(boolean result, int requestCode, Bundle data) {
-
     }
 }

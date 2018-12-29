@@ -29,13 +29,6 @@
             android:layout_margin="4dp"
             android:src="@drawable/location" />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_margin="4dp"
-            android:src="@drawable/money" />
-
         <EditText
             android:id="@+id/etChat"
             android:layout_width="match_parent"

@@ -4,19 +4,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.visoft.network.R;
-import com.visoft.network.funcionalidades.AccountActivity;
 import com.visoft.network.funcionalidades.AccountManager;
 import com.visoft.network.funcionalidades.AccountManagerFirebase;
 import com.visoft.network.funcionalidades.LoadingScreen;
 
 
-public class SignUpActivity extends AccountActivity implements View.OnClickListener {
+public class SignUpActivity extends AppCompatActivity implements View.OnClickListener {
     private static final int RC_SIGNUP = 3;
 
     private EditText etEmail, etPassword, etConfirmPassword, etUsername;
@@ -28,7 +28,22 @@ public class SignUpActivity extends AccountActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        this.accountManager = AccountManagerFirebase.getInstance(this);
+        this.accountManager = AccountManagerFirebase.getInstance(new AccountManagerFirebase.ListenerRequestResult() {
+            @Override
+            public void onRequestResult(boolean result, int requestCode, Bundle data) {
+                loadingScreen.hide();
+                if (result) {
+                    Intent intent = new Intent();
+                    intent.putExtra("loggeo", true);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                } else {
+                    if (data != null) {
+                        showSnackBar(data.getString("error"));
+                    }
+                }
+            }
+        }, this);
         this.loadingScreen = new LoadingScreen(this, (ViewGroup) findViewById(R.id.rootView));
 
         etUsername = findViewById(R.id.etUsername);
@@ -75,21 +90,6 @@ public class SignUpActivity extends AccountActivity implements View.OnClickListe
                 break;
         }
         return true;
-    }
-
-    @Override
-    public void onRequestResult(boolean result, int requestCode, Bundle data) {
-        loadingScreen.hide();
-        if (result) {
-            Intent intent = new Intent();
-            intent.putExtra("loggeo", true);
-            setResult(RESULT_OK, intent);
-            finish();
-        } else {
-            if (data != null) {
-                showSnackBar(data.getString("error"));
-            }
-        }
     }
 
 }

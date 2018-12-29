@@ -470,7 +470,12 @@ public class TurnProActivity extends AppCompatActivity {
             }
         });
 
-        AccountManagerFirebase.getInstance(null).invalidate();
+        AccountManagerFirebase.getInstance(new AccountManagerFirebase.ListenerRequestResult() {
+            @Override
+            public void onRequestResult(boolean result, int requestCode, Bundle data) {
+
+            }
+        }, null).invalidate();
     }
 
     private void saveInRubro() {

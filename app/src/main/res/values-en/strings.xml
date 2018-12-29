@@ -126,8 +126,6 @@
     <string name="horario_atenci_n">Business hours</string>
     <string name="a">to</string>
     <string name="de">From</string>
-    <string name="ingrese_su_descripci_n">Type your description</string>
-    <string name="usuario_o_email">Username or Email</string>
     <string name="contrase_a">Password</string>
     <string name="iniciar_sesi_n">Sign in</string>
     <string name="crear_usuario">New account</string>
@@ -156,17 +154,12 @@
     <string name="viernes">Friday</string>
     <string name="sabado">Saturday</string>
     <string name="domingo">Sunday</string>
-    <string name="revisaConexion">Check your connection</string>
-    <string name="resultsFor">Search results for:</string>
-    <string name="calificar_profesional">Review Professional</string>
     <string name="tiempoRespReview">How would you rate the punctuality?</string>
     <string name="calidadTrabajoReview">How would you rate the quality of service received?</string>
     <string name="atencionReview">How would you rate the attention?</string>
     <string name="calificacionFinalReview">Finally, a general review</string>
     <string name="pequenaDescripcion">Write a short review</string>
-    <string name="show_reviews">Show Reviews</string>
     <string name="registrarse">Sign Up</string>
-    <string name="search_view_hint">Search Name or Area</string>
     <string name="descripcion_personal">Personal description</string>
     <string name="contact_info">Contact Info</string>
     <string name="selecciona_foto">Add a picture</string>
@@ -175,8 +168,6 @@
     <string name="seguro_eliminar">Are you sure you want to delete your account?</string>
     <string name="añadirContacto">Add to Contacts</string>
     <string name="removerContacto">Remove Contact</string>
-    <string name="Contactos">Contacts</string>
-    <string name="shareUser">Share user</string>
     <string name="social_apps_noañadidas">Social Networks to add</string>
     <string name="social_apps_añadidas">Social Networks already added</string>
     <string name="introduzcaUsuarioInstagram">Enter your Instragram username</string>
@@ -187,14 +178,11 @@
     <string name="removerFacebook">Are you sure you want to remove Facebook?</string>
     <string name="removerWhatsapp">Are you sure you want to remove Whatsapp?</string>
     <string name="removerMail">Are you sure you don\'t want to show your email?</string>
-    <string name="enviarMail">Send Email…</string>
     <string name="selecciona_social_networks">Add or remove social network links</string>
     <string name="chatHint">Type a message</string>
-    <string name="enviado">Sent</string>
     <string name="chats">Chats</string>
     <string name="buscar">Search</string>
     <string name="contactos">Contacts</string>
-    <string name="ubicacion">Location</string>
     <string name="email_erroneo">Wrong Email</string>
     <string name="worng_password">Wrong password</string>
     <string name="wrong_username">Wrong username</string>
@@ -202,5 +190,7 @@
     <string name="error_iniciar_sesion">Check your credentials and try again</string>
     <string name="error_google">Error while logging in with Google</string>
     <string name="passwords_dont_match">Passwords don\'t match</string>
+    <string name="usuario_existente">That username is already in use</string>
+    <string name="error_coneccion">It seems that yout don\'t have a Internet connection</string>
 
 </resources>
