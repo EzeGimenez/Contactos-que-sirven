@@ -14,6 +14,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,8 +31,8 @@ import com.visoft.network.Util.Constants;
 import com.visoft.network.Util.Database;
 import com.visoft.network.Util.GlideApp;
 import com.visoft.network.funcionalidades.AccountManager;
-import com.visoft.network.funcionalidades.AccountManagerFirebase;
 import com.visoft.network.funcionalidades.GsonerUser;
+import com.visoft.network.funcionalidades.HolderCurrentAccountManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,8 +42,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainContactsFragment extends Fragment {
     StorageReference storage;
-    private ArrayList<User> contacts;
-    private DatabaseReference contactsRef, userRef;
+    private ArrayList<UserPro> contacts;
+    private DatabaseReference contactsRef, userProRef;
     private int j, i;
     private ListViewAdapter adapter;
 
@@ -59,7 +61,7 @@ public class MainContactsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         listView = view.findViewById(R.id.listViewContacts);
 
-        AccountManager accountManager = AccountManagerFirebase.getInstance(new AccountManagerFirebase.ListenerRequestResult() {
+        AccountManager.ListenerRequestResult listener = new AccountManager.ListenerRequestResult() {
             @Override
             public void onRequestResult(boolean result, int requestCode, Bundle data) {
                 if (result) {
@@ -70,20 +72,30 @@ public class MainContactsFragment extends Fragment {
 
                     contactsRef.keepSynced(true);
 
-                    userRef = Database.getDatabase()
-                            .getReference(Constants.FIREBASE_USERS_CONTAINER_NAME);
+                    userProRef = Database.getDatabase()
+                            .getReference(Constants.FIREBASE_USERS_PRO_CONTAINER_NAME);
 
-                    storage = FirebaseStorage.getInstance().getReference();
+                    String mock = "asd";
+                    userProRef.child("mock").setValue(mock).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            userProRef.child("mock").removeValue();
 
-                    if (contacts != null && adapter != null) {
-                        contacts.clear();
-                        adapter.notifyDataSetChanged();
-                    }
-                    populateContacts();
+                            storage = FirebaseStorage.getInstance().getReference();
+
+                            if (contacts != null && adapter != null) {
+                                contacts.clear();
+                                adapter.notifyDataSetChanged();
+                            }
+                            populateContacts();
+                        }
+                    });
+
+
                 }
             }
-        }, null);
-
+        };
+        AccountManager accountManager = HolderCurrentAccountManager.getCurrent(listener);
         accountManager.getCurrentUser(1);
     }
 
@@ -127,11 +139,11 @@ public class MainContactsFragment extends Fragment {
     }
 
     private void getProUserFromUID(String uid) {
-        userRef.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+        userProRef.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 j++;
-                User user = GsonerUser.getGson().fromJson(dataSnapshot.getValue(String.class), User.class);
+                UserPro user = (UserPro) GsonerUser.getGson().fromJson(dataSnapshot.getValue(String.class), User.class);
                 contacts.add(user);
                 setAdapter();
             }
@@ -143,11 +155,11 @@ public class MainContactsFragment extends Fragment {
         });
     }
 
-    private class ListViewAdapter extends ArrayAdapter<User> {
+    private class ListViewAdapter extends ArrayAdapter<UserPro> {
         private LayoutInflater inflater;
-        private List<User> list;
+        private List<UserPro> list;
 
-        ListViewAdapter(@NonNull Context context, int resource, @NonNull List<User> objects) {
+        ListViewAdapter(@NonNull Context context, int resource, @NonNull List<UserPro> objects) {
             super(context, resource, objects);
             this.inflater = LayoutInflater.from(context);
             this.list = objects;
@@ -174,15 +186,13 @@ public class MainContactsFragment extends Fragment {
                 holder = (ViewHolder) convertView.getTag();
             }
 
-            User user = list.get(position);
+            UserPro user = list.get(position);
             String subRubro = "";
-            if (user.getIsPro()) {
-                UserPro proUser = (UserPro) user;
-                int id = getResources().getIdentifier(proUser.getRubroEspecifico(),
-                        "string",
-                        getActivity().getPackageName());
-                subRubro = getResources().getString(id);
-            }
+            int id = getResources().getIdentifier(user.getRubroEspecifico(),
+                    "string",
+                    getActivity().getPackageName());
+            subRubro = getResources().getString(id);
+
 
             holder.tvUsername.setText(user.getUsername());
             holder.tvRubro.setText(subRubro);
@@ -190,7 +200,7 @@ public class MainContactsFragment extends Fragment {
             holder.ratingBar.setRating(user.getRating());
 
             if (user.getHasPic()) {
-                StorageReference userRefStorage = storage.child(Constants.FIREBASE_USERS_CONTAINER_NAME + "/" + user.getUid() + user.getImgVersion() + ".jpg");
+                StorageReference userRefStorage = storage.child(Constants.FIREBASE_USERS_PRO_CONTAINER_NAME + "/" + user.getUid() + user.getImgVersion() + ".jpg");
                 GlideApp.with(getContext())
                         .load(userRefStorage)
                         .into(holder.ivPic);

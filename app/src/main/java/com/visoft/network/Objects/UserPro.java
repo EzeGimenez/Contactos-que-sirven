@@ -174,4 +174,9 @@ public class UserPro extends User implements IFilterable {
         holder.tvUsername.setText(getUsername());
         holder.tvRubro.setText(rubroNombre);
     }
+
+    @Override
+    public String getUid() {
+        return uid;
+    }
 }

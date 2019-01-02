@@ -3,7 +3,6 @@ package com.visoft.network.Objects;
 import android.view.View;
 
 import com.visoft.network.MainPageSearch.FragmentSearchResults;
-import com.visoft.network.MainPageSearch.VisitorUser;
 import com.visoft.network.R;
 
 import java.io.Serializable;
@@ -17,11 +16,12 @@ import eu.davidea.flexibleadapter.items.IFlexible;
  * Clase UserNormal, usada para almacenar la informacion de un usuario
  */
 public abstract class User extends AbstractFlexibleItem<FragmentSearchResults.ViewHolderProUser> implements Serializable {
-    protected String username, email, uid;
-    protected float rating;
-    protected int numberReviews, imgVersion;
+    protected String uid;
     protected boolean isPro, hasPic;
-    protected String instanceID;
+    private String username;
+    private String email;
+    private float rating;
+    private int numberReviews, imgVersion;
 
     /**
      * Constructor de la clase
@@ -54,12 +54,8 @@ public abstract class User extends AbstractFlexibleItem<FragmentSearchResults.Vi
         holder.tvUsername.setText(getUsername());
     }
 
-    public String getInstanceID() {
-        return instanceID;
-    }
-
     public User setInstanceID(String instanceID) {
-        this.instanceID = instanceID;
+        String instanceID1 = instanceID;
         return this;
     }
 
@@ -90,15 +86,6 @@ public abstract class User extends AbstractFlexibleItem<FragmentSearchResults.Vi
         return this;
     }
 
-    public boolean getIsPro() {
-        return isPro;
-    }
-
-    public User setPro(boolean pro) {
-        isPro = pro;
-        return this;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -108,9 +95,7 @@ public abstract class User extends AbstractFlexibleItem<FragmentSearchResults.Vi
         return this;
     }
 
-    public String getUid() {
-        return uid;
-    }
+    public abstract String getUid();
 
     public User setUid(String uid) {
         this.uid = uid;
@@ -135,5 +120,11 @@ public abstract class User extends AbstractFlexibleItem<FragmentSearchResults.Vi
         return this;
     }
 
-    public abstract void acept(VisitorUser v);
+    public boolean getIsPro() {
+        return isPro;
+    }
+
+    public void setPro(boolean pro) {
+        isPro = pro;
+    }
 }

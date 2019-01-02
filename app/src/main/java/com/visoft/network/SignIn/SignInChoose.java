@@ -28,16 +28,12 @@ public class SignInChoose extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        boolean asPro = false;
+        Fragment fragment;
         if (view.getId() == R.id.btnSesionProfesional) {
-            asPro = true;
+            fragment = new SignInPro();
+        } else {
+            fragment = new SignInNormal();
         }
-
-        Bundle bundle = new Bundle();
-        bundle.putBoolean("asPro", asPro);
-
-        Fragment fragment = new SignInSpecific();
-        fragment.setArguments(bundle);
 
         getFragmentManager().beginTransaction()
                 .addToBackStack(SignInActivity.chooseID)

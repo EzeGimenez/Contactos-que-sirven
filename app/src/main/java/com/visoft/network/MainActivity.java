@@ -32,19 +32,16 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
 import com.visoft.network.MainPageChats.ChatsFragment;
 import com.visoft.network.MainPageContacts.MainContactsFragment;
 import com.visoft.network.MainPageSearch.HolderFirstTab;
 import com.visoft.network.Profiles.ProfileActivityOwnUser;
 import com.visoft.network.SignIn.SignInActivity;
 import com.visoft.network.Util.Constants;
-import com.visoft.network.Util.Database;
 import com.visoft.network.funcionalidades.AccountManager;
-import com.visoft.network.funcionalidades.AccountManagerFirebase;
+import com.visoft.network.funcionalidades.AccountManagerFirebaseNormal;
+import com.visoft.network.funcionalidades.AccountManagerFirebasePro;
+import com.visoft.network.funcionalidades.HolderCurrentAccountManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
     public static boolean isRunning;
     private FirebaseAuth mAuth;
     private SharedPreferences sharedPref;
-    private DatabaseReference database;
 
     private HolderFirstTab fragmentGeneral;
     private ChatsFragment chatsFragment;
@@ -65,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayout;
 
     private Menu menu;
+    private int currentTab;
     private ViewPager viewPagerMain;
 
     @Override
@@ -72,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        database = Database.getDatabase().getReference();
         sharedPref = getSharedPreferences(Constants.SHARED_PREF_NAME, MODE_PRIVATE);
         mAuth = FirebaseAuth.getInstance();
 
@@ -83,21 +79,20 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        AccountManager accountManager = AccountManagerFirebase.getInstance(new AccountManagerFirebase.ListenerRequestResult() {
-            @Override
-            public void onRequestResult(boolean result, int requestCode, Bundle data) {
-
-            }
-        }, this);
-
+        AccountManager accountManager;
+        SharedPreferences sharedPref = getSharedPreferences(Constants.SHARED_PREF_NAME, MODE_PRIVATE);
+        if (sharedPref.getBoolean("asPro", false)) {
+            accountManager = AccountManagerFirebasePro.getInstance(null, this);
+        } else {
+            accountManager = AccountManagerFirebaseNormal.getInstance(null, this);
+        }
+        HolderCurrentAccountManager.setCurrent(accountManager);
         accountManager.getCurrentUser(1);
 
         fragmentGeneral = fragmentGeneral == null ? new HolderFirstTab() : fragmentGeneral;
         chatsFragment = chatsFragment == null ? new ChatsFragment() : chatsFragment;
         mainContactsFragment = mainContactsFragment == null ? new MainContactsFragment() : mainContactsFragment;
 
-        //Creacion de toolbar_main
-        //Componentes graficas
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.black_transparent)));
@@ -154,7 +149,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        invalidateOptionsMenu();
+
+        if (viewPagerMain != null) {
+            viewPagerMain.setCurrentItem(currentTab);
+        }
     }
 
     /**
@@ -163,23 +161,6 @@ public class MainActivity extends AppCompatActivity {
     private void updateLogIn() {
         FirebaseUser acc = mAuth.getCurrentUser();
         updateUI(acc);
-        if (acc != null) {
-            database.child(Constants.FIREBASE_USERS_CONTAINER_NAME).child(acc.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    Object object = dataSnapshot.getValue();
-                    if (object == null) {
-                        mAuth.signOut();
-                        updateLogIn();
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
-        }
     }
 
     /**
@@ -217,9 +198,7 @@ public class MainActivity extends AppCompatActivity {
             tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                 @Override
                 public void onTabSelected(TabLayout.Tab tab) {
-                    if (tab.getPosition() == 0) {
-                        //Search for the result
-                    }
+                    currentTab = tab.getPosition();
                     if (tab.getPosition() == 1) {
                         View view = tab.getCustomView();
                         if (view != null) {
@@ -252,7 +231,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void showLogInScreen() {
         Intent intent = new Intent(this, SignInActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
+        finish();
     }
 
     @Override
@@ -309,5 +290,4 @@ public class MainActivity extends AppCompatActivity {
             return mFragmentTitleList.get(position);
         }
     }
-
 }

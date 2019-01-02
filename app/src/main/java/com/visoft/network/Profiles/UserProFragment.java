@@ -25,8 +25,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -44,6 +44,7 @@ import com.visoft.network.Util.Database;
 import com.visoft.network.Util.GlideApp;
 import com.visoft.network.custom_views.CustomDialog;
 import com.visoft.network.funcionalidades.GsonerUser;
+import com.visoft.network.funcionalidades.HolderCurrentAccountManager;
 import com.visoft.network.funcionalidades.MapHighlighter;
 import com.visoft.network.funcionalidades.Messenger;
 
@@ -200,18 +201,22 @@ public class UserProFragment extends Fragment implements OnMapReadyCallback, Vie
         }
 
         if (!(getActivity() instanceof ProfileActivityOwnUser)) {
-            Messenger m = new Messenger(getContext(), FirebaseAuth.getInstance().getCurrentUser().getUid(), user.getUid(), (ViewGroup) getView().findViewById(R.id.rootView), containerScreens, database);
+            ProfileActivity.hideLoadingScreen();
+            new Messenger(getContext(), HolderCurrentAccountManager.getCurrent(null).getCurrentUser(1).getUid(), user.getUid(), (ViewGroup) getView().findViewById(R.id.rootView), containerScreens, database);
+        } else {
+            ProfileActivityOwnUser.hideLoadingScreen();
         }
 
         getProfilePic();
         getInsignias();
+
     }
 
     private void getProfilePic() {
         if (user.getHasPic()) {
             StorageReference storage = FirebaseStorage.getInstance().getReference();
 
-            StorageReference userRef = storage.child(Constants.FIREBASE_USERS_CONTAINER_NAME + "/" + user.getUid() + user.getImgVersion() + ".jpg");
+            StorageReference userRef = storage.child(Constants.FIREBASE_USERS_PRO_CONTAINER_NAME + "/" + user.getUid() + user.getImgVersion() + ".jpg");
             GlideApp.with(getContext())
                     .load(userRef)
                     .into(ivProfilePic);
@@ -401,11 +406,11 @@ public class UserProFragment extends Fragment implements OnMapReadyCallback, Vie
     }
 
     private void getCommentsPics(final List<CircleImageView> picList, final List<String> uids) {
-        for (int i = 0; i < uids.size(); i++) {
 
+        for (int i = 0; i < uids.size(); i++) {
             final int finalI = i;
             database
-                    .child(Constants.FIREBASE_USERS_CONTAINER_NAME)
+                    .child(Constants.FIREBASE_USERS_PRO_CONTAINER_NAME)
                     .child(uids.get(i))
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -416,7 +421,7 @@ public class UserProFragment extends Fragment implements OnMapReadyCallback, Vie
                                 StorageReference userRef = FirebaseStorage
                                         .getInstance()
                                         .getReference()
-                                        .child(Constants.FIREBASE_USERS_CONTAINER_NAME + "/" + uids.get(finalI) + user.getImgVersion() + ".jpg");
+                                        .child(Constants.FIREBASE_USERS_PRO_CONTAINER_NAME + "/" + uids.get(finalI) + user.getImgVersion() + ".jpg");
                                 GlideApp.with(getContext())
                                         .load(userRef)
                                         .into(picList.get(finalI));
@@ -458,16 +463,19 @@ public class UserProFragment extends Fragment implements OnMapReadyCallback, Vie
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        GoogleMap map = googleMap;
+        UiSettings setts = googleMap.getUiSettings();
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            map.setMyLocationEnabled(true);
-            map.getUiSettings().setMyLocationButtonEnabled(false);
+            googleMap.setMyLocationEnabled(true);
+            googleMap.getUiSettings().setMyLocationButtonEnabled(false);
         }
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                 new LatLng(user.getMapCenterLat(), user.getMapCenterLng()),
                 user.getMapZoom()));
 
-        MapHighlighter mapHighlighter = new MapHighlighter(getContext(), map);
+        setts.setAllGesturesEnabled(false);
+
+
+        MapHighlighter mapHighlighter = new MapHighlighter(getContext(), googleMap);
         mapHighlighter.highlightMap(new LatLng(user.getMapCenterLat(), user.getMapCenterLng()));
     }
 

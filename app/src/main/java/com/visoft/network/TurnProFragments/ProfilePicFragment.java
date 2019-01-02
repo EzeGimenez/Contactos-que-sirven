@@ -74,7 +74,7 @@ public class ProfilePicFragment extends Fragment {
                         .getInstance()
                         .getReference()
                         .child(
-                                Constants.FIREBASE_USERS_CONTAINER_NAME + "/" +
+                                Constants.FIREBASE_USERS_PRO_CONTAINER_NAME + "/" +
                                         mAuth.getCurrentUser().getUid() +
                                         args.getInt("imgVersion") + ".jpg");
                 GlideApp.with(getContext())

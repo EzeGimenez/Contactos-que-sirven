@@ -1,14 +1,16 @@
 package com.visoft.network.Objects;
 
-import com.visoft.network.MainPageSearch.VisitorUser;
-
 /**
  * Clase UserNormal, usada para almacenar la informacion de un usuario
  */
 public class UserNormal extends User {
 
+    public UserNormal() {
+        isPro = false;
+    }
+
     @Override
-    public void acept(VisitorUser v) {
-        v.visit(this);
+    public String getUid() {
+        return uid;
     }
 }

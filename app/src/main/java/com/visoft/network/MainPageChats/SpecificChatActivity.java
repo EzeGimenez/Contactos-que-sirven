@@ -17,9 +17,11 @@ import android.view.ViewTreeObserver;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
@@ -32,6 +34,7 @@ import com.visoft.network.Util.Constants;
 import com.visoft.network.Util.Database;
 import com.visoft.network.Util.GlideApp;
 import com.visoft.network.funcionalidades.GsonerMessages;
+import com.visoft.network.funcionalidades.HolderCurrentAccountManager;
 import com.visoft.network.funcionalidades.Messenger;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -82,7 +85,7 @@ public class SpecificChatActivity extends AppCompatActivity {
         if (receiver.getHasPic()) {
             StorageReference storage = FirebaseStorage.getInstance().getReference();
 
-            StorageReference userRef = storage.child(Constants.FIREBASE_USERS_CONTAINER_NAME + "/" + receiver.getUid() + receiver.getImgVersion() + ".jpg");
+            StorageReference userRef = storage.child(Constants.FIREBASE_USERS_PRO_CONTAINER_NAME + "/" + receiver.getUid() + receiver.getImgVersion() + ".jpg");
             GlideApp.with(this)
                     .load(userRef)
                     .into(ivPic);
@@ -90,35 +93,47 @@ public class SpecificChatActivity extends AppCompatActivity {
             ivPic.setImageDrawable(getResources().getDrawable(R.drawable.profile_pic));
         }
 
-        new Messenger(this, FirebaseAuth.getInstance().getCurrentUser().getUid(), receiver.getUid(), (ViewGroup) findViewById(R.id.rootView), recyclerView, database);
+        new Messenger(this, HolderCurrentAccountManager.getCurrent(null).getCurrentUser(1).getUid(), receiver.getUid(), (ViewGroup) findViewById(R.id.rootView), recyclerView, database);
 
-        DatabaseReference messagesRef = Database
+        final DatabaseReference messagesRef = Database
                 .getDatabase()
                 .getReference(Constants.FIREBASE_MESSAGES_CONTAINER_NAME)
                 .child(chatID);
 
-        recyclerViewAdapter = new ListViewChatsAdapter(String.class, 0, ViewHolderChats.class, messagesRef);
-        recyclerView.setLayoutManager(new LinearLayoutManager(SpecificChatActivity.this));
-        recyclerView.setAdapter(recyclerViewAdapter);
-
-        // Scroll to bottom on new messages
-        recyclerViewAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+        messagesRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onItemRangeInserted(int positionStart, int itemCount) {
-                recyclerView.smoothScrollToPosition(recyclerViewAdapter.getItemCount());
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                recyclerViewAdapter = new ListViewChatsAdapter(String.class, 0, ViewHolderChats.class, messagesRef);
+                recyclerView.setLayoutManager(new LinearLayoutManager(SpecificChatActivity.this));
+                recyclerView.setAdapter(recyclerViewAdapter);
+
+                // Scroll to bottom on new messages
+                recyclerViewAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+                    @Override
+                    public void onItemRangeInserted(int positionStart, int itemCount) {
+                        recyclerView.smoothScrollToPosition(recyclerViewAdapter.getItemCount());
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
 
         final View activityRootView = findViewById(R.id.rootView);
-        activityRootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                int heightDiff = activityRootView.getRootView().getHeight() - activityRootView.getHeight();
-                if (heightDiff > dpToPx(getApplication(), 200)) { // if more than 200 dp, it's probably a keyboard...
-                    recyclerView.smoothScrollToPosition(recyclerViewAdapter.getItemCount());
-                }
-            }
-        });
+        activityRootView.getViewTreeObserver().
+
+                addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        int heightDiff = activityRootView.getRootView().getHeight() - activityRootView.getHeight();
+                        if (heightDiff > dpToPx(getApplication(), 200)) { // if more than 200 dp, it's probably a keyboard...
+                            recyclerView.smoothScrollToPosition(recyclerViewAdapter.getItemCount());
+                        }
+                    }
+                });
     }
 
     @Override
@@ -145,7 +160,6 @@ public class SpecificChatActivity extends AppCompatActivity {
         ListViewChatsAdapter(Class<String> modelClass, int modelLayout, Class<ViewHolderChats> viewHolderClass, Query ref) {
             super(modelClass, modelLayout, viewHolderClass, ref);
             gson = GsonerMessages.getGson();
-
         }
 
         @NonNull

@@ -37,7 +37,7 @@ public class MessagingService extends FirebaseMessagingService {
         FirebaseUser user = auth.getCurrentUser();
         if (user != null) {
             DatabaseReference ds = FirebaseDatabase.getInstance().getReference();
-            ds.child(Constants.FIREBASE_USERS_CONTAINER_NAME).child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            ds.child(Constants.FIREBASE_USERS_PRO_CONTAINER_NAME).child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     User user = GsonerUser.getGson().fromJson(dataSnapshot.getValue(String.class), User.class);

@@ -173,7 +173,7 @@ public class UserReviewActivity extends AppCompatActivity {
 
     private void saveProUser(UserPro user) {
         String json = GsonerUser.getGson().toJson(user, User.class);
-        database.child(Constants.FIREBASE_USERS_CONTAINER_NAME)
+        database.child(Constants.FIREBASE_USERS_PRO_CONTAINER_NAME)
                 .child(proUserReviewed.getUid())
                 .setValue(json).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

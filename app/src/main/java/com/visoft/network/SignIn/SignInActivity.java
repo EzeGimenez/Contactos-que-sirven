@@ -1,7 +1,9 @@
 package com.visoft.network.SignIn;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
 import com.visoft.network.R;
@@ -19,6 +21,12 @@ public class SignInActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .add(containerID, new SignInChoose(), chooseID)
                 .commit();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(containerID);
+        fragment.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

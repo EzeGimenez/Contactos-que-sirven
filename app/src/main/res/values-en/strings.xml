@@ -185,15 +185,17 @@
     <string name="contactos">Contacts</string>
     <string name="email_erroneo">Wrong Email</string>
     <string name="worng_password">Wrong password</string>
-    <string name="wrong_username">Wrong username</string>
+    <string name="wrong_username">Username already in use</string>
     <string name="error_sign_up">Error while creating an account, please try again</string>
     <string name="error_iniciar_sesion">Check your credentials and try again</string>
     <string name="error_google">Error while logging in with Google</string>
     <string name="passwords_dont_match">Passwords don\'t match</string>
-    <string name="usuario_existente">That username is already in use</string>
+    <string name="usuario_existente_pro">Your account is already registered as a Client. Please use the same credentials to log in as a professional</string>
     <string name="error_coneccion">It seems that yout don\'t have a Internet connection</string>
     <string name="iniciar_sesion_como_cliente">Log in as Client</string>
     <string name="iniciar_sesion_como_profesional">Log in as Profesional</string>
     <string name="no_tienes_un_usuario">Not an user yet?</string>
+    <string name="crear_usuario_profesional">New professional account</string>
+    <string name="usuario_existente_normal">Your account is already registered as a Professional. Please use the same credentials to log in as a Cliente</string>
 
 </resources>

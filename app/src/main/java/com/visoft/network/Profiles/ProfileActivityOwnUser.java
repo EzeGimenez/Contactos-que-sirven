@@ -16,30 +16,33 @@ import android.view.ViewGroup;
 
 import com.visoft.network.Objects.User;
 import com.visoft.network.R;
+import com.visoft.network.SignIn.SignInActivity;
 import com.visoft.network.TurnProFragments.TurnProActivity;
 import com.visoft.network.Util.Constants;
 import com.visoft.network.custom_views.CustomDialog;
 import com.visoft.network.funcionalidades.AccountManager;
-import com.visoft.network.funcionalidades.AccountManagerFirebase;
+import com.visoft.network.funcionalidades.HolderCurrentAccountManager;
 import com.visoft.network.funcionalidades.LoadingScreen;
 
 public class ProfileActivityOwnUser extends AppCompatActivity {
     private static final int RC_CURRENTUSER = 1, RC_DELETEACCOUNT = 2;
 
     private static boolean isRunning;
+    private static LoadingScreen loadingScreen;
     private User user;
-
     private AccountManager accountManager;
-    private LoadingScreen loadingScreen;
-
     private Menu menu;
+
+    public static void hideLoadingScreen() {
+        loadingScreen.hide();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        this.accountManager = AccountManagerFirebase.getInstance(new AccountManagerFirebase.ListenerRequestResult() {
+        AccountManager.ListenerRequestResult listener = new AccountManager.ListenerRequestResult() {
             @Override
             public void onRequestResult(boolean result, int requestCode, Bundle data) {
                 if (requestCode == RC_CURRENTUSER) {
@@ -52,11 +55,14 @@ public class ProfileActivityOwnUser extends AppCompatActivity {
                 }
                 loadingScreen.hide();
             }
-        }, this);
-        this.loadingScreen = new LoadingScreen(this, (ViewGroup) findViewById(R.id.rootView));
+        };
+
+        accountManager = HolderCurrentAccountManager.getCurrent(listener);
+
+        loadingScreen = new LoadingScreen(this, (ViewGroup) findViewById(R.id.rootView));
+        loadingScreen.show();
 
         user = accountManager.getCurrentUser(RC_CURRENTUSER);
-        loadingScreen.show();
 
         //Toolbar
         //Componentes gráficas
@@ -75,10 +81,9 @@ public class ProfileActivityOwnUser extends AppCompatActivity {
     }
 
     private void iniciarUI() {
+        loadingScreen.show();
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.black_transparent)));
         if (menu != null && user != null) {
-            loadingScreen.hide();
-            MenuItem convertirEnProIcon = menu.findItem(R.id.convertirEnPro);
             MenuItem editarPerfil = menu.findItem(R.id.edit);
 
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -87,13 +92,12 @@ public class ProfileActivityOwnUser extends AppCompatActivity {
             String id;
             if ((user == null || user.getIsPro())) {
                 editarPerfil.setVisible(true);
-                convertirEnProIcon.setVisible(false);
+
                 fragment = new UserProFragment();
                 bundle.putSerializable("user", user);
                 id = Constants.PRO_USER_FRAGMENT_TAG;
             } else {
                 editarPerfil.setVisible(false);
-                convertirEnProIcon.setVisible(true);
                 fragment = new UserFragment();
                 id = Constants.DEFAULT_USER_FRAGMENT_TAG;
                 bundle.putSerializable("user", user);
@@ -121,10 +125,10 @@ public class ProfileActivityOwnUser extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.signOut:
                 accountManager.logOut(1);
+                Intent intent = new Intent(this, SignInActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
                 finish();
-                return true;
-            case R.id.convertirEnPro:
-                convertirEnPro();
                 return true;
             case R.id.edit:
                 editarPerfil();
@@ -149,18 +153,6 @@ public class ProfileActivityOwnUser extends AppCompatActivity {
                 });
 
         dialog.show();
-    }
-
-    /**
-     * Transforma el perfil de usuario en uno profesional
-     */
-    private void convertirEnPro() {
-        //Iniciar actividad para convertirse en pro
-        Intent intent = new Intent(this, TurnProActivity.class);
-        intent.putExtra("user", user);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-        finish();
     }
 
     /**

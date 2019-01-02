@@ -159,8 +159,6 @@
     <string name="registrarse">Registrarse</string>
     <string name="descripcion_personal">Descripción personal</string>
     <string name="contact_info">Información de Contacto</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="selecciona_foto">Añade una foto</string>
     <string name="calificar">Hacer una reseña</string>
     <string name="eliminar_cuenta">Eliminar cuenta</string>
@@ -189,14 +187,13 @@
     <string name="error_iniciar_sesion">error al iniciar sesion</string>
     <string name="error_google">Error al iniciar sesion con Google</string>
     <string name="passwords_dont_match">No coinciden contraseñas</string>
-    <string name="usuario_existente">El nombre de usuario ya existe</string>
+    <string name="usuario_existente_pro">El nombre de usuario ya existe</string>
     <string name="error_coneccion">Parece que no tiene internet</string>
     <string name="iniciar_sesion_como_cliente">Iniciar Sesion como Cliente</string>
     <string name="iniciar_sesion_como_profesional">Iniciar Sesion como Profesional</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="no_tienes_un_usuario">No tienes un usuario?</string>
+    <string name="crear_usuario_profesional">Crear usuario profesional</string>
+    <string name="usuario_existente_normal">El nombre de usuario ya existe</string>
 
 
 </resources>

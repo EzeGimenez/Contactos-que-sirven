@@ -12,47 +12,40 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.visoft.network.Objects.UserPro;
 import com.visoft.network.R;
+import com.visoft.network.funcionalidades.SearcherProUser;
+
+import java.util.List;
 
 public class HolderFirstTab extends Fragment {
 
+    private static SearcherProUser searcherProUser;
     private final int containerId = R.id.ContainerFirstTab;
     private FragmentManager fragmentManager;
-
     private FragmentFirstTab fragmentGeneral, fragmentEspecifico1, fragmentEspecifico2, fragmentSearchResult;
     private String actual;
-
     private String idGeneral = "general";
-    private String idSearchResult = "search";
+    private String idSearchResult = "searchResult";
     private SearchView.OnQueryTextListener listenerSearchView;
 
-    public void setLocation(LatLng l) {
-        iniciarFragments();
-        ((FragmentSearchResults) fragmentSearchResult).setLocation(l);
-    }
+    private String currentQuery;
 
-    public void iniciarFragments() {
-        if (fragmentSearchResult == null) {
-            fragmentSearchResult = new FragmentSearchResults();
-            fragmentEspecifico1 = new FragmentSpecific1();
-            fragmentGeneral = new FragmentGeneral();
-            fragmentEspecifico2 = new FragmentSpecific2();
-
-            fragmentSearchResult.setHolder(this);
-            fragmentGeneral.setHolder(this);
-            fragmentEspecifico2.setHolder(this);
-            fragmentEspecifico1.setHolder(this);
-        }
+    public static List<UserPro> getProUsers() {
+        return searcherProUser.getProUsers();
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        searcherProUser = new SearcherProUser();
         fragmentManager = getChildFragmentManager();
         iniciarFragments();
 
         listenerSearchView = new SearchView.OnQueryTextListener() {
+
+            private String prev = "";
 
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -61,15 +54,10 @@ public class HolderFirstTab extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String s) {
-
                 if (s.length() > 0) {
-
+                    currentQuery = s;
                     if (actual != null && !actual.equals(idSearchResult)) {
-
-                        Bundle bundle = new Bundle();
-
-                        fragmentSearchResult.setArguments(bundle);
-
+                        prev = actual;
                         fragmentManager
                                 .beginTransaction()
                                 .addToBackStack(actual)
@@ -80,13 +68,16 @@ public class HolderFirstTab extends Fragment {
                     } else {
                         ((FragmentSearchResults) fragmentSearchResult).filter(s);
                     }
+                } else if (!prev.equals("")) {
+                    if (!prev.equals(idSearchResult)) {
+                        fragmentManager.popBackStack();
+                        prev = "";
+                    }
                 } else {
-
-                    fragmentManager.popBackStack();
-
+                    ((FragmentSearchResults) fragmentSearchResult).filter(s);
                 }
 
-                return false;
+                return true;
             }
         };
 
@@ -98,6 +89,24 @@ public class HolderFirstTab extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_holder_first_tab, container, false);
+    }
+
+    public void setLocation(LatLng l) {
+        searcherProUser.setLocation(l);
+    }
+
+    public void iniciarFragments() {
+        if (fragmentSearchResult == null) {
+            fragmentSearchResult = new FragmentSearchResults();
+            fragmentEspecifico1 = new FragmentSpecific1();
+            fragmentGeneral = new FragmentGeneral();
+            fragmentEspecifico2 = new FragmentSpecific2();
+        }
+
+        fragmentSearchResult.setHolder(this);
+        fragmentGeneral.setHolder(this);
+        fragmentEspecifico2.setHolder(this);
+        fragmentEspecifico1.setHolder(this);
     }
 
     @Override
@@ -136,6 +145,17 @@ public class HolderFirstTab extends Fragment {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (currentQuery != null) {
+            if (actual.equals(idSearchResult)) {
+                ((FragmentSearchResults) fragmentSearchResult).filter(currentQuery);
+            }
+        }
+    }
+
     public void advance(Bundle bundle) {
         String idEspecifico1 = "esp1";
         String idEspecifico2 = "esp2";
@@ -172,6 +192,10 @@ public class HolderFirstTab extends Fragment {
                     .replace(containerId, fragmentSearchResult, idSearchResult)
                     .commit();
         }
+    }
+
+    public void setCurrentQuery(String a) {
+        this.currentQuery = a;
     }
 
     public void setActual(String actual) {

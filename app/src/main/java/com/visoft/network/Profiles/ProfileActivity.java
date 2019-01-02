@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -21,18 +22,25 @@ import com.visoft.network.Objects.UserPro;
 import com.visoft.network.R;
 import com.visoft.network.Util.Constants;
 import com.visoft.network.Util.Database;
+import com.visoft.network.funcionalidades.LoadingScreen;
 
 public class ProfileActivity extends AppCompatActivity {
+    private static LoadingScreen loadingScreen;
     private User shownUser;
     private Menu menu;
     private boolean esContacto = false;
     private DatabaseReference userContacts;
+
+    public static void hideLoadingScreen() {
+        loadingScreen.hide();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        loadingScreen = new LoadingScreen(this, (ViewGroup) findViewById(R.id.rootView));
         shownUser = (User) getIntent().getSerializableExtra("user");
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -45,6 +53,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void iniciarUI() {
+        loadingScreen.show();
         Fragment fragment;
         String tag;
         Bundle bundle = new Bundle();
@@ -146,7 +155,6 @@ public class ProfileActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.toolbar_perfil, menu);
         this.menu = menu;
         menu.findItem(R.id.edit).setVisible(false);
-        menu.findItem(R.id.convertirEnPro).setVisible(false);
         menu.findItem(R.id.signOut).setVisible(false);
         menu.findItem(R.id.eliminarCuenta).setVisible(false);
 

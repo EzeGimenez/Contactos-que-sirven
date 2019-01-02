@@ -11,13 +11,14 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.visoft.network.R;
+import com.visoft.network.TurnProFragments.TurnProActivity;
 import com.visoft.network.funcionalidades.AccountManager;
-import com.visoft.network.funcionalidades.AccountManagerFirebase;
+import com.visoft.network.funcionalidades.AccountManagerFirebaseNormal;
+import com.visoft.network.funcionalidades.HolderCurrentAccountManager;
 import com.visoft.network.funcionalidades.LoadingScreen;
 
-
-public class SignUpActivity extends AppCompatActivity implements View.OnClickListener {
-    private static final int RC_SIGNUP = 3;
+public class SignUpProActivity extends AppCompatActivity implements View.OnClickListener {
+    private static final int RC_SIGNUP = 3, RC_GOPRO = 5;
 
     private EditText etEmail, etPassword, etConfirmPassword, etUsername;
     private LoadingScreen loadingScreen;
@@ -28,22 +29,20 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        this.accountManager = AccountManagerFirebase.getInstance(new AccountManagerFirebase.ListenerRequestResult() {
+        this.accountManager = HolderCurrentAccountManager.getCurrent(new AccountManagerFirebaseNormal.ListenerRequestResult() {
             @Override
             public void onRequestResult(boolean result, int requestCode, Bundle data) {
                 loadingScreen.hide();
-                if (result) {
-                    Intent intent = new Intent();
-                    intent.putExtra("loggeo", true);
-                    setResult(RESULT_OK, intent);
-                    finish();
-                } else {
+                if (requestCode == RC_SIGNUP && result) {
+                    startProConfig();
+                } else if (!result) {
                     if (data != null) {
                         showSnackBar(data.getString("error"));
                     }
                 }
             }
-        }, this);
+        });
+
         this.loadingScreen = new LoadingScreen(this, (ViewGroup) findViewById(R.id.rootView));
 
         etUsername = findViewById(R.id.etUsername);
@@ -52,6 +51,22 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         etConfirmPassword = findViewById(R.id.edConfirmPassword);
 
         findViewById(R.id.btnSignUp).setOnClickListener(this);
+    }
+
+    private void startProConfig() {
+        Intent intent = new Intent(this, TurnProActivity.class);
+        intent.putExtra("proUser", accountManager.getCurrentUser(1));
+        intent.putExtra("isEditing", false);
+        startActivityForResult(intent, RC_GOPRO);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            setResult(RESULT_OK, null);
+            finish();
+        }
     }
 
     @Override
@@ -79,7 +94,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
     private void showSnackBar(String msg) {
         Snackbar.make(findViewById(R.id.rootView),
-                msg, Snackbar.LENGTH_SHORT).show();
+                msg, Snackbar.LENGTH_LONG).show();
     }
 
     @Override
@@ -91,5 +106,4 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         }
         return true;
     }
-
 }

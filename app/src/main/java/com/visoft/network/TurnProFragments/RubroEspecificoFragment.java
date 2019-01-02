@@ -18,10 +18,6 @@ import com.visoft.network.R;
 
 public class RubroEspecificoFragment extends Fragment {
 
-    //Componentes gráficas
-    private ListView listView;
-    private String rubroGeneral;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -36,14 +32,15 @@ public class RubroEspecificoFragment extends Fragment {
         TextView tvInfo = getActivity().findViewById(R.id.tvInfo);
         tvInfo.setText(R.string.selecciona_especificacion);
 
-        rubroGeneral = getArguments().getString("RubroGeneral", null);
+        String rubroGeneral = getArguments().getString("RubroGeneral", null);
 
         int id = getResources().getIdentifier(rubroGeneral + "ID",
                 "array",
                 getActivity().getPackageName());
         final String[] rubroEspecificosID = getResources().getStringArray(id);
 
-        listView = view.findViewById(R.id.listView);
+        //Componentes gráficas
+        ListView listView = view.findViewById(R.id.listView);
         listView.setAdapter(new RubrosGeneralesAdapter(getContext(), rubroEspecificosID));
 
         //Guardar en un arraystring los ids y en otro los nombres posta

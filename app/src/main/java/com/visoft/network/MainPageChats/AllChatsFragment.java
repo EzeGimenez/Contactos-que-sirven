@@ -15,7 +15,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,39 +24,53 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.visoft.network.Objects.ChatOverview;
 import com.visoft.network.Objects.User;
+import com.visoft.network.Objects.UserNormal;
+import com.visoft.network.Objects.UserPro;
 import com.visoft.network.R;
 import com.visoft.network.Util.Constants;
 import com.visoft.network.Util.Database;
 import com.visoft.network.Util.GlideApp;
+import com.visoft.network.funcionalidades.AccountManager;
 import com.visoft.network.funcionalidades.GsonerUser;
+import com.visoft.network.funcionalidades.HolderCurrentAccountManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AllChatsFragment extends Fragment {
-    private FirebaseAuth mAuth;
     private DatabaseReference database;
     private List<String> chatUIDS;
     private List<ChatOverview> chatOverviews;
     private HashMap<String, User> mapUIDUser;
+    private AccountManager accountManager;
+    private User current;
 
     //Componentes gráficas
     private ListView listView;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        mAuth = FirebaseAuth.getInstance();
         database = Database.getDatabase().getReference();
-
-        populateChats();
+        accountManager = HolderCurrentAccountManager.getCurrent(new AccountManager.ListenerRequestResult() {
+            @Override
+            public void onRequestResult(boolean result, int requestCode, Bundle data) {
+                if (current == null && result) {
+                    current = (User) data.get("user");
+                    populateChats();
+                }
+            }
+        });
+        current = accountManager.getCurrentUser(1);
+        if (current != null) {
+            populateChats();
+        }
 
         return inflater.inflate(R.layout.fragment_all_chats, container, false);
     }
@@ -69,9 +82,9 @@ public class AllChatsFragment extends Fragment {
     }
 
     private void populateChats() {
-        DatabaseReference userChatRef = database
+        final DatabaseReference userChatRef = database
                 .child(Constants.FIREBASE_CHATS_CONTAINER_NAME)
-                .child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid());
+                .child(current.getUid());
 
         Query q = userChatRef;
         q.keepSynced(true);
@@ -101,14 +114,35 @@ public class AllChatsFragment extends Fragment {
     }
 
     private void getUsers() {
-        DatabaseReference userRef = database.child(Constants.FIREBASE_USERS_CONTAINER_NAME);
+        DatabaseReference userNormalRef = database.child(Constants.FIREBASE_USERS_NORMAL_CONTAINER_NAME);
         for (String uid : chatUIDS) {
-            userRef.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+            userNormalRef.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    User user = GsonerUser.getGson().fromJson(dataSnapshot.getValue(String.class), User.class);
-                    mapUIDUser.put(user.getUid(), user);
-                    setAdapter();
+                    UserNormal user = (UserNormal) GsonerUser.getGson().fromJson(dataSnapshot.getValue(String.class), User.class);
+                    if (user != null) {
+                        mapUIDUser.put(user.getUid(), user);
+                        setAdapter();
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+        DatabaseReference userProRef = database.child(Constants.FIREBASE_USERS_PRO_CONTAINER_NAME);
+        for (String uid : chatUIDS) {
+            userProRef.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    UserPro user = (UserPro) GsonerUser.getGson().fromJson(dataSnapshot.getValue(String.class), User.class);
+                    if (user != null) {
+                        mapUIDUser.put(user.getUid(), user);
+                        setAdapter();
+                    }
+
                 }
 
                 @Override
@@ -134,7 +168,7 @@ public class AllChatsFragment extends Fragment {
                         ChatOverview chatOverview = chatOverviews.get(position);
 
                         User user;
-                        if (mAuth.getCurrentUser().getUid().equals(chatOverview.getAuthor())) {
+                        if (accountManager.getCurrentUser(1).getUid().equals(chatOverview.getAuthor())) {
                             user = mapUIDUser.get(chatOverview.getReceiver());
                         } else {
                             user = mapUIDUser.get(chatOverview.getAuthor());
@@ -154,7 +188,7 @@ public class AllChatsFragment extends Fragment {
         private List<ChatOverview> chats;
         private LayoutInflater inflater;
 
-        public ListViewChatsAdapter(@NonNull Context context, int resource, @NonNull List<ChatOverview> chats) {
+        ListViewChatsAdapter(@NonNull Context context, int resource, @NonNull List<ChatOverview> chats) {
             super(context, resource, chats);
             inflater = LayoutInflater.from(context);
             this.chats = chats;
@@ -180,7 +214,7 @@ public class AllChatsFragment extends Fragment {
 
             ChatOverview chatOverview = chats.get(position);
             User user;
-            if (mAuth.getCurrentUser().getUid().equals(chatOverview.getAuthor())) {
+            if (accountManager.getCurrentUser(1).getUid().equals(chatOverview.getAuthor())) {
                 user = mapUIDUser.get(chatOverview.getReceiver());
             } else {
                 user = mapUIDUser.get(chatOverview.getAuthor());
@@ -195,7 +229,7 @@ public class AllChatsFragment extends Fragment {
 
                 if (user.getHasPic()) {
                     StorageReference storage = FirebaseStorage.getInstance().getReference();
-                    StorageReference userRef = storage.child(Constants.FIREBASE_USERS_CONTAINER_NAME + "/" + user.getUid() + user.getImgVersion() + ".jpg");
+                    StorageReference userRef = storage.child(Constants.FIREBASE_USERS_PRO_CONTAINER_NAME + "/" + user.getUid() + user.getImgVersion() + ".jpg");
                     GlideApp.with(getContext())
                             .load(userRef)
                             .into(holder.ivPic);

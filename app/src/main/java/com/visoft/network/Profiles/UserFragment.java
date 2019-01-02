@@ -38,6 +38,12 @@ public class UserFragment extends Fragment {
         tvUsername = view.findViewById(R.id.tvUsername);
         ratingBar = view.findViewById(R.id.ratingBar);
 
+        if (getActivity() instanceof ProfileActivityOwnUser) {
+            ProfileActivityOwnUser.hideLoadingScreen();
+        } else {
+            ProfileActivity.hideLoadingScreen();
+        }
+
         iniciarUI();
     }
 

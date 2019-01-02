@@ -49,7 +49,7 @@ public class FragmentSpecific2 extends FragmentFirstTab {
 
                 Bundle bundle = new Bundle();
                 bundle.putString("rubro", list.get(position).getId());
-
+                t.setCurrentQuery(list.get(position).getId());
                 t.advance(bundle);
                 return true;
             }

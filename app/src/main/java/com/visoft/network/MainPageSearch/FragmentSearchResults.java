@@ -11,15 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.iarcuschin.simpleratingbar.SimpleRatingBar;
 import com.visoft.network.Objects.UserPro;
 import com.visoft.network.Profiles.ProfileActivity;
 import com.visoft.network.R;
-import com.visoft.network.funcionalidades.AccountManager;
-import com.visoft.network.funcionalidades.AccountManagerFirebase;
-import com.visoft.network.funcionalidades.SearcherProUser;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -30,11 +27,7 @@ import eu.davidea.viewholders.FlexibleViewHolder;
 public class FragmentSearchResults extends FragmentFirstTab {
 
     private FlexibleAdapter adapter;
-    private SearcherProUser searcherProUser;
-
-    public void setLocation(LatLng l) {
-        searcherProUser = new SearcherProUser(l);
-    }
+    private List<UserPro> list;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -42,42 +35,28 @@ public class FragmentSearchResults extends FragmentFirstTab {
         return inflater.inflate(R.layout.fragment_search_result, container, false);
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        if (searcherProUser == null) {
-            setLocation(null);
-        }
-        final List<UserPro> list = searcherProUser.getProUsers();
-
-        AccountManager accountManager = AccountManagerFirebase.getInstance(new AccountManagerFirebase.ListenerRequestResult() {
-            @Override
-            public void onRequestResult(boolean result, int requestCode, Bundle data) {
-
-            }
-        }, null);
-
-        Iterator<UserPro> it = list.iterator();
-        while (it.hasNext()) {
-            UserPro p = it.next();
-
+    private void populate() {
+        for (UserPro p : list) {
             int id = getResources().getIdentifier(p.getRubroEspecificoEspecifico(), "string", getContext().getPackageName());
             p.setRubroNombre(getString(id));
-
-            if (p.equals(accountManager.getCurrentUser(1))) {
-                it.remove();
-            }
         }
 
         t.setActual(getTag());
 
-        adapter = new FlexibleAdapter<>(list);
-        RecyclerView recyclerView = view.findViewById(R.id.recyclerViewSearchResult);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-
         if (getArguments() != null) {
-            filter(getArguments().getString("rubro"));
+            String rubro = getArguments().getString("rubro");
+            Iterator<UserPro> it = list.iterator();
+            while (it.hasNext()) {
+                UserPro p = it.next();
+                if (!p.filter(rubro)) {
+                    it.remove();
+                }
+            }
         }
+
+        adapter = new FlexibleAdapter<>(list);
+        RecyclerView recyclerView = getView().findViewById(R.id.recyclerViewSearchResult);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 
         recyclerView.setAdapter(adapter);
 
@@ -93,6 +72,13 @@ public class FragmentSearchResults extends FragmentFirstTab {
         });
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        list = new ArrayList<>(HolderFirstTab.getProUsers());
+
+        populate();
+    }
 
     public void filter(String a) {
         adapter.setFilter(a);
@@ -114,5 +100,13 @@ public class FragmentSearchResults extends FragmentFirstTab {
             tvNumReviews = view.findViewById(R.id.tvNumReviews);
             ratingBar = view.findViewById(R.id.ratingBar);
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        list = new ArrayList<>(HolderFirstTab.getProUsers());
+        setArguments(null);
+        populate();
     }
 }

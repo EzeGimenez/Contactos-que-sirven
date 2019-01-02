@@ -27,12 +27,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.visoft.network.Objects.ChatOverview;
 import com.visoft.network.Objects.User;
 import com.visoft.network.Objects.UserNormal;
-import com.visoft.network.Objects.UserPro;
 import com.visoft.network.R;
 import com.visoft.network.Util.Constants;
 import com.visoft.network.Util.Database;
@@ -42,7 +39,7 @@ import com.visoft.network.exceptions.InvalidUsernameException;
 
 import java.util.ArrayList;
 
-public class AccountManagerFirebase implements AccountManager {
+public class AccountManagerFirebaseNormal extends AccountManager {
 
     private static AccountManager instance;
     private static ListenerRequestResult listener;
@@ -50,12 +47,12 @@ public class AccountManagerFirebase implements AccountManager {
 
     private FirebaseAuth mAuth;
     private DatabaseReference usersRef;
-    private User user;
+    private UserNormal user;
     private FirebaseUser fbUser;
 
     private GoogleSignInClient googleClient;
 
-    private AccountManagerFirebase() {
+    private AccountManagerFirebaseNormal() {
         GoogleSignInOptions op = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken("421055195921-q7vcj31bcr0lmhe9s4p9176r44ndma8m.apps.googleusercontent.com")
                 .requestEmail()
@@ -64,7 +61,7 @@ public class AccountManagerFirebase implements AccountManager {
 
         usersRef = Database.getDatabase()
                 .getReference()
-                .child(Constants.FIREBASE_USERS_CONTAINER_NAME);
+                .child(Constants.FIREBASE_USERS_NORMAL_CONTAINER_NAME);
 
         googleClient = GoogleSignIn.getClient(act, op);
         mAuth = FirebaseAuth.getInstance();
@@ -75,7 +72,7 @@ public class AccountManagerFirebase implements AccountManager {
         act = a;
 
         if (instance == null) {
-            instance = new AccountManagerFirebase();
+            instance = new AccountManagerFirebaseNormal();
         }
         return instance;
     }
@@ -122,14 +119,18 @@ public class AccountManagerFirebase implements AccountManager {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     String json = dataSnapshot.getValue(String.class);
-                    user = GsonerUser.getGson().fromJson(json, User.class);
+                    user = (UserNormal) GsonerUser.getGson().fromJson(json, User.class);
 
-                    user.setInstanceID(FirebaseInstanceId.getInstance().getToken());
-                    dataSnapshot.getRef().setValue(GsonerUser.getGson().toJson(user, User.class));
+                    if (user != null) {
+                        user.setInstanceID(FirebaseInstanceId.getInstance().getToken());
+                        dataSnapshot.getRef().setValue(GsonerUser.getGson().toJson(user, User.class));
 
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("user", user);
-                    notifyAccountActivity(true, requestCode, bundle);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("user", user);
+                        notifyAccountActivity(true, requestCode, bundle);
+                    } else {
+                        registerUserInDatabase(createUser(), -1);
+                    }
                 }
 
                 @Override
@@ -138,7 +139,6 @@ public class AccountManagerFirebase implements AccountManager {
                     notifyAccountActivity(false, requestCode, null);
                 }
             });
-
         } else {
 
             Bundle bundle = new Bundle();
@@ -193,7 +193,21 @@ public class AccountManagerFirebase implements AccountManager {
                             if (task.getResult().getAdditionalUserInfo().isNewUser()) {
                                 registerUserInDatabase(createUser(), requestCode);
                             } else {
-                                getUserFromDatabase(requestCode);
+                                usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        if (dataSnapshot.hasChild("pro" + mAuth.getCurrentUser().getUid())) {
+                                            getUserFromDatabase(requestCode);
+                                        } else {
+                                            registerUserInDatabase(createUser(), requestCode);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
                             }
                         } else {
                             Bundle bundle = new Bundle();
@@ -228,32 +242,10 @@ public class AccountManagerFirebase implements AccountManager {
         final DatabaseReference rootRef = Database.getDatabase().getReference();
 
         //Removing from users;
-        rootRef.child(Constants.FIREBASE_USERS_CONTAINER_NAME).child(user.getUid()).removeValue();
+        rootRef.child(Constants.FIREBASE_USERS_NORMAL_CONTAINER_NAME).child(user.getUid()).removeValue();
 
         //Removing contacts
         rootRef.child(Constants.FIREBASE_CONTACTS_CONTAINER_NAME).child(user.getUid()).removeValue();
-
-        //proUser removing
-        if (user.getIsPro()) {
-            //Removing from rubros
-            rootRef
-                    .child(Constants.FIREBASE_RUBRO_CONTAINER_NAME)
-                    .child(((UserPro) user).getRubroEspecifico())
-                    .child(user.getUid())
-                    .removeValue();
-
-            //removing reviews
-            rootRef
-                    .child(Constants.FIREBASE_REVIEWS_CONTAINER_NAME)
-                    .child(user.getUid())
-                    .removeValue();
-
-            //removing user Quality
-            rootRef
-                    .child(Constants.FIREBASE_QUALITY_CONTAINER_NAME)
-                    .child(user.getUid())
-                    .removeValue();
-        }
 
         //Remove chats
         final ArrayList<String> uidsChat = new ArrayList<>();
@@ -297,16 +289,16 @@ public class AccountManagerFirebase implements AccountManager {
 
                     }
                 });
+    }
 
-        //Removing image
-        StorageReference storage = FirebaseStorage.getInstance().getReference();
-        StorageReference userRef;
-        userRef = storage.child(Constants.FIREBASE_USERS_CONTAINER_NAME + "/" + user.getUid() + user.getImgVersion() + ".jpg");
-        userRef.delete();
+    @Override
+    public void setListener(ListenerRequestResult l) {
+        listener = l;
     }
 
     private void notifyAccountActivity(boolean result, int requestCode, Bundle data) {
-        listener.onRequestResult(result, requestCode, data);
+        if (listener != null)
+            listener.onRequestResult(result, requestCode, data);
     }
 
     //EMAIL
@@ -335,9 +327,10 @@ public class AccountManagerFirebase implements AccountManager {
 
     @Override
     public void logOut(int requestCode) {
+        user.setInstanceID("");
+
         usersRef.child(user.getUid())
-                .child("instanceID")
-                .setValue("");
+                .setValue(GsonerUser.getGson().toJson(user, User.class));
 
         user = null;
         fbUser = null;
@@ -389,7 +382,7 @@ public class AccountManagerFirebase implements AccountManager {
         } catch (FirebaseAuthInvalidCredentialsException i) {
             msg = act.getString(R.string.credenciales_erroneas);
         } catch (FirebaseAuthUserCollisionException i) {
-            msg = act.getString(R.string.usuario_existente);
+            msg = act.getString(R.string.usuario_existente_normal);
         } catch (FirebaseNetworkException i) {
             msg = act.getString(R.string.error_coneccion);
         } catch (Exception i) {
@@ -418,9 +411,5 @@ public class AccountManagerFirebase implements AccountManager {
             throw new InvalidUsernameException(act.getString(R.string.wrong_username));
         }
 
-    }
-
-    public abstract static class ListenerRequestResult {
-        public abstract void onRequestResult(boolean result, int requestCode, Bundle data);
     }
 }

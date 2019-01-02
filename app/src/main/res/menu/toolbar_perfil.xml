@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/convertirEnPro"
-        android:icon="@drawable/trabajo"
-        android:title="@string/transformar_en_perfil_de_trabajo"
-        app:showAsAction="never" />
+
     <item
         android:id="@+id/edit"
         android:icon="@drawable/edit_24dp"

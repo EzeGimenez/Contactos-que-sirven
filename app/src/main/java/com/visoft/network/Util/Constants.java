@@ -9,7 +9,7 @@ public abstract class Constants {
      * Fragment Tags
      */
     public static final String LOGIN_FRAGMENT_TAG = "SignInFragment";
-    public static final String SIGNUP_FRAGMENT_TAG = "SignUpActivity";
+    public static final String SIGNUP_FRAGMENT_TAG = "SignUpNormalActivity";
     public static final String MAIN_PAGE_FRAGMENT_TAG = "MainPageFragment";
     public static final String PRO_USER_FRAGMENT_TAG = "UserProFragment";
     public static final String DEFAULT_USER_FRAGMENT_TAG = "UserFragment";
@@ -32,7 +32,8 @@ public abstract class Constants {
      * Firebase database
      */
     public static final String FIREBASE_RUBRO_CONTAINER_NAME = "rubros_generales";
-    public static final String FIREBASE_USERS_CONTAINER_NAME = "users";
+    public static final String FIREBASE_USERS_NORMAL_CONTAINER_NAME = "usersNormal";
+    public static final String FIREBASE_USERS_PRO_CONTAINER_NAME = "usersPro";
     public static final String FIREBASE_QUALITY_CONTAINER_NAME = "userQuality";
     public static final String FIREBASE_REVIEWS_CONTAINER_NAME = "reviews";
     public static final String FIREBASE_CONTACTS_CONTAINER_NAME = "contacts";

@@ -30,6 +30,7 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".SignIn.SignUpProActivity" />
         <activity
             android:name=".SignIn.SignInActivity"
             android:windowSoftInputMode="adjustResize" />
@@ -41,7 +42,7 @@
         <activity android:name=".Profiles.ProfileActivity" />
         <activity android:name=".Profiles.UserReviewActivity" />
         <activity
-            android:name=".SignIn.SignUpActivity"
+            android:name=".SignIn.SignUpNormalActivity"
             android:windowSoftInputMode="adjustResize" />
 
         <meta-data

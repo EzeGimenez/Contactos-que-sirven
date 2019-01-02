@@ -12,7 +12,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
-import com.visoft.network.MainPageSearch.VisitorUserGetProUser;
 import com.visoft.network.Objects.User;
 import com.visoft.network.Objects.UserPro;
 import com.visoft.network.Util.Constants;
@@ -30,25 +29,21 @@ public class SearcherProUser {
     private Gson gson;
     private LatLng location;
 
-    public SearcherProUser(LatLng location) {
-        this.location = location;
+    public SearcherProUser() {
         gson = GsonerUser.getGson();
 
         ref = Database.getDatabase()
                 .getReference()
-                .child(Constants.FIREBASE_USERS_CONTAINER_NAME);
+                .child(Constants.FIREBASE_USERS_PRO_CONTAINER_NAME);
 
         getFromDatabase();
     }
 
     private void getFromDatabase() {
-
         String mock = "data refresh";
-
         Query query = ref;
 
         query.keepSynced(true);
-
         ref.child("mock").setValue(mock).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -57,17 +52,14 @@ public class SearcherProUser {
                 ref.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        VisitorUserGetProUser visitor = new VisitorUserGetProUser();
+                        proUsers = new ArrayList<>();
+
                         for (DataSnapshot d : dataSnapshot.getChildren()) {
                             if (d != null) {
-                                User u = gson.fromJson(d.getValue(String.class), User.class);
-
-                                u.acept(visitor);
+                                UserPro u = (UserPro) gson.fromJson(d.getValue(String.class), User.class);
+                                proUsers.add(u);
                             }
                         }
-
-                        proUsers = visitor.getList();
-                        Collections.sort(proUsers, new ProUserComparator());
                     }
 
                     @Override
@@ -79,10 +71,16 @@ public class SearcherProUser {
         });
     }
 
+    public void setLocation(LatLng l) {
+        location = l;
+    }
+
     public List<UserPro> getProUsers() {
         if (proUsers == null) {
             proUsers = new ArrayList<>();
         }
+        proUsers.remove(HolderCurrentAccountManager.getCurrent(null).getCurrentUser(1));
+        Collections.sort(proUsers, new ProUserComparator());
         return proUsers;
     }
 

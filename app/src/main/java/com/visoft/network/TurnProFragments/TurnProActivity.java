@@ -4,51 +4,46 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.visoft.network.Objects.QualityInfo;
 import com.visoft.network.Objects.User;
-import com.visoft.network.Objects.UserNormal;
 import com.visoft.network.Objects.UserPro;
 import com.visoft.network.Profiles.ProfileActivityOwnUser;
 import com.visoft.network.R;
 import com.visoft.network.Util.Constants;
 import com.visoft.network.Util.Database;
-import com.visoft.network.Util.DatabaseTimer;
-import com.visoft.network.funcionalidades.AccountManagerFirebase;
+import com.visoft.network.funcionalidades.AccountManager;
 import com.visoft.network.funcionalidades.GsonerUser;
+import com.visoft.network.funcionalidades.HolderCurrentAccountManager;
+import com.visoft.network.funcionalidades.LoadingScreen;
 
 import java.io.ByteArrayOutputStream;
 
 public class TurnProActivity extends AppCompatActivity {
     private FragmentManager fragmentManager;
     private UserPro proUser;
-    private UserNormal user;
     private DatabaseReference database;
-    private FirebaseAuth mAuth;
-    private DatabaseTimer timer;
     private Bitmap bitmap;
-    private boolean isEditing = true;
+    private boolean isEditing;
 
     //Componentes gráficas
     private Button btnPrev, btnNext;
-    private ConstraintLayout containerProgressBar;
+    private LoadingScreen loadingScreen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,19 +55,12 @@ public class TurnProActivity extends AppCompatActivity {
         //Inicializacion variables
         btnPrev = findViewById(R.id.btnPrev);
         btnNext = findViewById(R.id.btnNext);
-        TextView tvInfo = findViewById(R.id.tvInfo);
-        containerProgressBar = findViewById(R.id.progressBarContainer);
+        loadingScreen = new LoadingScreen(this, (ViewGroup) findViewById(R.id.rootView));
 
         proUser = (UserPro) getIntent().getSerializableExtra("proUser");
-
-        if (proUser == null) {
-            proUser = new UserPro();
-            isEditing = false;
-            user = (UserNormal) getIntent().getSerializableExtra("user");
-        }
+        isEditing = getIntent().getBooleanExtra("isEditing", true);
 
         database = Database.getDatabase().getReference();
-        mAuth = FirebaseAuth.getInstance();
 
         iniciarUI();
     }
@@ -402,21 +390,8 @@ public class TurnProActivity extends AppCompatActivity {
         }
     }
 
-
     public void saveProUser() {
-        showLoadingScreen();
-        timer = new DatabaseTimer(16, this, false);
-
-        if (!isEditing) {
-            proUser.setImgVersion(0);
-            proUser.setPro(true);
-            proUser.setUsername(user.getUsername());
-            proUser.setRating(user.getRating());
-            proUser.setEmail(user.getEmail());
-            proUser.setUid(user.getUid());
-            proUser.setInstanceID(user.getInstanceID());
-            proUser.setNumberReviews(user.getNumberReviews());
-        }
+        loadingScreen.show();
 
         saveInPic();
     }
@@ -426,11 +401,11 @@ public class TurnProActivity extends AppCompatActivity {
 
         StorageReference userRef;
         if (isEditing && bitmap != null && proUser.getHasPic()) {
-            storage.child(Constants.FIREBASE_USERS_CONTAINER_NAME + "/" + proUser.getUid() + proUser.getImgVersion() + ".jpg").delete();
+            storage.child(Constants.FIREBASE_USERS_PRO_CONTAINER_NAME + "/" + proUser.getUid() + proUser.getImgVersion() + ".jpg").delete();
             proUser.setImgVersion(proUser.getImgVersion() + 1);
         }
 
-        userRef = storage.child(Constants.FIREBASE_USERS_CONTAINER_NAME + "/" + proUser.getUid() + proUser.getImgVersion() + ".jpg");
+        userRef = storage.child(Constants.FIREBASE_USERS_PRO_CONTAINER_NAME + "/" + proUser.getUid() + proUser.getImgVersion() + ".jpg");
 
         if (bitmap != null) {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -462,33 +437,28 @@ public class TurnProActivity extends AppCompatActivity {
 
     private void saveInUser() {
         String json = GsonerUser.getGson().toJson(proUser, User.class);
-        database.child(Constants.FIREBASE_USERS_CONTAINER_NAME)
-                .child(mAuth.getCurrentUser().getUid()).setValue(json).addOnCompleteListener(new OnCompleteListener<Void>() {
+        database.child(Constants.FIREBASE_USERS_PRO_CONTAINER_NAME)
+                .child(proUser.getUid()).setValue(json).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 saveInRubro();
             }
         });
 
-        AccountManagerFirebase.getInstance(new AccountManagerFirebase.ListenerRequestResult() {
-            @Override
-            public void onRequestResult(boolean result, int requestCode, Bundle data) {
-
-            }
-        }, null).invalidate();
+        AccountManager accountManager = HolderCurrentAccountManager.getCurrent(null);
+        accountManager.invalidate();
     }
 
     private void saveInRubro() {
         database.child(Constants.FIREBASE_RUBRO_CONTAINER_NAME)
                 .child(proUser.getRubroEspecificoEspecifico())
-                .child(mAuth.getCurrentUser().getUid())
+                .child(proUser.getUid())
                 .setValue(true).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                Intent intent = new Intent(getApplication(), ProfileActivityOwnUser.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-                timer.cancel();
+
+                goBack();
+                loadingScreen.hide();
                 if (!isEditing) {
                     saveInQuality();
                 } else {
@@ -501,7 +471,7 @@ public class TurnProActivity extends AppCompatActivity {
     private void saveInQuality() {
         QualityInfo qualityInfo = new QualityInfo();
         database.child(Constants.FIREBASE_QUALITY_CONTAINER_NAME)
-                .child(mAuth.getCurrentUser().getUid())
+                .child(proUser.getUid())
                 .setValue(qualityInfo).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -511,25 +481,22 @@ public class TurnProActivity extends AppCompatActivity {
     }
 
     private void goBack() {
-        Intent intent = new Intent(getApplication(), ProfileActivityOwnUser.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-        hideLoadingScreen();
-        finish();
+        if (!isEditing) {
+            Intent intent = new Intent();
+            intent.putExtra("creo", true);
+            setResult(RESULT_OK, intent);
+            finish();
+        } else {
+            Intent intent = new Intent(getApplication(), ProfileActivityOwnUser.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            finish();
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (timer != null)
-            timer.cancel();
-    }
-
-    private void showLoadingScreen() {
-        containerProgressBar.setVisibility(View.VISIBLE);
-    }
-
-    private void hideLoadingScreen() {
-        containerProgressBar.setVisibility(View.GONE);
+        loadingScreen.hide();
     }
 }
