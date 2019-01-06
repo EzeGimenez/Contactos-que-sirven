@@ -12,10 +12,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
-import com.visoft.network.Objects.User;
-import com.visoft.network.Objects.UserPro;
-import com.visoft.network.Util.Constants;
-import com.visoft.network.Util.Database;
+import com.visoft.network.objects.User;
+import com.visoft.network.objects.UserPro;
+import com.visoft.network.util.Constants;
+import com.visoft.network.util.Database;
 
 import java.util.ArrayList;
 import java.util.Collections;

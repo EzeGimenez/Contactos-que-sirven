@@ -109,7 +109,7 @@
     <string name="mecanico">Mecánico</string>
     <string name="gomero">Gomero</string>
     <string name="cerrajeria">Cerrajería</string>
-    <string name="credenciales_erroneas">Credenciales erróneas</string>
+    <string name="contrasena_erroneas">Contraseña Errónes</string>
     <string name="sesion_iniciada">Sesión iniciada</string>
     <string name="error_al_iniciar_sesion">Hubo un error mientras se intentó iniciar sesión. Reinténtelo</string>
     <string name="usuario_creado">Usuario creado satisfactoriamente</string>
@@ -128,12 +128,12 @@
     <string name="de">De</string>
     <string name="contrase_a">Contraseña</string>
     <string name="iniciar_sesi_n">Iniciar Sesión</string>
-    <string name="crear_usuario">Crear Usuario</string>
+    <string name="crear_usuario">Crea un usuario!</string>
     <string name="email">Email</string>
     <string name="confirmar_contrase_a">Confirmar Contraseña</string>
     <string name="usuario">Usuario</string>
     <string name="complete_info_contacto">Complete la información de contacto</string>
-    <string name="escriba_descripcion">Y para finalizar, escriba una pequeña descripción sobre usted</string>
+    <string name="escriba_descripcion">Último paso! Descríbete brevemente</string>
     <string name="selecciona_especificacion">Selecciona una especificación</string>
     <string name="selecciona_area_trabajo">Selecciona un área de trabajo</string>
     <string name="selecciona_rango_trabajo">Selecciona el rango de trabajo</string>
@@ -158,11 +158,11 @@
     <string name="descripcion_personal">Descripción personal</string>
     <string name="contact_info">Información de Contacto</string>
     <string name="selecciona_foto">Añade una foto</string>
-    <string name="calificar">Hacer una reseña</string>
+    <string name="calificar">Calificar profesional</string>
     <string name="eliminar_cuenta">Eliminar cuenta</string>
     <string name="seguro_eliminar">Estás seguro de querer eliminar la cuenta?</string>
-    <string name="añadirContacto">Añadir a Contactos</string>
-    <string name="removerContacto">Remover de Agenda</string>
+    <string name="añadirContacto">Añadir a favoritos</string>
+    <string name="removerContacto">Remover de favoritos</string>
     <string name="social_apps_noañadidas">Redes sociales a añadir</string>
     <string name="social_apps_añadidas">Redes sociales ya añadidas</string>
     <string name="introduzcaUsuarioInstagram">Introduzca su nombre de usuario de Instagram</string>
@@ -179,10 +179,10 @@
 
     <string name="chats">Chats</string>
     <string name="buscar">buscar</string>
-    <string name="contactos">Contactos</string>
+    <string name="contactos">Favoritos</string>
 
-    <string name="email_erroneo">Email erroneo</string>
-    <string name="worng_password">password erroneo</string>
+    <string name="email_erroneo">Email inválido</string>
+    <string name="wrong_password">Contraseña inválida</string>
     <string name="wrong_username">Usuario ya registrado</string>
     <string name="error_sign_up">No se pudo crear usuario</string>
     <string name="error_iniciar_sesion">Error al iniciar sesion</string>
@@ -190,9 +190,12 @@
     <string name="passwords_dont_match">No coinciden contraseñas</string>
     <string name="usuario_existente_pro">Su usuario ya está registrado como Cliente, por favor utilice las mismas credenciales para iniciar sesión como profesional</string>
     <string name="error_coneccion">Parece que no tiene internet</string>
-    <string name="iniciar_sesion_como_cliente">Iniciar Sesion como Cliente</string>
-    <string name="iniciar_sesion_como_profesional">Iniciar Sesion como Profesional</string>
+    <string name="cliente">Cliente</string>
+    <string name="profesional">Profesional</string>
     <string name="no_tienes_un_usuario">No tienes un usuario?</string>
-    <string name="crear_usuario_profesional">Crear usuario profesional</string>
+    <string name="crear_usuario_profesional">Crea un usuario profesional!</string>
     <string name="usuario_existente_normal">Su usuario ya está registrado como Profesional, por favor utilice las mismas credenciales para iniciar sesión como cliente</string>
+    <string name="username_length_wrong">El nombre de usuario debe tener al menos 4 caracteres</string>
+    <string name="password_length_wrong">La contraseña debe contener al menos 6 caracteres</string>
+    <string name="todavia_no_tienes_chats">Todavía no tienes chats. No te desesperes! Nuevos mensajes llegarán muy pronto</string>
 </resources>

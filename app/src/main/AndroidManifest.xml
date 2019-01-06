@@ -21,7 +21,7 @@
         tools:ignore="GoogleAppIndexingWarning">
 
         <activity
-            android:name=".MainActivity"
+            android:name=".MainActivityNormal"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,28 +29,28 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".SignIn.SignUpProActivity" />
+        <activity android:name=".sign_in.SignUpProActivity" />
         <activity
-            android:name=".SignIn.SignInActivity"
+            android:name=".sign_in.SignInActivity"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".Profiles.ProfileActivityOwnUser" />
-        <activity android:name=".TurnProFragments.TurnProActivity" />
+        <activity android:name=".profiles.ProfileActivityOwnUser" />
+        <activity android:name=".turn_pro.TurnProActivity" />
         <activity
-            android:name=".MainPageChats.SpecificChatActivity"
+            android:name=".tab_chats.SpecificChatActivity"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".Profiles.ProfileActivity" />
-        <activity android:name=".Profiles.UserReviewActivity" />
+        <activity android:name=".profiles.ProfileActivity" />
+        <activity android:name=".profiles.UserReviewActivity" />
         <activity
-            android:name=".SignIn.SignUpNormalActivity"
+            android:name=".sign_in.SignUpNormalActivity"
             android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".MainActivityPro" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
         <service
-            android:name=".MainPageChats.MessagingService"
+            android:name=".tab_chats.MessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

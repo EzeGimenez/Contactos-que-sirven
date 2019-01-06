@@ -11,8 +11,7 @@
         android:id="@+id/ContainerScreen"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingBottom="100dp">
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/ContainerScreen1"
@@ -209,6 +208,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="100dp"
                 android:gravity="center">
 
                 <Button
@@ -231,5 +231,37 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/personalControls"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="bottom"
+            android:background="@drawable/top_inner_shadow">
+
+            <TextView
+                android:id="@+id/eliminarCuenta"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawableStart="@drawable/ic_close_black_24dp"
+                android:gravity="center"
+                android:paddingStart="16dp"
+                android:text="@string/eliminar_cuenta"
+                android:textColor="@android:color/holo_red_light"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/cerrarSesion"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:paddingStart="16dp"
+                android:text="@string/cerrar_sesi_n"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
     </LinearLayout>
+
 </ScrollView>

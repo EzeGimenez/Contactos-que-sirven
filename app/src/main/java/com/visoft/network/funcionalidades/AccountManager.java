@@ -3,11 +3,11 @@ package com.visoft.network.funcionalidades;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.visoft.network.Objects.User;
 import com.visoft.network.exceptions.InvalidEmailException;
 import com.visoft.network.exceptions.InvalidPasswordException;
 import com.visoft.network.exceptions.InvalidUsernameException;
 import com.visoft.network.exceptions.LogInException;
+import com.visoft.network.objects.User;
 
 /**
  * Administra la cuenta del cliente

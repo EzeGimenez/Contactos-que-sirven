@@ -10,7 +10,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
-import com.visoft.network.Objects.User;
+import com.visoft.network.objects.User;
 
 import java.lang.reflect.Type;
 

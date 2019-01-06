@@ -27,15 +27,15 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.visoft.network.Objects.ChatOverview;
-import com.visoft.network.Objects.User;
-import com.visoft.network.Objects.UserNormal;
 import com.visoft.network.R;
-import com.visoft.network.Util.Constants;
-import com.visoft.network.Util.Database;
 import com.visoft.network.exceptions.InvalidEmailException;
 import com.visoft.network.exceptions.InvalidPasswordException;
 import com.visoft.network.exceptions.InvalidUsernameException;
+import com.visoft.network.objects.ChatOverview;
+import com.visoft.network.objects.User;
+import com.visoft.network.objects.UserNormal;
+import com.visoft.network.util.Constants;
+import com.visoft.network.util.Database;
 
 import java.util.ArrayList;
 
@@ -124,7 +124,8 @@ public class AccountManagerFirebaseNormal extends AccountManager {
                     if (user != null) {
                         user.setInstanceID(FirebaseInstanceId.getInstance().getToken());
                         dataSnapshot.getRef().setValue(GsonerUser.getGson().toJson(user, User.class));
-
+                        usersRef.child(user.getUid())
+                                .setValue(GsonerUser.getGson().toJson(user, User.class));
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("user", user);
                         notifyAccountActivity(true, requestCode, bundle);
@@ -281,6 +282,11 @@ public class AccountManagerFirebaseNormal extends AccountManager {
                                     .removeValue();
                         }
 
+
+                        user = null;
+                        fbUser = null;
+
+                        mAuth.signOut();
                         notifyAccountActivity(true, requestCode, null);
                     }
 
@@ -380,7 +386,7 @@ public class AccountManagerFirebaseNormal extends AccountManager {
         try {
             throw e;
         } catch (FirebaseAuthInvalidCredentialsException i) {
-            msg = act.getString(R.string.credenciales_erroneas);
+            msg = act.getString(R.string.contrasena_erroneas);
         } catch (FirebaseAuthUserCollisionException i) {
             msg = act.getString(R.string.usuario_existente_normal);
         } catch (FirebaseNetworkException i) {
@@ -404,11 +410,11 @@ public class AccountManagerFirebaseNormal extends AccountManager {
         }
 
         if (password == null || password.length() < 6) {
-            throw new InvalidPasswordException(act.getString(R.string.worng_password));
+            throw new InvalidPasswordException(act.getString(R.string.password_length_wrong));
         }
 
         if (username == null || username.length() < 4) {
-            throw new InvalidUsernameException(act.getString(R.string.wrong_username));
+            throw new InvalidUsernameException(act.getString(R.string.username_length_wrong));
         }
 
     }

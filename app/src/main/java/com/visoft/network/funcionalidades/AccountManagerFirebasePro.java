@@ -29,15 +29,15 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.visoft.network.Objects.ChatOverview;
-import com.visoft.network.Objects.User;
-import com.visoft.network.Objects.UserPro;
 import com.visoft.network.R;
-import com.visoft.network.Util.Constants;
-import com.visoft.network.Util.Database;
 import com.visoft.network.exceptions.InvalidEmailException;
 import com.visoft.network.exceptions.InvalidPasswordException;
 import com.visoft.network.exceptions.InvalidUsernameException;
+import com.visoft.network.objects.ChatOverview;
+import com.visoft.network.objects.User;
+import com.visoft.network.objects.UserPro;
+import com.visoft.network.util.Constants;
+import com.visoft.network.util.Database;
 
 import java.util.ArrayList;
 
@@ -82,10 +82,8 @@ public class AccountManagerFirebasePro extends AccountManager {
     //USER
     private UserPro createUser() {
         UserPro user = new UserPro();
+
         String instanceId = FirebaseInstanceId.getInstance().getToken();
-
-        FirebaseInstanceId.getInstance().getToken();
-
         user.setUsername(fbUser.getDisplayName())
                 .setRating(-1)
                 .setNumberReviews(0)
@@ -102,14 +100,15 @@ public class AccountManagerFirebasePro extends AccountManager {
         usersRef.child(u.getUid()).setValue(json).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("user", u);
-                    notifyAccountActivity(true, requestCode, bundle);
-                } else {
+                if (!task.isSuccessful()) {
                     Bundle bundle = new Bundle();
                     bundle.putString("error", act.getString(R.string.error_sign_up));
                     notifyAccountActivity(false, requestCode, bundle);
+                } else {
+                    getUserFromDatabase(requestCode);
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean("registered", true);
+                    notifyAccountActivity(true, requestCode, bundle);
                 }
             }
         });
@@ -125,6 +124,8 @@ public class AccountManagerFirebasePro extends AccountManager {
 
                     if (user != null) {
                         user.setInstanceID(FirebaseInstanceId.getInstance().getToken());
+                        usersRef.child(user.getUid())
+                                .setValue(GsonerUser.getGson().toJson(user, User.class));
                         dataSnapshot.getRef().setValue(GsonerUser.getGson().toJson(user, User.class));
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("user", user);
@@ -200,9 +201,6 @@ public class AccountManagerFirebasePro extends AccountManager {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                         if (dataSnapshot.hasChild("pro" + mAuth.getCurrentUser().getUid())) {
-                                            Bundle bundle = new Bundle();
-                                            bundle.putBoolean("isNewUser", false);
-                                            notifyAccountActivity(true, requestCode, bundle);
                                             getUserFromDatabase(requestCode);
                                         } else {
                                             registerUserInDatabase(createUser(), requestCode);
@@ -309,7 +307,36 @@ public class AccountManagerFirebasePro extends AccountManager {
                                     .removeValue();
                         }
 
-                        notifyAccountActivity(true, requestCode, null);
+                        rootRef.child(Constants.FIREBASE_RUBRO_CONTAINER_NAME).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                for (DataSnapshot d : dataSnapshot.getChildren()) {
+                                    if (d.hasChild(user.getUid())) {
+                                        d.child(user.getUid()).getRef().removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                user = null;
+                                                fbUser = null;
+
+                                                mAuth.signOut();
+                                                notifyAccountActivity(true, requestCode, null);
+                                            }
+                                        });
+                                    }
+                                }
+
+                                user = null;
+                                fbUser = null;
+
+                                mAuth.signOut();
+                                notifyAccountActivity(true, requestCode, null);
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
                     }
 
                     @Override
@@ -415,7 +442,7 @@ public class AccountManagerFirebasePro extends AccountManager {
         try {
             throw e;
         } catch (FirebaseAuthInvalidCredentialsException i) {
-            msg = act.getString(R.string.credenciales_erroneas);
+            msg = act.getString(R.string.contrasena_erroneas);
         } catch (FirebaseAuthUserCollisionException i) {
             msg = act.getString(R.string.usuario_existente_pro);
         } catch (FirebaseNetworkException i) {
@@ -439,11 +466,11 @@ public class AccountManagerFirebasePro extends AccountManager {
         }
 
         if (password == null || password.length() < 6) {
-            throw new InvalidPasswordException(act.getString(R.string.worng_password));
+            throw new InvalidPasswordException(act.getString(R.string.wrong_password));
         }
 
         if (username == null || username.length() < 4) {
-            throw new InvalidUsernameException(act.getString(R.string.wrong_username));
+            throw new InvalidUsernameException(act.getString(R.string.username_length_wrong));
         }
 
     }

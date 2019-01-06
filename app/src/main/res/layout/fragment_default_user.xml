@@ -1,69 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".Profiles.UserFragment">
-
+    android:orientation="vertical"
+    tools:context=".profiles.UserFragment">
 
     <ImageView
         android:id="@+id/ivProfilePic"
-        android:layout_width="111dp"
-        android:layout_height="93dp"
-        android:layout_marginTop="32dp"
-        android:src="@drawable/profile_pic"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/constraintLayout"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivProfilePic">
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/profile_pic" />
+
+    <TextView
+        android:id="@+id/tvUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ivProfilePic"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="16dp"
+        android:textAllCaps="true" />
+
+    <LinearLayout
+        android:id="@+id/personalControls"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/top_inner_shadow">
 
         <TextView
-            android:id="@+id/tvUsername"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="8dp"
-            android:textAllCaps="true"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:id="@+id/eliminarCuenta"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:drawableStart="@drawable/ic_close_black_24dp"
+            android:gravity="center"
+            android:paddingStart="16dp"
+            android:text="@string/eliminar_cuenta"
+            android:textColor="@android:color/holo_red_light"
+            android:textSize="15sp" />
 
         <TextView
-            android:id="@+id/tvNumberReviews"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/ratingBar"
-            app:layout_constraintStart_toEndOf="@+id/ratingBar"
-            app:layout_constraintTop_toTopOf="@+id/ratingBar" />
+            android:id="@+id/cerrarSesion"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingStart="16dp"
+            android:text="@string/cerrar_sesi_n"
+            android:textSize="15sp" />
 
-        <com.iarcuschin.simpleratingbar.SimpleRatingBar
-            android:id="@+id/ratingBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="16dp"
-            android:numStars="5"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/tvUsername"
-            app:layout_constraintTop_toBottomOf="@+id/tvUsername"
-            app:srb_drawBorderEnabled="false"
-            app:srb_isIndicator="true"
-            app:srb_numberOfStars="5"
-            app:srb_starBackgroundColor="@color/semi_transparent"
-            app:srb_starCornerRadius="3"
-            app:srb_starSize="30dp" />
+    </LinearLayout>
 
-
-    </android.support.constraint.ConstraintLayout>
-
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>

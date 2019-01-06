@@ -124,7 +124,7 @@
     <string name="horario_atenci_n">Horario Atención</string>
     <string name="a">a</string>
     <string name="de">De</string>
-    <string name="credenciales_erroneas">Credenciales erróneas</string>
+    <string name="contrasena_erroneas">Credenciales erróneas</string>
     <string name="sesion_iniciada">Sesión iniciada</string>
     <string name="error_al_iniciar_sesion">Hubo un error mientras se intentó iniciar sesión. Reinténtelo</string>
     <string name="usuario_creado">Usuario creado satisfactoriamente</string>
@@ -160,7 +160,7 @@
     <string name="descripcion_personal">Descripción personal</string>
     <string name="contact_info">Información de Contacto</string>
     <string name="selecciona_foto">Añade una foto</string>
-    <string name="calificar">Hacer una reseña</string>
+    <string name="calificar">Calificar profesional</string>
     <string name="eliminar_cuenta">Eliminar cuenta</string>
     <string name="seguro_eliminar">Estás seguro de querer eliminar la cuenta?</string>
     <string name="añadirContacto">Añadir a agenda</string>
@@ -178,22 +178,24 @@
     <string name="selecciona_social_networks">Añade o elimina links a las redes sociales</string>
     <string name="chatHint">Escribe mensaje</string>
     <string name="chats">Chats</string>
-    <string name="buscar">buscar</string>
+    <string name="buscar">Buscar</string>
     <string name="contactos">Contactos</string>
-    <string name="email_erroneo">Email erroneo</string>
-    <string name="worng_password">password erroneo</string>
-    <string name="wrong_username">username wrong</string>
+    <string name="email_erroneo">Email inválido</string>
+    <string name="wrong_password">Contraseña inválida</string>
+    <string name="wrong_username">Nombre de usuario inválido</string>
     <string name="error_sign_up">No se pudo crear usuario</string>
     <string name="error_iniciar_sesion">error al iniciar sesion</string>
     <string name="error_google">Error al iniciar sesion con Google</string>
     <string name="passwords_dont_match">No coinciden contraseñas</string>
     <string name="usuario_existente_pro">El nombre de usuario ya existe</string>
     <string name="error_coneccion">Parece que no tiene internet</string>
-    <string name="iniciar_sesion_como_cliente">Iniciar Sesion como Cliente</string>
-    <string name="iniciar_sesion_como_profesional">Iniciar Sesion como Profesional</string>
+    <string name="cliente">Cliente</string>
+    <string name="profesional">Profesional</string>
     <string name="no_tienes_un_usuario">No tienes un usuario?</string>
     <string name="crear_usuario_profesional">Crear usuario profesional</string>
     <string name="usuario_existente_normal">El nombre de usuario ya existe</string>
-
+    <string name="username_length_wrong">El nombre de usuario debe tener al menos 4 caracteres</string>
+    <string name="password_length_wrong">La contraseña debe contener al menos 6 caracteres</string>
+    <string name="todavia_no_tienes_chats">Todavia no tienes chats. No te desesperes! Nuevos mensajes llegarán muy pronto</string>
 
 </resources>

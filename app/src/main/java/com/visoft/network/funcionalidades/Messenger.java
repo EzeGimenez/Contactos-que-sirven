@@ -25,12 +25,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
-import com.visoft.network.Objects.ChatOverview;
-import com.visoft.network.Objects.MapMessage;
-import com.visoft.network.Objects.Message;
-import com.visoft.network.Objects.TextMessage;
 import com.visoft.network.R;
-import com.visoft.network.Util.Constants;
+import com.visoft.network.objects.ChatOverview;
+import com.visoft.network.objects.MapMessage;
+import com.visoft.network.objects.Message;
+import com.visoft.network.objects.TextMessage;
+import com.visoft.network.util.Constants;
 
 import java.util.Date;
 import java.util.Objects;
