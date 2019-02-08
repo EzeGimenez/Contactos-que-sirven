@@ -1,57 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/background_profile_search_result_row">
 
-    <TextView
-        android:id="@+id/tvUsername"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Username"
-        app:layout_constraintEnd_toStartOf="@+id/ratingBar"
-        app:layout_constraintStart_toEndOf="@+id/ivImage"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/ivImage"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:src="@drawable/profile_pic"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_margin="8dp"
+        android:src="@drawable/profile_pic" />
+
+    <TextView
+        android:id="@+id/tvUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:layout_toStartOf="@id/ratingBar"
+        android:layout_toEndOf="@id/ivImage"
+        android:text="Username"
+        android:textAllCaps="true"
+        android:textColor="@color/colorAccentPrimary" />
 
     <TextView
         android:id="@+id/tvMessage"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="16dp"
-        android:text="Msg"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/tvUsername"
-        app:layout_constraintTop_toBottomOf="@+id/tvUsername" />
+        android:layout_below="@id/tvUsername"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="8dp"
+        android:layout_toEndOf="@id/ivImage"
+        android:text="Msg" />
 
     <com.iarcuschin.simpleratingbar.SimpleRatingBar
         android:id="@+id/ratingBar"
-        android:layout_marginEnd="4dp"
-        android:layout_marginStart="8dp"
-        android:numStars="5"
-        app:layout_constraintBottom_toBottomOf="@+id/tvUsername"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/tvUsername"
-        app:layout_constraintTop_toTopOf="@+id/tvUsername"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="8dp"
+        android:numStars="5"
         app:srb_drawBorderEnabled="false"
         app:srb_isIndicator="true"
         app:srb_numberOfStars="5"
@@ -59,4 +47,4 @@
         app:srb_starCornerRadius="3"
         app:srb_starSize="20dp" />
 
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>

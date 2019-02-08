@@ -392,7 +392,7 @@ public class AccountManagerFirebaseNormal extends AccountManager {
         } catch (FirebaseNetworkException i) {
             msg = act.getString(R.string.error_coneccion);
         } catch (Exception i) {
-            msg = e.getMessage();
+            msg = act.getString(R.string.no_hay_usuario_registrado);
         }
         bundle.putString("error", msg);
         return bundle;

@@ -100,6 +100,7 @@ public class SignInNormal extends Fragment implements View.OnClickListener {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.SHARED_PREF_NAME, MODE_PRIVATE);
         sharedPreferences.edit().putBoolean("asPro", false).commit();
         Intent intent = new Intent(getContext(), MainActivityNormal.class);
+        loadingScreen.hide();
         startActivity(intent);
         getActivity().finish();
     }
@@ -138,7 +139,5 @@ public class SignInNormal extends Fragment implements View.OnClickListener {
         HolderCurrentAccountManager.setCurrent(accountManager);
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.SHARED_PREF_NAME, MODE_PRIVATE);
         sharedPreferences.edit().putBoolean("asPro", false).commit();
-
-        loadingScreen.hide();
     }
 }

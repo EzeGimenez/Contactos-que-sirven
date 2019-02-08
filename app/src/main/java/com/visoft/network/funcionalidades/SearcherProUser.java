@@ -9,7 +9,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.visoft.network.objects.User;
@@ -25,7 +24,6 @@ import java.util.List;
 public class SearcherProUser {
 
     private DatabaseReference ref;
-    private List<UserPro> proUsers;
     private Gson gson;
     private LatLng location;
 
@@ -33,55 +31,128 @@ public class SearcherProUser {
         gson = GsonerUser.getGson();
 
         ref = Database.getDatabase()
-                .getReference()
-                .child(Constants.FIREBASE_USERS_PRO_CONTAINER_NAME);
-
-        getFromDatabase();
+                .getReference();
     }
 
-    private void getFromDatabase() {
-        String mock = "data refresh";
-        Query query = ref;
+    public void getFromDatabase(final OnFinishListenerUserPro listener, final String rubroId) {
+        final String mock = "data refresh";
 
-        query.keepSynced(true);
-        ref.child("mock").setValue(mock).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                ref.child("mock").removeValue();
+        if (rubroId != null) {
+            ref.child(Constants.FIREBASE_RUBRO_CONTAINER_NAME).child(rubroId).child("mock").setValue(mock).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    ref.child("mock").removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            ref
+                                    .child(Constants.FIREBASE_RUBRO_CONTAINER_NAME)
+                                    .child(rubroId)
+                                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            final List<String> proUsersUID = new ArrayList<>();
+                                            final List<UserPro> proUsers = new ArrayList<>();
 
-                ref.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        proUsers = new ArrayList<>();
+                                            for (DataSnapshot d : dataSnapshot.getChildren()) {
+                                                if (d != null) {
+                                                    String aux = d.getKey();
+                                                    if (!aux.equals("mock")) {
+                                                        proUsersUID.add(aux);
+                                                    }
+                                                }
+                                            }
 
-                        for (DataSnapshot d : dataSnapshot.getChildren()) {
-                            if (d != null) {
-                                UserPro u = (UserPro) gson.fromJson(d.getValue(String.class), User.class);
-                                proUsers.add(u);
-                            }
+                                            if (proUsersUID.isEmpty()) {
+                                                listener.onFinish(new ArrayList<UserPro>());
+                                            } else {
+                                                final int[] fix = {0};
+                                                for (String aux : proUsersUID) {
+                                                    ref
+                                                            .child(Constants.FIREBASE_USERS_PRO_CONTAINER_NAME)
+                                                            .child(aux)
+                                                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                @Override
+                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                                    String json = dataSnapshot.getValue(String.class);
+                                                                    UserPro u = (UserPro) gson.fromJson(json, User.class);
+                                                                    if (u != null) {
+                                                                        proUsers.add(u);
+                                                                    } else {
+                                                                        fix[0]++;
+                                                                    }
+                                                                    if (proUsers.size() == proUsersUID.size() - fix[0]) {
+
+                                                                        Collections.sort(proUsers, new ProUserComparator());
+                                                                        listener.onFinish(proUsers);
+                                                                    }
+                                                                }
+
+                                                                @Override
+                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                }
+                                                            });
+                                                }
+                                            }
+
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                        }
+                                    });
                         }
-                    }
+                    });
+                }
+            });
+        } else {
+            ref.child(Constants.FIREBASE_USERS_PRO_CONTAINER_NAME)
+                    .child("mock")
+                    .setValue(mock)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            ref.child("mock")
+                                    .removeValue()
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            ref
+                                                    .child(Constants.FIREBASE_USERS_PRO_CONTAINER_NAME)
+                                                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                            ArrayList<UserPro> list = new ArrayList<>();
+                                                            String json;
+                                                            for (DataSnapshot d : dataSnapshot.getChildren()) {
+                                                                json = d.getValue(String.class);
+                                                                if (!json.equals(mock)) {
+                                                                    list.add((UserPro) gson.fromJson(d.getValue(String.class), User.class));
+                                                                }
+                                                            }
+                                                            Collections.sort(list, new ProUserComparator());
+                                                            listener.onFinish(list);
+                                                        }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                        @Override
+                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                    }
-                });
-            }
-        });
+                                                        }
+                                                    });
+                                        }
+                                    });
+                        }
+                    });
+        }
+    }
+
+    public interface OnFinishListenerUserPro {
+        void onFinish(List<UserPro> list);
     }
 
     public void setLocation(LatLng l) {
         location = l;
-    }
-
-    public List<UserPro> getProUsers() {
-        if (proUsers == null) {
-            proUsers = new ArrayList<>();
-        }
-        proUsers.remove(HolderCurrentAccountManager.getCurrent(null).getCurrentUser(1));
-        Collections.sort(proUsers, new ProUserComparator());
-        return proUsers;
     }
 
     private class ProUserComparator implements Comparator<UserPro> {

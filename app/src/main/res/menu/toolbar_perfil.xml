@@ -9,13 +9,8 @@
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/calificar"
-        android:title="@string/calificar"
-        app:showAsAction="never" />
-
-    <item
         android:id="@+id/addContact"
-        android:icon="@drawable/ic_favorite_border_black_24dp"
+        android:icon="@drawable/ic_star_border_black_24dp"
         android:title="@string/añadirContacto"
         app:showAsAction="always" />
 </menu>

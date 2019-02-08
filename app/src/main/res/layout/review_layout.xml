@@ -1,49 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/tvQuery"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="100dp"
-        android:layout_marginEnd="16dp"
         android:text="TextView"
         android:textAlignment="center"
         android:textAllCaps="true"
         android:textColor="@color/colorAccentPrimary"
-        app:layout_constraintBottom_toTopOf="@+id/ratingBar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textSize="20sp" />
 
     <com.iarcuschin.simpleratingbar.SimpleRatingBar
         android:id="@+id/ratingBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        app:layout_constraintBottom_toTopOf="@+id/editText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvQuery"
+        android:layout_margin="16dp"
         app:srb_drawBorderEnabled="false"
-        app:srb_starBackgroundColor="@color/semi_transparent"
-        app:srb_starSize="40dp" />
+        app:srb_starBackgroundColor="@color/colorPrimary"
+        app:srb_starSize="40dp"
+        app:srb_stepSize="0.5" />
 
     <EditText
         android:id="@+id/editText"
         style="@style/editText"
         android:hint="@string/pequenaDescripcion"
         android:inputType="textCapSentences"
-        android:textColorHint="@color/colorPrimary"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
-</android.support.constraint.ConstraintLayout>
+        android:textColorHint="@color/black_transparent"
+        android:visibility="invisible" />
+
+</LinearLayout>

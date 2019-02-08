@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -20,6 +21,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,21 +30,24 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.visoft.network.R;
 import com.visoft.network.objects.ChatOverview;
-import com.visoft.network.objects.MapMessage;
 import com.visoft.network.objects.Message;
-import com.visoft.network.objects.TextMessage;
+import com.visoft.network.objects.MessageContractFinished;
+import com.visoft.network.objects.MessageMap;
+import com.visoft.network.objects.MessageText;
 import com.visoft.network.util.Constants;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
 public class Messenger {
     private DatabaseReference database;
-
     private Context context;
     private String fromUID, toUID;
     private ViewGroup rootView;
     private View loseFocusView;
+    private boolean notify;
 
     public Messenger(Context context, String from, String to, ViewGroup rootView, View loseFocusView, DatabaseReference database) {
         this.context = context;
@@ -50,6 +56,7 @@ public class Messenger {
         this.rootView = rootView;
         this.database = database;
         this.loseFocusView = loseFocusView;
+        this.notify = true;
 
         setUp();
     }
@@ -85,7 +92,7 @@ public class Messenger {
             public void onClick(View v) {
                 String text = etChat.getText().toString();
                 if (text.length() > 0) {
-                    TextMessage message = new TextMessage();
+                    MessageText message = new MessageText();
                     message.setTimeStamp(new Date().getTime()).setAuthor(fromUID);
                     message.setMessage(text);
                     sendMessage(message);
@@ -100,6 +107,12 @@ public class Messenger {
                 showMapDialog();
             }
         });
+    }
+
+    public void finishChat() {
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
+        Date date = new Date();
+        sendMessage(new MessageContractFinished(context.getString(R.string.finished_at) + " " + dateFormat.format(date)).setAuthor(fromUID));
     }
 
     private void sendMessage(final Message msg) {
@@ -120,6 +133,7 @@ public class Messenger {
                             chatOverview.setChatID(chatID);
                         }
 
+                        chatOverview.setFinished(msg instanceof MessageContractFinished);
                         chatOverview.setAuthor(fromUID);
                         chatOverview.setReceiverUID(toUID);
                         chatOverview.setLastMessage(msg.getOverview());
@@ -154,7 +168,14 @@ public class Messenger {
                 .child(Constants.FIREBASE_MESSAGES_CONTAINER_NAME)
                 .child(chatOverview.getChatID())
                 .push()
-                .setValue(data);
+                .setValue(data).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (notify) {
+                    Toast.makeText(context, context.getString(R.string.mensaje_enviado), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         database
                 .child(Constants.FIREBASE_NOTIFICATIONS_CONTAINER_NAME)
@@ -212,10 +233,14 @@ public class Messenger {
     }
 
     private void sendLocationAsMessage(LatLng position) {
-        MapMessage message = new MapMessage();
+        MessageMap message = new MessageMap();
         message.setTimeStamp(new Date().getTime())
                 .setAuthor(fromUID);
         message.setPosition(position);
         sendMessage(message);
+    }
+
+    public void setNotify(boolean notify) {
+        this.notify = notify;
     }
 }

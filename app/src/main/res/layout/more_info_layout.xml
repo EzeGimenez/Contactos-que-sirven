@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="16dp"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/tvCoworkers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_supervisor_account_black_24dp"
+        android:drawablePadding="8dp"
+        android:padding="8dp"
+        android:text="@string/trabaja_solo"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/tvobrasocial"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_local_hospital_black_24dp"
+        android:drawablePadding="8dp"
+        android:padding="8dp"
+        android:text="@string/no_posee_obra_social"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/tvmovilidadpropia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_directions_car_black_24dp"
+        android:drawablePadding="8dp"
+        android:padding="8dp"
+        android:text="@string/no_posee_movilidad_propia"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/tvcredit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_credit_card_black_24dp"
+        android:drawablePadding="8dp"
+        android:padding="8dp"
+        android:text="@string/no_acepta_credito"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/tvdebit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_credit_card_black_24dp"
+        android:drawablePadding="8dp"
+        android:padding="8dp"
+        android:text="@string/no_acepta_debito"
+        android:textAlignment="center" />
+
+
+</LinearLayout>

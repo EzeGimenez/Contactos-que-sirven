@@ -22,8 +22,6 @@ public class UserFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         user = (UserNormal) getArguments().getSerializable("user");
-
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_default_user, container, false);
     }
 

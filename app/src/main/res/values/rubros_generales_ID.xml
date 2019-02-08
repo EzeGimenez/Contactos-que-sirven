@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="rubrosGeneralesID">
-        <item>servicioshogar</item>
-        <item>obraConstruccion</item>
-        <item>serviciosPersonales</item>
-        <item>emergencias</item>
+        <item>mantenimientohogar</item>
+        <item>serviciosnegocio</item>
+        <item>obraconstruccion</item>
+        <item>alquileres</item>
+        <item>delivery</item>
+        <item>capacitacion</item>
+        <item>serviciosanimales</item>
+        <item>medicinasalud</item>
+        <item>serviciosautomoviltransporte</item>
+        <item>eventos</item>
+        <item>oficinas</item>
     </string-array>
 </resources>

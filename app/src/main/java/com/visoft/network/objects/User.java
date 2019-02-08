@@ -45,7 +45,7 @@ public abstract class User extends AbstractFlexibleItem<FragmentSearchResults.Vi
 
     @Override
     public FragmentSearchResults.ViewHolderProUser createViewHolder(View view, FlexibleAdapter<IFlexible> adapter) {
-        return new FragmentSearchResults.ViewHolderProUser(view, adapter);
+        return new FragmentSearchResults.ViewHolderProUser(view.getContext(), view, adapter);
     }
 
     @Override

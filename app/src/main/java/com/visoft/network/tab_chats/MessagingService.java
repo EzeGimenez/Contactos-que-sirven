@@ -12,6 +12,7 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
+import android.widget.RemoteViews;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -72,8 +73,8 @@ public class MessagingService extends FirebaseMessagingService {
         final int NOTIFY_ID = 1002;
 
         String name = Constants.NOTIFICATION_CHAT_CHANNEL_NAME;
-        String id = Constants.NOTIFICATION_CHAT_CHANNEL_ID; // The user-visible name of the channel.
-        String description = "New Message"; // The user-visible description of the channel.
+        String id = Constants.NOTIFICATION_CHAT_CHANNEL_ID;
+        String description = "New Message";
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, id);
 
@@ -81,13 +82,18 @@ public class MessagingService extends FirebaseMessagingService {
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
 
-        builder.setContentTitle(title)  // required
-                .setSmallIcon(R.drawable.arrow_back) // required
-                .setContentText(body)  // required
+        RemoteViews notificationLayoutExpanded = new RemoteViews(getPackageName(), R.layout.notification);
+
+        notificationLayoutExpanded.setTextViewText(R.id.sender, title);
+        notificationLayoutExpanded.setTextViewText(R.id.body, body);
+
+        builder
+                .setSmallIcon(R.drawable.arrow_back)
+                .setCustomContentView(notificationLayoutExpanded)
+                .setCustomBigContentView(notificationLayoutExpanded)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setAutoCancel(true)
-                .setContentIntent(pendingIntent)
-                .setTicker(body);
+                .setContentIntent(pendingIntent);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 

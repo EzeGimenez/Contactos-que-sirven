@@ -1,14 +1,10 @@
 package com.visoft.network;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -27,14 +23,10 @@ import com.visoft.network.tab_chats.ChatsFragment;
 import com.visoft.network.util.Constants;
 
 public class MainActivityPro extends AppCompatActivity {
-    public static final String RECEIVER_INTENT = "RECEIVER_INTENT";
-
-    public static boolean isRunning;
     private FirebaseAuth mAuth;
     private SharedPreferences sharedPref;
-
     private ChatsFragment chatsFragment;
-    private BroadcastReceiver broadcastReceiver;
+    private boolean updated = false;
 
     private Menu menu;
 
@@ -46,15 +38,19 @@ public class MainActivityPro extends AppCompatActivity {
         sharedPref = getSharedPreferences(Constants.SHARED_PREF_NAME, MODE_PRIVATE);
         mAuth = FirebaseAuth.getInstance();
 
-        broadcastReceiver = new BroadcastReceiver() {
+        AccountManager.ListenerRequestResult l = new AccountManager.ListenerRequestResult() {
             @Override
-            public void onReceive(Context context, Intent intent) {
-                notifyNewMessage();
+            public void onRequestResult(boolean result, int requestCode, Bundle data) {
+                if (result && data.getBoolean("isNewUser", false)) {
+                    showLogInScreen();
+                    mAuth.signOut();
+                } else {
+                    updateUI(mAuth.getCurrentUser());
+                }
             }
         };
 
-        AccountManager accountManager;
-        accountManager = AccountManagerFirebasePro.getInstance(null, this);
+        AccountManager accountManager = AccountManagerFirebasePro.getInstance(l, this);
         HolderCurrentAccountManager.setCurrent(accountManager);
         accountManager.getCurrentUser(1);
 
@@ -65,11 +61,6 @@ public class MainActivityPro extends AppCompatActivity {
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.black_transparent)));
     }
 
-    public void notifyNewMessage() {
-        //TODO
-        sharedPref.edit().putBoolean("unreadMessages", false).apply();
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -77,21 +68,6 @@ public class MainActivityPro extends AppCompatActivity {
         if (mAuth.getCurrentUser() == null) {
             showLogInScreen();
         }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        LocalBroadcastManager.getInstance(this).registerReceiver((broadcastReceiver),
-                new IntentFilter(RECEIVER_INTENT)
-        );
-        isRunning = true;
     }
 
     /**
@@ -108,35 +84,44 @@ public class MainActivityPro extends AppCompatActivity {
      * @param user firebase user, puede ser null
      */
     private void updateUI(@Nullable FirebaseUser user) {
-        final MenuItem goToProfileItem = menu.findItem(R.id.goToProfile);
+        if (!updated && user != null && menu != null) {
+            final MenuItem goToProfileItem = menu.findItem(R.id.goToProfile);
 
-        final View view = menu.findItem(R.id.goToProfile).getActionView();
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onOptionsItemSelected(goToProfileItem);
+            final View view = menu.findItem(R.id.goToProfile).getActionView();
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onOptionsItemSelected(goToProfileItem);
+                }
+            });
+
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.ContainerMainPro, chatsFragment)
+                    .commit();
+
+            TextView tvusername = view.findViewById(R.id.tvUsername);
+            tvusername.setText(user.getDisplayName());
+            tvusername.setVisibility(View.VISIBLE);
+            goToProfileItem.setVisible(true);
+
+            if (!sharedPref.getBoolean("unreadMessages", false)) {
+                //TODO no hay mensajes nuevos
             }
-        });
-
-        getSupportFragmentManager()
-                .beginTransaction()
-                .add(R.id.ContainerMainPro, chatsFragment)
-                .commit();
-
-        TextView tvusername = view.findViewById(R.id.tvUsername);
-        tvusername.setText(user.getDisplayName());
-        tvusername.setVisibility(View.VISIBLE);
-        goToProfileItem.setVisible(true);
-
-        if (!sharedPref.getBoolean("unreadMessages", false)) {
-            //TODO no hay mensajes nuevos
+            updated = true;
         }
     }
 
     private void showLogInScreen() {
         Intent intent = new Intent(this, SignInActivity.class);
-        onBackPressed();
         startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finishAffinity();
     }
 
     @Override
@@ -153,7 +138,6 @@ public class MainActivityPro extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.toolbar_main, menu);
         this.menu = menu;
         updateLogIn();

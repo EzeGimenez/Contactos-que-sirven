@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 
@@ -31,6 +32,16 @@ public class CustomDialog {
      */
     public CustomDialog setView(View view) {
         builder.setView(view);
+        return this;
+    }
+
+    public CustomDialog setPositiveIcon(Drawable icon) {
+        builder.setPositiveButtonIcon(icon);
+        return this;
+    }
+
+    public CustomDialog setNegativeIcon(Drawable icon) {
+        builder.setNegativeButtonIcon(icon);
         return this;
     }
 

@@ -1,5 +1,6 @@
 package com.visoft.network.tab_search;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,11 +14,12 @@ import android.widget.TextView;
 
 import com.iarcuschin.simpleratingbar.SimpleRatingBar;
 import com.visoft.network.R;
+import com.visoft.network.funcionalidades.HolderCurrentAccountManager;
+import com.visoft.network.funcionalidades.LoadingScreen;
+import com.visoft.network.funcionalidades.SearcherProUser;
 import com.visoft.network.objects.UserPro;
 import com.visoft.network.profiles.ProfileActivity;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -26,8 +28,11 @@ import eu.davidea.viewholders.FlexibleViewHolder;
 
 public class FragmentSearchResults extends FragmentFirstTab {
 
-    private FlexibleAdapter adapter;
+    private FlexibleAdapter<UserPro> adapter;
     private List<UserPro> list;
+    private RecyclerView recyclerView;
+    private LoadingScreen loadingScreen;
+    private boolean fromRubro;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -36,53 +41,136 @@ public class FragmentSearchResults extends FragmentFirstTab {
     }
 
     private void populate() {
-        for (UserPro p : list) {
-            int id = getResources().getIdentifier(p.getRubroEspecificoEspecifico(), "string", getContext().getPackageName());
-            p.setRubroNombre(getString(id));
-        }
 
         t.setActual(getTag());
 
-        if (getArguments() != null) {
-            String rubro = getArguments().getString("rubro");
-            Iterator<UserPro> it = list.iterator();
-            while (it.hasNext()) {
-                UserPro p = it.next();
-                if (!p.filter(rubro)) {
-                    it.remove();
-                }
-            }
-        }
-
-        adapter = new FlexibleAdapter<>(list);
-        RecyclerView recyclerView = getView().findViewById(R.id.recyclerViewSearchResult);
+        loadingScreen = new LoadingScreen(getContext(), (ViewGroup) getView().findViewById(R.id.rootView));
+        adapter = null;
+        recyclerView = getView().findViewById(R.id.recyclerViewSearchResult);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-
         recyclerView.setAdapter(adapter);
 
-        adapter.addListener(new FlexibleAdapter.OnItemClickListener() {
-            @Override
-            public boolean onItemClick(View view, int position) {
-                Intent intent = new Intent(getContext(), ProfileActivity.class);
-                intent.putExtra("user", list.get(position));
+        Bundle args = getArguments();
+        if (args.getString("rubro") != null) {
 
-                startActivity(intent);
-                return true;
-            }
-        });
+            fromRubro = true;
+            filter(args.getString("rubro"));
+
+        } else if (args.getString("name") != null) {
+
+            fromRubro = false;
+            filter(args.getString("name"));
+
+        }
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        list = new ArrayList<>(HolderFirstTab.getProUsers());
 
         populate();
     }
 
-    public void filter(String a) {
-        adapter.setFilter(a);
-        adapter.filterItems();
+    public void filter(final String a) {
+        loadingScreen.show();
+        if (adapter == null && fromRubro) {
+            t.getSearcherProUser().getFromDatabase(new SearcherProUser.OnFinishListenerUserPro() {
+                @Override
+                public void onFinish(List<UserPro> l) {
+                    loadingScreen.hide();
+
+                    list = l;
+                    removeCurrentUserFromList(list);
+                    adapter = new FlexibleAdapter<>(list);
+                    if (list.isEmpty()) {
+                        int id = getResources().getIdentifier(
+                                a, "string", getActivity().getPackageName()
+                        );
+                        noResults(getString(id));
+                    } else {
+                        yesResults();
+                        recyclerView.setAdapter(adapter);
+                        adapter.addListener(new FlexibleAdapter.OnItemClickListener() {
+                            @Override
+                            public boolean onItemClick(View view, int position) {
+                                Intent intent = new Intent(getContext(), ProfileActivity.class);
+                                intent.putExtra("user", list.get(position));
+
+                                startActivity(intent);
+                                return true;
+                            }
+                        });
+                    }
+                }
+            }, a);
+        } else if (adapter == null) {
+            t.getSearcherProUser().getFromDatabase(new SearcherProUser.OnFinishListenerUserPro() {
+                @Override
+                public void onFinish(final List<UserPro> list) {
+                    loadingScreen.hide();
+                    removeCurrentUserFromList(list);
+                    adapter = new FlexibleAdapter<>(list);
+                    adapter.setFilter(a);
+                    adapter.filterItems();
+                    recyclerView.setAdapter(adapter);
+
+                    if (adapter.getCurrentItems().isEmpty()) {
+                        noResults(a);
+                    } else {
+                        yesResults();
+                    }
+
+                    adapter.addListener(new FlexibleAdapter.OnItemClickListener() {
+                        @Override
+                        public boolean onItemClick(View view, int position) {
+                            Intent intent = new Intent(getContext(), ProfileActivity.class);
+                            intent.putExtra("user", list.get(position));
+
+                            startActivity(intent);
+                            return true;
+                        }
+                    });
+                }
+            }, null);
+        } else {
+            loadingScreen.hide();
+            adapter.setFilter(a);
+            adapter.filterItems();
+            if (adapter.getCurrentItems().isEmpty()) {
+                noResults(a);
+            } else {
+                yesResults();
+            }
+        }
+    }
+
+    private void removeCurrentUserFromList(List<UserPro> l) {
+        UserPro toremove = null;
+        for (UserPro p : l) {
+            if (p.getUid().equals("pro" + HolderCurrentAccountManager.getCurrent(null).getCurrentUser(1).getUid())) {
+                toremove = p;
+                break;
+            }
+        }
+        l.remove(toremove);
+    }
+
+    private void noResults(String a) {
+        recyclerView.setVisibility(View.GONE);
+        TextView tv = getView().findViewById(R.id.tvNoResults);
+        tv.setVisibility(View.VISIBLE);
+        tv.setText(getString(R.string.no_results) + " '" + a + "'");
+    }
+
+    private void yesResults() {
+        recyclerView.setVisibility(View.VISIBLE);
+        getView().findViewById(R.id.tvNoResults).setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        setArguments(null);
     }
 
     public static class ViewHolderProUser extends FlexibleViewHolder {
@@ -90,23 +178,20 @@ public class FragmentSearchResults extends FragmentFirstTab {
         public CircleImageView img;
         public TextView tvUsername, tvRubro, tvNumReviews;
         public SimpleRatingBar ratingBar;
+        private Context context;
 
-        public ViewHolderProUser(View view, FlexibleAdapter adapter) {
+        public ViewHolderProUser(Context ctx, View view, FlexibleAdapter adapter) {
             super(view, adapter);
-
+            this.context = ctx;
             img = view.findViewById(R.id.ivProfilePic);
             tvRubro = view.findViewById(R.id.tvRubro);
             tvUsername = view.findViewById(R.id.tvUsername);
             tvNumReviews = view.findViewById(R.id.tvNumReviews);
             ratingBar = view.findViewById(R.id.ratingBar);
         }
-    }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        list = new ArrayList<>(HolderFirstTab.getProUsers());
-        setArguments(null);
-        populate();
+        public Context getContext() {
+            return context;
+        }
     }
 }

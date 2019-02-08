@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvdni"
+            style="@style/tvconfigurator"
+            android:text="Número de DNI" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_ser_mostrado"
+            android:textColor="@color/colorAccentPrimary"
+            android:textSize="11sp" />
+
+        <EditText
+            android:id="@+id/etdni"
+            style="@style/editText"
+            android:layout_below="@id/tvdni"
+            android:inputType="phone" />
+
+        <TextView
+            android:id="@+id/tvdireccionlegal"
+            style="@style/tvconfigurator"
+            android:layout_below="@id/etdni"
+            android:layout_marginTop="8dp"
+            android:text="Dirección legal" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_ser_mostrado"
+            android:textColor="@color/colorAccentPrimary"
+            android:textSize="11sp" />
+
+        <EditText
+            android:id="@+id/etdireccionlegal"
+            style="@style/editText"
+            android:layout_below="@id/tvdireccionlegal"
+            android:inputType="textCapWords" />
+
+        <RelativeLayout
+            android:id="@+id/r0"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/etdireccionlegal"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:id="@+id/tvmovilidadpropia"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="¿Posee movilidad propia?" />
+
+            <CheckBox
+                android:id="@+id/checkboxmovilidadpropia"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/tvmovilidadpropia"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="32dp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/r1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/r0"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:id="@+id/tvobrasocial"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="¿Posee obra social?" />
+
+            <CheckBox
+                android:id="@+id/checkboxobrasocial"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/tvobrasocial"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="32dp" />
+
+            <EditText
+                android:id="@+id/etobrasocial"
+                style="@style/editText"
+                android:layout_below="@id/tvobrasocial"
+                android:hint="¿Cuál?"
+                android:inputType="textCapWords"
+                android:textColorHint="@color/black_transparent"
+                android:visibility="gone" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/r2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/r1"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:id="@+id/tvpatente"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="¿Posee patente?" />
+
+            <CheckBox
+                android:id="@+id/checkboxpatente"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/tvpatente"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="32dp" />
+
+            <EditText
+                android:id="@+id/etpatente"
+                style="@style/editText"
+                android:layout_below="@id/tvpatente"
+                android:hint="¿Cual?"
+                android:inputType="textCapWords"
+                android:textColorHint="@color/black_transparent"
+                android:visibility="gone" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/r3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/r2"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:id="@+id/tvcredit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="@string/acepta_tarjeta_de_cr_dito" />
+
+            <CheckBox
+                android:id="@+id/checkboxcredit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/tvcredit"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="32dp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/r4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/r3"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:id="@+id/tvdebit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="@string/acepta_tarjeta_de_debito" />
+
+            <CheckBox
+                android:id="@+id/checkboxdebit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/tvdebit"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="32dp" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</ScrollView>

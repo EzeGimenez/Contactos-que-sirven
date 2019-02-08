@@ -43,7 +43,7 @@ import java.util.ArrayList;
 
 public class AccountManagerFirebasePro extends AccountManager {
 
-    private static AccountManager instance;
+    private static AccountManagerFirebasePro instance;
     private static ListenerRequestResult listener;
     private static AppCompatActivity act;
 
@@ -69,7 +69,7 @@ public class AccountManagerFirebasePro extends AccountManager {
         mAuth = FirebaseAuth.getInstance();
     }
 
-    public static AccountManager getInstance(ListenerRequestResult l, AppCompatActivity a) {
+    public static AccountManagerFirebasePro getInstance(ListenerRequestResult l, AppCompatActivity a) {
         listener = l;
         act = a;
 
@@ -95,25 +95,6 @@ public class AccountManagerFirebasePro extends AccountManager {
         return user;
     }
 
-    private void registerUserInDatabase(final UserPro u, final int requestCode) {
-        String json = GsonerUser.getGson().toJson(u, User.class);
-        usersRef.child(u.getUid()).setValue(json).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (!task.isSuccessful()) {
-                    Bundle bundle = new Bundle();
-                    bundle.putString("error", act.getString(R.string.error_sign_up));
-                    notifyAccountActivity(false, requestCode, bundle);
-                } else {
-                    getUserFromDatabase(requestCode);
-                    Bundle bundle = new Bundle();
-                    bundle.putBoolean("registered", true);
-                    notifyAccountActivity(true, requestCode, bundle);
-                }
-            }
-        });
-    }
-
     private void getUserFromDatabase(final int requestCode) {
         if (user == null) {
             usersRef.child("pro" + fbUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -133,7 +114,6 @@ public class AccountManagerFirebasePro extends AccountManager {
                     } else {
 
                         createUser();
-                        registerUserInDatabase(user, requestCode);
                         Bundle bundle = new Bundle();
                         bundle.putBoolean("isNewUser", true);
                         notifyAccountActivity(true, requestCode, bundle);
@@ -170,7 +150,6 @@ public class AccountManagerFirebasePro extends AccountManager {
     }
 
     //LOGINS
-
     @Override
     public void logInWithFacebook(int requestCode) {
 
@@ -192,7 +171,7 @@ public class AccountManagerFirebasePro extends AccountManager {
                         if (task.isSuccessful()) {
                             fbUser = mAuth.getCurrentUser();
                             if (task.getResult().getAdditionalUserInfo().isNewUser()) {
-                                registerUserInDatabase(createUser(), requestCode);
+                                createUser();
                                 Bundle bundle = new Bundle();
                                 bundle.putBoolean("isNewUser", true);
                                 notifyAccountActivity(true, requestCode, bundle);
@@ -203,7 +182,7 @@ public class AccountManagerFirebasePro extends AccountManager {
                                         if (dataSnapshot.hasChild("pro" + mAuth.getCurrentUser().getUid())) {
                                             getUserFromDatabase(requestCode);
                                         } else {
-                                            registerUserInDatabase(createUser(), requestCode);
+                                            createUser();
                                             Bundle bundle = new Bundle();
                                             bundle.putBoolean("isNewUser", true);
                                             notifyAccountActivity(true, requestCode, bundle);
@@ -255,11 +234,13 @@ public class AccountManagerFirebasePro extends AccountManager {
         rootRef.child(Constants.FIREBASE_CONTACTS_CONTAINER_NAME).child(user.getUid()).removeValue();
 
         //Removing from rubros
-        rootRef
-                .child(Constants.FIREBASE_RUBRO_CONTAINER_NAME)
-                .child(user.getRubroEspecifico())
-                .child(user.getUid())
-                .removeValue();
+        DatabaseReference rubrosRef = rootRef.child(Constants.FIREBASE_RUBRO_CONTAINER_NAME);
+        for (String a : user.getRubros()) {
+            rubrosRef
+                    .child(a)
+                    .child(user.getUid())
+                    .removeValue();
+        }
 
         //removing reviews
         rootRef
@@ -422,12 +403,14 @@ public class AccountManagerFirebasePro extends AccountManager {
                     fbUser.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            registerUserInDatabase(createUser(), requestCode);
+                            createUser();
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("user", user);
+                            notifyAccountActivity(true, requestCode, bundle);
                         }
                     });
 
                 } else {
-                    //TODO CHequear si ya existe
                     Bundle bundle = getBundleFromException(task.getException());
                     notifyAccountActivity(false, requestCode, bundle);
                 }
@@ -448,7 +431,7 @@ public class AccountManagerFirebasePro extends AccountManager {
         } catch (FirebaseNetworkException i) {
             msg = act.getString(R.string.error_coneccion);
         } catch (Exception i) {
-            msg = e.getMessage();
+            msg = act.getString(R.string.no_hay_usuario_registrado);
         }
         bundle.putString("error", msg);
         return bundle;

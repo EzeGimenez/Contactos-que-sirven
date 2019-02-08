@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/background_profile_search_result_row">
@@ -9,51 +8,40 @@
         android:id="@+id/ivProfilePic"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_centerVertical="true"
         android:layout_marginStart="16dp"
         android:src="@drawable/profile_pic"
-        android:transitionName="ivPic"
-        app:layout_constraintBottom_toBottomOf="@+id/tvLastMessage"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tvUsername" />
+        android:transitionName="ivPic" />
 
     <TextView
         android:id="@+id/tvUsername"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_margin="8dp"
+        android:layout_toStartOf="@id/timeStamp"
+        android:layout_toEndOf="@id/ivProfilePic"
         android:text="Username"
         android:textAllCaps="true"
         android:textColor="@color/colorAccentPrimary"
-        android:transitionName="username"
-        app:layout_constraintBottom_toTopOf="@+id/tvLastMessage"
-        app:layout_constraintEnd_toStartOf="@+id/timeStamp"
-        app:layout_constraintStart_toEndOf="@+id/ivProfilePic"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:transitionName="username" />
 
     <TextView
         android:id="@+id/tvLastMessage"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:text="message"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/tvUsername"
-        app:layout_constraintTop_toBottomOf="@+id/tvUsername" />
+        android:layout_below="@id/tvUsername"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="8dp"
+        android:layout_toEndOf="@id/ivProfilePic"
+        android:text="message" />
 
     <TextView
         android:id="@+id/timeStamp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
         android:layout_margin="8dp"
         android:text="18:05"
-        android:textSize="15sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textSize="15sp" />
 
-
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>

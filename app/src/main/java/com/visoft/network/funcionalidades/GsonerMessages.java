@@ -53,7 +53,7 @@ public class GsonerMessages {
             JsonPrimitive prim = (JsonPrimitive) jsonObject.get(CLASSNAME);
             String className = prim.getAsString();
 
-            Class<?> klass = null;
+            Class<?> klass;
             try {
                 klass = Class.forName(className);
             } catch (ClassNotFoundException e) {

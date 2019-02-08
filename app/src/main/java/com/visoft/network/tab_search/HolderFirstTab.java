@@ -3,6 +3,7 @@ package com.visoft.network.tab_search;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.SearchView;
@@ -13,25 +14,25 @@ import android.view.ViewGroup;
 import com.google.android.gms.maps.model.LatLng;
 import com.visoft.network.R;
 import com.visoft.network.funcionalidades.SearcherProUser;
-import com.visoft.network.objects.UserPro;
-
-import java.util.List;
 
 public class HolderFirstTab extends Fragment {
 
     private static SearcherProUser searcherProUser;
     private final int containerId = R.id.ContainerFirstTab;
     private FragmentManager fragmentManager;
-    private FragmentFirstTab fragmentGeneral, fragmentEspecifico1, fragmentEspecifico2, fragmentSearchResult;
+    private FragmentFirstTab fragmentGeneral, fragmentEspecifico, fragmentSearchResult;
     private String actual;
     private String idGeneral = "general";
     private String idSearchResult = "searchResult";
     private SearchView.OnQueryTextListener listenerSearchView;
 
+    private TabLayout tabLayout;
+    private int current;
+
     private String currentQuery;
 
-    public static List<UserPro> getProUsers() {
-        return searcherProUser.getProUsers();
+    public SearcherProUser getSearcherProUser() {
+        return searcherProUser;
     }
 
     @Override
@@ -58,7 +59,7 @@ public class HolderFirstTab extends Fragment {
                     if (actual != null && !actual.equals(idSearchResult)) {
                         prev = actual;
                         Bundle bundle = new Bundle();
-                        bundle.putString("rubro", s);
+                        bundle.putString("name", s);
                         fragmentSearchResult.setArguments(bundle);
                         fragmentManager
                                 .beginTransaction()
@@ -102,20 +103,24 @@ public class HolderFirstTab extends Fragment {
     public void iniciarFragments() {
         if (fragmentSearchResult == null) {
             fragmentSearchResult = new FragmentSearchResults();
-            fragmentEspecifico1 = new FragmentSpecific1();
             fragmentGeneral = new FragmentGeneral();
-            fragmentEspecifico2 = new FragmentSpecific2();
+            fragmentEspecifico = new FragmentSpecific();
         }
 
         fragmentSearchResult.setHolder(this);
         fragmentGeneral.setHolder(this);
-        fragmentEspecifico2.setHolder(this);
-        fragmentEspecifico1.setHolder(this);
+        fragmentEspecifico.setHolder(this);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        tabLayout = view.findViewById(R.id.tabLayout);
+        current = 0;
+        tabLayout.addTab(tabLayout.newTab());
+        tabLayout.addTab(tabLayout.newTab());
+        tabLayout.addTab(tabLayout.newTab());
 
         //SEARCH VIEW
         SearchView searchView = view.findViewById(R.id.searchView);
@@ -125,6 +130,7 @@ public class HolderFirstTab extends Fragment {
     public void onBackPressed() {
         if (fragmentManager.getBackStackEntryCount() > 0) {
             fragmentManager.popBackStack();
+            tabLayout.getTabAt(--current).select();
         } else {
             getActivity().finishAffinity();
         }
@@ -142,37 +148,29 @@ public class HolderFirstTab extends Fragment {
     }
 
     public void advance(Bundle bundle) {
-        String idEspecifico1 = "esp1";
-        String idEspecifico2 = "esp2";
+        String idEspecifico = "esp";
+
+        current++;
+        tabLayout.getTabAt(current).select();
+
         if (actual.equals(idGeneral)) {
 
-            fragmentEspecifico1.setArguments(bundle);
+            fragmentEspecifico.setArguments(bundle);
 
             fragmentManager
                     .beginTransaction()
                     .addToBackStack(idGeneral)
                     .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
-                    .replace(containerId, fragmentEspecifico1, idEspecifico1)
+                    .replace(containerId, fragmentEspecifico, idEspecifico)
                     .commit();
 
-        } else if (actual.equals(idEspecifico1)) {
-
-            fragmentEspecifico2.setArguments(bundle);
-
-            fragmentManager
-                    .beginTransaction()
-                    .addToBackStack(idEspecifico1)
-                    .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
-                    .replace(containerId, fragmentEspecifico2, idEspecifico2)
-                    .commit();
-
-        } else if (actual.equals(idEspecifico2)) {
+        } else if (actual.equals(idEspecifico)) {
 
             fragmentSearchResult.setArguments(bundle);
 
             fragmentManager
                     .beginTransaction()
-                    .addToBackStack(idEspecifico2)
+                    .addToBackStack(idEspecifico)
                     .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
                     .replace(containerId, fragmentSearchResult, idSearchResult)
                     .commit();

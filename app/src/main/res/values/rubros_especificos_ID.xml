@@ -1,28 +1,137 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="servicioshogarID">
-        <item>serviciosMant</item>
-        <item>proveedores</item>
-        <item>asesoramientos</item>
-        <item>personalEventual</item>
+    <string-array name="mantenimientohogarID">
+        <item>limpieza</item>
+        <item>electrodomesticos</item>
+        <item>plomero</item>
+        <item>electricista</item>
+        <item>cerrajeria</item>
+        <item>controlplagas</item>
+        <item>albanileria</item>
+        <item>telefonia</item>
+        <item>pintor</item>
+        <item>piscina</item>
+        <item>jardineria</item>
+        <item>gasista</item>
+        <item>carpintero</item>
+        <item>computacion</item>
+        <item>alarmas</item>
     </string-array>
 
-    <string-array name="obraConstruccionID">
-        <item>servicios</item>
-        <item>alquileres</item>
+    <string-array name="serviciosnegocioID">
+        <item>auditoria</item>
+        <item>contabilidad</item>
+        <item>abogacia</item>
+        <item>marketing</item>
+        <item>agrimensura</item>
+        <item>agronomia</item>
+        <item>bebidasalimentos</item>
+        <item>ropaaccesorios</item>
+        <item>electrodomesticos</item>
     </string-array>
 
-    <string-array name="serviciosPersonalesID">
-        <item>esteticaBienestar</item>
-        <item>profesorado</item>
-        <item>delivery</item>
-        <item>serviciosMascotas</item>
+    <string-array name="obraconstruccionID">
+        <item>ingenieria</item>
+        <item>arquitecto</item>
+        <item>gestionobras</item>
+        <item>albanileria</item>
+        <item>carpintero</item>
+        <item>electricista</item>
+        <item>singuero</item>
+        <item>serviciosgeneral</item>
+        <item>rellenos</item>
+        <item>mudanza</item>
+        <item>parquizacion</item>
+        <item>pintor</item>
+        <item>gasista</item>
+        <item>disenador</item>
+        <item>plomero</item>
+        <item>techista</item>
+        <item>picapedrero</item>
+        <item>movimientosindustriales</item>
+        <item>herrero</item>
+        <item>insumoscorralon</item>
+        <item>insumoselectricidad</item>
     </string-array>
 
-    <string-array name="emergenciasID">
-        <item>medicinaSalud</item>
-        <item>organismos</item>
-        <item>emergenciasDomesticas</item>
+    <string-array name="alquileresID">
+        <item>herramientas</item>
+        <item>maquinaria</item>
+    </string-array>
+
+    <string-array name="esteticabienestarID">
+        <item>peluqueria</item>
+        <item>manicurapedicura</item>
+    </string-array>
+
+    <string-array name="deliveryID">
+        <item>cadeteria</item>
+        <item>bebidasalimentos</item>
+        <item>farmacia</item>
+    </string-array>
+
+    <string-array name="capacitacionID">
+        <item>deportesbalon</item>
+        <item>deportesmontana</item>
+        <item>clasesparticularessecundario</item>
+        <item>clasesparticularesuniversidad</item>
+        <item>artesmarciales</item>
+        <item>cursosentretenimiento</item>
+        <item>deportesactuaticos</item>
+        <item>entretenimiento</item>
+        <item>computacion</item>
+        <item>idioma</item>
+        <item>relajacion</item>
+        <item>cursosprofesionales</item>
+    </string-array>
+
+    <string-array name="serviciosanimalesID">
+        <item>alojamientoanimales</item>
+        <item>veterinaria</item>
+        <item>transporteanimales</item>
+        <item>esteticaanimales</item>
+        <item>paseoentretenimiento</item>
+    </string-array>
+
+    <string-array name="medicinasaludID">
+        <item>nutricionista</item>
+        <item>traumatologia</item>
+        <item>geriatria</item>
+        <item>oftalmologia</item>
+        <item>enfermeria</item>
+        <item>podologia</item>
+        <item>pediatria</item>
+        <item>ambulancia</item>
+        <item>cardiologia</item>
+        <item>psicologia</item>
+        <item>cuidadoadultosmayores</item>
+        <item>serviciosdiscapacitados</item>
+    </string-array>
+
+    <string-array name="serviciosautomoviltransporteID">
+        <item>grua</item>
+        <item>gomeria</item>
+        <item>mecanico</item>
+        <item>electricidadautomotor</item>
+        <item>taxi</item>
+        <item>remisse</item>
+        <item>traffic</item>
+        <item>interurbano</item>
+        <item>flete</item>
+        <item>chapapintura</item>
+    </string-array>
+
+    <string-array name="eventosID">
+        <item>fotografia</item>
+        <item>musica</item>
+        <item>organizacion</item>
+    </string-array>
+
+    <string-array name="oficinasID">
+        <item>dispensersexpendedoras</item>
+        <item>equipofitness</item>
+        <item>fotocopiadoras</item>
+        <item>montacargasyascensores</item>
     </string-array>
 
 </resources>

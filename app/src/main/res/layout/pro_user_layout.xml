@@ -1,50 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/background_profile_search_result_row">
+    android:background="@drawable/background_profile_search_result_row"
+    android:padding="8dp">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/ivProfilePic"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginStart="16dp"
         android:src="@drawable/profile_pic"
-        android:transitionName="ivPic"
-        app:layout_constraintBottom_toBottomOf="@+id/tvRubro"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tvUsername" />
+        android:transitionName="ivPic" />
 
     <TextView
         android:id="@+id/tvUsername"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="4dp"
+        android:layout_toStartOf="@id/ratingBar"
+        android:layout_toEndOf="@id/ivProfilePic"
         android:text="Username"
         android:textAllCaps="true"
         android:textColor="@color/colorAccentPrimary"
-        android:transitionName="username"
-        app:layout_constraintBottom_toTopOf="@+id/tvRubro"
-        app:layout_constraintEnd_toStartOf="@+id/ratingBar"
-        app:layout_constraintStart_toEndOf="@+id/ivProfilePic"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:transitionName="username" />
 
     <com.iarcuschin.simpleratingbar.SimpleRatingBar
         android:id="@+id/ratingBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="4dp"
         android:numStars="5"
         android:transitionName="ratingBar"
-        app:layout_constraintBottom_toBottomOf="@+id/tvUsername"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/tvUsername"
-        app:layout_constraintTop_toTopOf="@+id/tvUsername"
         app:srb_drawBorderEnabled="false"
         app:srb_isIndicator="true"
         app:srb_numberOfStars="5"
@@ -54,26 +43,22 @@
 
     <TextView
         android:id="@+id/tvRubro"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="Job"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/tvNumReviews"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/tvUsername"
-        app:layout_constraintTop_toBottomOf="@+id/tvUsername" />
+        android:layout_below="@id/tvUsername"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:layout_toEndOf="@id/ivProfilePic"
+        android:maxLines="1"
+        android:text="Job" />
 
     <TextView
         android:id="@+id/tvNumReviews"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/tvRubro"
-        app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
+        android:layout_below="@id/ratingBar"
+        android:layout_alignBaseline="@id/tvRubro"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="8dp" />
 
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>

@@ -71,6 +71,10 @@ public class MainActivityNormal extends AppCompatActivity {
         sharedPref = getSharedPreferences(Constants.SHARED_PREF_NAME, MODE_PRIVATE);
         mAuth = FirebaseAuth.getInstance();
 
+        if (mAuth.getCurrentUser() == null) {
+            showLogInScreen();
+        }
+
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -88,6 +92,7 @@ public class MainActivityNormal extends AppCompatActivity {
         } else {
             accountManager = AccountManagerFirebaseNormal.getInstance(null, this);
         }
+
         HolderCurrentAccountManager.setCurrent(accountManager);
         accountManager.getCurrentUser(1);
 
@@ -162,7 +167,7 @@ public class MainActivityNormal extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (holderFirstTab.isVisible()) {
+        if (holderFirstTab != null && holderFirstTab.isVisible()) {
             holderFirstTab.onBackPressed();
         }
     }
@@ -183,62 +188,65 @@ public class MainActivityNormal extends AppCompatActivity {
     private void updateUI(@Nullable FirebaseUser user) {
         final MenuItem goToProfileItem = menu.findItem(R.id.goToProfile);
 
-        final View view = menu.findItem(R.id.goToProfile).getActionView();
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onOptionsItemSelected(goToProfileItem);
-            }
-        });
-        TextView tvusername = view.findViewById(R.id.tvUsername);
-        tvusername.setText(user.getDisplayName());
-        tvusername.setVisibility(View.VISIBLE);
-        goToProfileItem.setVisible(true);
-
-        viewPagerMain = findViewById(R.id.ViewPagerMain);
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-
-        tabLayout = findViewById(R.id.tabLayoutMain);
-        tabLayout.setupWithViewPager(viewPagerMain);
-        viewPagerAdapter.addFragment(holderFirstTab, getString(R.string.buscar));
-        viewPagerAdapter.addFragment(chatsFragment, getString(R.string.chats));
-        viewPagerAdapter.addFragment(mainContactsFragment, getString(R.string.contactos));
-        viewPagerMain.setOffscreenPageLimit(3);
-        viewPagerMain.setAdapter(viewPagerAdapter);
-
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                currentTab = tab.getPosition();
-                if (tab.getPosition() == 1) {
-                    View view = tab.getCustomView();
-                    if (view != null) {
-                        view.findViewById(R.id.notImg).setVisibility(View.INVISIBLE);
-                    }
-                    sharedPref.edit().putBoolean("unreadMessages", false).apply();
+        if (user != null) {
+            final View view = menu.findItem(R.id.goToProfile).getActionView();
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onOptionsItemSelected(goToProfileItem);
                 }
+            });
+            TextView tvusername = view.findViewById(R.id.tvUsername);
+            tvusername.setText(user.getDisplayName());
+            tvusername.setVisibility(View.VISIBLE);
+            goToProfileItem.setVisible(true);
+
+            viewPagerMain = findViewById(R.id.ViewPagerMain);
+            ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+
+            tabLayout = findViewById(R.id.tabLayoutMain);
+            tabLayout.setupWithViewPager(viewPagerMain);
+            viewPagerAdapter.addFragment(holderFirstTab, getString(R.string.buscar));
+            viewPagerAdapter.addFragment(chatsFragment, getString(R.string.chats));
+            viewPagerAdapter.addFragment(mainContactsFragment, getString(R.string.contactos));
+            viewPagerMain.setOffscreenPageLimit(3);
+            viewPagerMain.setAdapter(viewPagerAdapter);
+
+            tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                @Override
+                public void onTabSelected(TabLayout.Tab tab) {
+                    currentTab = tab.getPosition();
+                    if (tab.getPosition() == 1) {
+                        View view = tab.getCustomView();
+                        if (view != null) {
+                            view.findViewById(R.id.notImg).setVisibility(View.INVISIBLE);
+                        }
+                        sharedPref.edit().putBoolean("unreadMessages", false).apply();
+                    }
+                }
+
+                @Override
+                public void onTabUnselected(TabLayout.Tab tab) {
+                }
+
+                @Override
+                public void onTabReselected(TabLayout.Tab tab) {
+
+                }
+            });
+
+            tabLayout.getTabAt(1).setCustomView(R.layout.chat_notified);
+
+            if (!sharedPref.getBoolean("unreadMessages", false)) {
+                tabLayout.getTabAt(1).getCustomView().findViewById(R.id.notImg).setVisibility(View.INVISIBLE);
             }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
-        tabLayout.getTabAt(1).setCustomView(R.layout.chat_notified);
-
-        if (!sharedPref.getBoolean("unreadMessages", false)) {
-            tabLayout.getTabAt(1).getCustomView().findViewById(R.id.notImg).setVisibility(View.INVISIBLE);
         }
     }
 
     private void showLogInScreen() {
         Intent intent = new Intent(this, SignInActivity.class);
-        onBackPressed();
         startActivity(intent);
+        finish();
     }
 
     @Override

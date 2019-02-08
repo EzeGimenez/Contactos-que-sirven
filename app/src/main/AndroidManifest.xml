@@ -19,7 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-
+        <activity android:name=".TutorialActivity"></activity>
         <activity
             android:name=".MainActivityNormal"
             android:windowSoftInputMode="adjustResize">
@@ -34,7 +34,7 @@
             android:name=".sign_in.SignInActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".profiles.ProfileActivityOwnUser" />
-        <activity android:name=".turn_pro.TurnProActivity" />
+        <activity android:name=".turnpro.TurnProActivity" />
         <activity
             android:name=".tab_chats.SpecificChatActivity"
             android:windowSoftInputMode="adjustResize" />

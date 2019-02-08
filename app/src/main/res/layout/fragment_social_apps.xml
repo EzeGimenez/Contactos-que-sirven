@@ -1,136 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".turn_pro.SocialAppsFragment">
+    android:gravity="center"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/tvAppsNoAñadidas"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_margin="16dp"
         android:text="@string/social_apps_noañadidas"
-        app:layout_constraintBottom_toTopOf="@+id/ContainerAppsNoAñadidas"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textSize="18sp" />
 
-    <android.support.constraint.ConstraintLayout
+    <LinearLayout
         android:id="@+id/ContainerAppsNoAñadidas"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/tvAppsAñadidas"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvAppsNoAñadidas">
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:gravity="center_horizontal">
 
         <ImageView
             android:id="@+id/btnInstagram"
             style="@style/SocialButton"
             android:layout_marginStart="16dp"
-            android:src="@drawable/social_instagram_icon"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/btnFacebook"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:src="@drawable/social_instagram_icon" />
 
         <ImageView
             android:id="@+id/btnFacebook"
             style="@style/SocialButton"
-            android:src="@drawable/social_facebook_icon"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/btnWhatsapp"
-            app:layout_constraintStart_toEndOf="@id/btnInstagram"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:src="@drawable/social_facebook_icon" />
 
         <ImageView
             android:id="@+id/btnWhatsapp"
             style="@style/SocialButton"
-            android:src="@drawable/social_whatsapp_icon"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/btnMail"
-            app:layout_constraintStart_toEndOf="@id/btnFacebook"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:src="@drawable/social_whatsapp_icon" />
 
         <ImageView
             android:id="@+id/btnMail"
             style="@style/SocialButton"
             android:layout_marginEnd="16dp"
-            android:src="@drawable/social_email_icon"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/btnWhatsapp"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:src="@drawable/social_email_icon" />
 
-    </android.support.constraint.ConstraintLayout>
+    </LinearLayout>
 
     <TextView
         android:id="@+id/tvAppsAñadidas"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_margin="16dp"
         android:text="@string/social_apps_añadidas"
-        app:layout_constraintBottom_toTopOf="@+id/ContainerAppsAñadidas"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ContainerAppsNoAñadidas" />
+        android:textSize="18sp" />
 
-    <android.support.constraint.ConstraintLayout
+    <LinearLayout
         android:id="@+id/ContainerAppsAñadidas"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvAppsAñadidas">
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:gravity="center_horizontal">
 
         <ImageView
             android:id="@+id/btnInstagramA"
             style="@style/SocialButton"
             android:layout_marginStart="16dp"
-            android:src="@drawable/social_instagram_icon"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/btnFacebookA"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:src="@drawable/social_instagram_icon" />
 
         <ImageView
             android:id="@+id/btnFacebookA"
             style="@style/SocialButton"
-            android:src="@drawable/social_facebook_icon"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/btnWhatsappA"
-            app:layout_constraintStart_toEndOf="@id/btnInstagramA"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:src="@drawable/social_facebook_icon" />
 
         <ImageView
             android:id="@+id/btnWhatsappA"
             style="@style/SocialButton"
-            android:src="@drawable/social_whatsapp_icon"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/btnMailA"
-            app:layout_constraintStart_toEndOf="@id/btnFacebookA"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:src="@drawable/social_whatsapp_icon" />
 
         <ImageView
             android:id="@+id/btnMailA"
             style="@style/SocialButton"
             android:layout_marginEnd="16dp"
-            android:src="@drawable/social_email_icon"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/btnWhatsappA"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:src="@drawable/social_email_icon" />
 
-    </android.support.constraint.ConstraintLayout>
+    </LinearLayout>
 
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

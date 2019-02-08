@@ -52,20 +52,16 @@
                 android:textColor="@color/colorAccentPrimary"
                 android:transitionName="username" />
 
-            <TextView
-                android:id="@+id/tvRubro"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvRubros"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:textAlignment="center"
-                android:textAllCaps="true" />
+                android:layout_margin="16dp" />
 
             <LinearLayout
                 android:id="@+id/constraintLayout"
                 android:layout_width="match_parent"
-                android:layout_height="350dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
@@ -216,16 +212,26 @@
                     android:layout_width="75dp"
                     android:layout_height="75dp"
                     android:layout_margin="8dp"
-                    android:background="@drawable/round_orange_circle"
-                    android:drawableStart="@drawable/comment" />
+                    android:background="@drawable/main_buttons"
+                    android:drawableStart="@drawable/comment"
+                    android:padding="8dp"
+                    android:text="1" />
 
                 <ImageButton
                     android:id="@+id/btnCV"
                     android:layout_width="75dp"
                     android:layout_height="75dp"
                     android:layout_margin="8dp"
-                    android:background="@drawable/round_orange_circle"
+                    android:background="@drawable/main_buttons"
                     android:src="@drawable/curriculum" />
+
+                <ImageButton
+                    android:id="@+id/btnMoreInfo"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:layout_margin="8dp"
+                    android:background="@drawable/main_buttons"
+                    android:src="@drawable/ic_info_black_24dp" />
 
             </LinearLayout>
 

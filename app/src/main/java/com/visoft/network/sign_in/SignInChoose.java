@@ -33,14 +33,14 @@ public class SignInChoose extends Fragment implements View.OnClickListener {
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction
-                .addToBackStack(SignInActivity.chooseID);
+                .addToBackStack(getTag());
+        transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
 
         if (view.getId() == R.id.btnSesionProfesional) {
             fragment = new SignInPro();
-            transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
+
         } else {
             fragment = new SignInNormal();
-            transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left);
         }
 
         transaction.replace(SignInActivity.containerID, fragment)

@@ -18,6 +18,6 @@
         android:id="@+id/notImg"
         android:layout_width="10dp"
         android:layout_height="10dp"
-        android:src="@drawable/round_orange_circle" />
+        android:src="@drawable/main_buttons" />
 
 </LinearLayout>

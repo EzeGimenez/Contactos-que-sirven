@@ -1,26 +1,20 @@
 package com.visoft.network.tab_contacts;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.iarcuschin.simpleratingbar.SimpleRatingBar;
 import com.visoft.network.R;
 import com.visoft.network.funcionalidades.AccountManager;
 import com.visoft.network.funcionalidades.GsonerUser;
@@ -30,12 +24,10 @@ import com.visoft.network.objects.UserPro;
 import com.visoft.network.profiles.ProfileActivity;
 import com.visoft.network.util.Constants;
 import com.visoft.network.util.Database;
-import com.visoft.network.util.GlideApp;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import de.hdodenhof.circleimageview.CircleImageView;
+import eu.davidea.flexibleadapter.FlexibleAdapter;
 
 public class MainContactsFragment extends Fragment {
 
@@ -45,7 +37,7 @@ public class MainContactsFragment extends Fragment {
     private boolean populated;
 
     //Componentes gráficas
-    private ListView listView;
+    private RecyclerView rvContacts;
 
     @Nullable
     @Override
@@ -56,7 +48,7 @@ public class MainContactsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        listView = view.findViewById(R.id.listViewContacts);
+        rvContacts = view.findViewById(R.id.listViewContacts);
     }
 
     @Override
@@ -98,7 +90,7 @@ public class MainContactsFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        listView.setAdapter(null);
+        rvContacts.setAdapter(null);
         populated = false;
     }
 
@@ -124,14 +116,17 @@ public class MainContactsFragment extends Fragment {
     private void setAdapter() {
         if (i == j) {
             if (contacts.size() > 0) {
-                ListViewAdapter adapter = new ListViewAdapter(getContext(), R.layout.pro_user_layout, contacts);
-                listView.setAdapter(adapter);
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                FlexibleAdapter<UserPro> adapter = new FlexibleAdapter<>(contacts);
+                rvContacts.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+                rvContacts.setAdapter(adapter);
+                adapter.addListener(new FlexibleAdapter.OnItemClickListener() {
                     @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    public boolean onItemClick(View view, int position) {
                         Intent intent = new Intent(getActivity(), ProfileActivity.class);
                         intent.putExtra("user", contacts.get(position));
                         startActivity(intent);
+
+                        return false;
                     }
                 });
             }
@@ -153,69 +148,5 @@ public class MainContactsFragment extends Fragment {
 
             }
         });
-    }
-
-    private class ListViewAdapter extends ArrayAdapter<UserPro> {
-        private LayoutInflater inflater;
-        private List<UserPro> list;
-        private StorageReference storage;
-
-        ListViewAdapter(@NonNull Context context, int resource, @NonNull List<UserPro> objects) {
-            super(context, resource, objects);
-            this.inflater = LayoutInflater.from(context);
-            this.list = objects;
-            storage = FirebaseStorage.getInstance().getReference();
-        }
-
-        @NonNull
-        @Override
-        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-
-            final ViewHolder holder;
-
-            if (convertView == null) {
-                holder = new ViewHolder();
-                convertView = inflater.inflate(R.layout.pro_user_layout, null);
-
-                holder.ivPic = convertView.findViewById(R.id.ivProfilePic);
-                holder.tvUsername = convertView.findViewById(R.id.tvUsername);
-                holder.tvRubro = convertView.findViewById(R.id.tvRubro);
-                holder.tvNumReviews = convertView.findViewById(R.id.tvNumReviews);
-                holder.ratingBar = convertView.findViewById(R.id.ratingBar);
-
-                convertView.setTag(holder);
-            } else {
-                holder = (ViewHolder) convertView.getTag();
-            }
-
-            UserPro user = list.get(position);
-            String subRubro;
-            int id = getResources().getIdentifier(user.getRubroEspecifico(),
-                    "string",
-                    getActivity().getPackageName());
-            subRubro = getResources().getString(id);
-
-
-            holder.tvUsername.setText(user.getUsername());
-            holder.tvRubro.setText(subRubro);
-            holder.tvNumReviews.setText(user.getNumberReviews() + " " + getString(R.string.reviews));
-            holder.ratingBar.setRating(user.getRating());
-
-            if (user.getHasPic()) {
-                StorageReference userRefStorage = storage.child(Constants.FIREBASE_USERS_PRO_CONTAINER_NAME + "/" + user.getUid() + user.getImgVersion() + ".jpg");
-                GlideApp.with(getContext())
-                        .load(userRefStorage)
-                        .into(holder.ivPic);
-            }
-
-
-            return convertView;
-        }
-
-        private class ViewHolder {
-            CircleImageView ivPic;
-            TextView tvUsername, tvRubro, tvNumReviews;
-            SimpleRatingBar ratingBar;
-        }
     }
 }

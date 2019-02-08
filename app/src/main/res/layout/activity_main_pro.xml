@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="8dp"
-        android:background="@drawable/edittext_background_orange"
+        android:background="@drawable/edittext_background_coloraccentprimary"
         android:padding="8dp"
         android:text="@string/chats"
         android:textAlignment="center"

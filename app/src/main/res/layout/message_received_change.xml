@@ -1,69 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="8dp">
+    android:layout_marginTop="4dp"
+    android:layout_marginEnd="16dp">
 
-    <ImageView
-        android:id="@+id/arrow"
-        android:layout_width="15dp"
-        android:layout_height="20dp"
-        android:layout_marginTop="8dp"
-        android:rotation="180"
-        android:src="@drawable/right_triangle_white"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/globe" />
-
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/globe"
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="100dp"
-        android:background="@drawable/message_received_background"
-        android:paddingEnd="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toEndOf="@id/arrow"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="wrap_content">
 
-        <RelativeLayout
-            android:id="@+id/fillerView"
+        <ImageView
+            android:id="@+id/arrow"
+            android:layout_width="15dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="4dp"
+            android:rotation="180"
+            android:src="@drawable/right_triangle_white" />
+
+        <LinearLayout
+            android:id="@+id/containerMsg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="4dp"
-            android:maxWidth="220dp"
-            android:orientation="vertical"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_marginStart="-4dp"
+            android:layout_toEndOf="@id/arrow"
+            android:background="@drawable/message_received_background"
+            android:padding="4dp">
 
             <TextView
                 android:id="@+id/tvText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:maxWidth="220dp"
+                android:text="asdda"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="16sp"
-                android:visibility="gone" />
+                android:visibility="visible" />
 
             <com.google.android.gms.maps.MapView
                 android:id="@+id/mapView"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:visibility="gone" />
-
-        </RelativeLayout>
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tvTimeStamp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="4dp"
+            android:layout_margin="4dp"
+            android:layout_toEndOf="@id/containerMsg"
             android:text="11:40"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="12sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/fillerView" />
-    </android.support.constraint.ConstraintLayout>
-</android.support.constraint.ConstraintLayout>
+            android:textSize="12sp" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -16,13 +16,12 @@ import android.widget.EditText;
 
 import com.visoft.network.MainActivityPro;
 import com.visoft.network.R;
-import com.visoft.network.funcionalidades.AccountManager;
 import com.visoft.network.funcionalidades.AccountManagerFirebasePro;
 import com.visoft.network.funcionalidades.HolderCurrentAccountManager;
 import com.visoft.network.funcionalidades.LoadingScreen;
 import com.visoft.network.objects.User;
 import com.visoft.network.objects.UserPro;
-import com.visoft.network.turn_pro.TurnProActivity;
+import com.visoft.network.turnpro.TurnProActivity;
 import com.visoft.network.util.Constants;
 
 import static android.app.Activity.RESULT_CANCELED;
@@ -33,7 +32,7 @@ public class SignInPro extends Fragment implements View.OnClickListener {
     public static final int RC_SIGNINEMAIL = 1, RC_SIGNINGOOGLE = 2, RC_SIGNUP = 3;
     private static final int RC_SIGNUPGOOGLE = 11;
     private EditText emailET, passwordET;
-    private AccountManager accountManager;
+    private AccountManagerFirebasePro accountManager;
     private LoadingScreen loadingScreen;
 
     @Override
@@ -64,10 +63,29 @@ public class SignInPro extends Fragment implements View.OnClickListener {
         User user = accountManager.getCurrentUser(10);
         if (user != null) {
             Intent intent = new Intent(getContext(), TurnProActivity.class);
-            intent.putExtra("proUser", user);
-            intent.putExtra("isEditing", false);
+
+            String[] configurators = new String[8];
+            configurators[0] = "ConfiguratorRubro";
+            configurators[1] = "ConfiguratorWorkScope";
+            configurators[2] = "ConfiguratorProfilePic";
+            configurators[3] = "ConfiguratorContacto";
+            configurators[4] = "ConfiguratorPersonalInfo";
+            configurators[5] = "ConfiguratorAcompanante";
+            configurators[6] = "ConfiguratorSocialApps";
+            configurators[7] = "ConfiguratorCV";
+
+            intent.putExtra("user", user);
+            intent.putExtra("configurators", configurators);
+            intent.putExtra("isNewUser", true);
+            loadingScreen.hide();
             startActivityForResult(intent, RC_SIGNUPGOOGLE);
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        accountManager.invalidate();
     }
 
     @Override
@@ -146,7 +164,6 @@ public class SignInPro extends Fragment implements View.OnClickListener {
     public void onResume() {
         super.onResume();
 
-
         this.accountManager = AccountManagerFirebasePro.getInstance(new AccountManagerFirebasePro.ListenerRequestResult() {
             @Override
             public void onRequestResult(boolean result, int requestCode, Bundle data) {
@@ -174,7 +191,5 @@ public class SignInPro extends Fragment implements View.OnClickListener {
         }, (AppCompatActivity) getActivity());
 
         HolderCurrentAccountManager.setCurrent(accountManager);
-
-        loadingScreen.hide();
     }
 }

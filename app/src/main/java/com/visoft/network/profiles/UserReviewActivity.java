@@ -2,19 +2,19 @@ package com.visoft.network.profiles;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -26,6 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.iarcuschin.simpleratingbar.SimpleRatingBar;
 import com.visoft.network.R;
 import com.visoft.network.funcionalidades.GsonerUser;
+import com.visoft.network.funcionalidades.LoadingScreen;
 import com.visoft.network.objects.QualityInfo;
 import com.visoft.network.objects.Review;
 import com.visoft.network.objects.User;
@@ -33,16 +34,14 @@ import com.visoft.network.objects.UserPro;
 import com.visoft.network.util.Constants;
 import com.visoft.network.util.Database;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class UserReviewActivity extends AppCompatActivity {
     private Review review;
     private DatabaseReference database;
     private QualityInfo qualityInfo;
     private UserPro proUserReviewed;
-    private Map<Integer, View> mapPage;
+    private SparseArray<View> mapPage;
     private FirebaseAuth mAuth;
+    private LoadingScreen loadingScreen;
 
     //Componentes gráficas
     private Button btnNext, btnPrev;
@@ -54,9 +53,11 @@ public class UserReviewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_review);
 
+        loadingScreen = new LoadingScreen(this, (ViewGroup) findViewById(R.id.rootView));
+
         database = Database.getDatabase().getReference();
         mAuth = FirebaseAuth.getInstance();
-        mapPage = new HashMap<>();
+        mapPage = new SparseArray<>();
         proUserReviewed = (UserPro) getIntent().getSerializableExtra("user");
 
         database.child(Constants.FIREBASE_QUALITY_CONTAINER_NAME)
@@ -95,7 +96,6 @@ public class UserReviewActivity extends AppCompatActivity {
     }
 
     private void saveReview() {
-
         review.setReviewerUID(mAuth.getCurrentUser().getUid());
         review.setReviewerUsername(mAuth.getCurrentUser().getDisplayName());
 
@@ -121,18 +121,7 @@ public class UserReviewActivity extends AppCompatActivity {
             qualityInfo.setCalidad(qualityInfo.getCalidad() - 2);
         }
 
-        showLoadingScreen();
-        CountDownTimer timer = new CountDownTimer(8000, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-
-            }
-
-            @Override
-            public void onFinish() {
-                finish();
-            }
-        };
+        loadingScreen.show();
 
         database.child(Constants.FIREBASE_REVIEWS_CONTAINER_NAME)
                 .child(proUserReviewed.getUid())
@@ -178,18 +167,45 @@ public class UserReviewActivity extends AppCompatActivity {
                 .setValue(json).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                hideLoadingScreen();
-                goBack();
+                loadingScreen.hide();
+                finish();
             }
         });
+
+
+        database.child(Constants.COUNTER_CONTRACTS)
+                .child("mock")
+                .setValue("mock")
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+
+                        database
+                                .child(Constants.COUNTER_CONTRACTS)
+                                .child("mock")
+                                .removeValue();
+
+                        database.child(Constants.COUNTER_CONTRACTS)
+                                .child("cant")
+                                .addListenerForSingleValueEvent(new ValueEventListener() {
+
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        long cant = (long) dataSnapshot.getValue();
+                                        database.child(Constants.COUNTER_CONTRACTS).child("cant").setValue(++cant);
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+                    }
+                });
     }
 
     public void goBack() {
-        Intent intent = new Intent(this, ProfileActivity.class);
-        intent.putExtra("user", proUserReviewed);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-        finish();
+        Toast.makeText(this, getString(R.string.please_finish_review), Toast.LENGTH_SHORT).show();
     }
 
     private void onForthPressed() {
@@ -200,6 +216,7 @@ public class UserReviewActivity extends AppCompatActivity {
             case 0:
 
                 viewPager.setCurrentItem(shown + 1);
+                btnPrev.setVisibility(View.VISIBLE);
                 btnPrev.setText(getString(R.string.previo));
                 review.setTiempoResp(ratingBar.getRating());
 
@@ -243,7 +260,7 @@ public class UserReviewActivity extends AppCompatActivity {
                 break;
             case 1:
                 ratingBar.setRating(review.getTiempoResp());
-                btnPrev.setText(getString(R.string.cancelar));
+                btnPrev.setVisibility(View.GONE);
                 viewPager.setCurrentItem(shown - 1);
                 break;
             case 2:
@@ -262,14 +279,6 @@ public class UserReviewActivity extends AppCompatActivity {
     private void setup() {
         review = new Review();
         viewPager.setAdapter(new LayoutAdapter());
-    }
-
-    private void showLoadingScreen() {
-        findViewById(R.id.progressBarContainer).setVisibility(View.VISIBLE);
-    }
-
-    private void hideLoadingScreen() {
-        findViewById(R.id.progressBarContainer).setVisibility(View.GONE);
     }
 
     private class LayoutAdapter extends PagerAdapter {

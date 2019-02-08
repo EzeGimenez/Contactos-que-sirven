@@ -61,7 +61,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="16dp"
                 android:padding="8dp"
-                android:text="@string/profesional"
+                android:text="@string/prestador_servicio"
                 android:textAlignment="center"
                 android:textAllCaps="true"
                 android:textSize="18sp" />

@@ -1,6 +1,5 @@
 package com.visoft.network.profiles;
 
-import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -100,7 +99,7 @@ public class ProfileActivity extends AppCompatActivity {
                 }
 
                 if (esContacto && menu != null) {
-                    menu.findItem(R.id.addContact).setIcon(R.drawable.ic_favorite_black_24dp);
+                    menu.findItem(R.id.addContact).setIcon(R.drawable.ic_star_black_24dp);
                 }
             }
 
@@ -115,13 +114,6 @@ public class ProfileActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
-            case R.id.calificar:
-                Intent intent = new Intent(ProfileActivity.this, UserReviewActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra("user", shownUser);
-                startActivity(intent);
-                finish();
-                return true;
             case R.id.addContact:
                 if (!esContacto) {
                     añadirContacto();
@@ -157,12 +149,9 @@ public class ProfileActivity extends AppCompatActivity {
         menu.findItem(R.id.edit).setVisible(false);
 
         if (esContacto) {
-            menu.findItem(R.id.addContact).setIcon(R.drawable.ic_favorite_black_24dp);
+            menu.findItem(R.id.addContact).setIcon(R.drawable.ic_star_black_24dp);
         } else {
-            menu.findItem(R.id.addContact).setIcon(R.drawable.ic_favorite_border_black_24dp);
-        }
-        if (!shownUser.getIsPro()) {
-            menu.findItem(R.id.calificar).setVisible(false);
+            menu.findItem(R.id.addContact).setIcon(R.drawable.ic_star_border_black_24dp);
         }
         return true;
     }

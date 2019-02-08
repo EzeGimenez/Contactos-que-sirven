@@ -10,7 +10,7 @@
 
     <color name="transparent">#00ffffff</color>
     <color name="semi_transparent">#20ffffff</color>
-    <color name="black_transparent">#47000000</color>
+    <color name="black_transparent">#74000000</color>
     <color name="foreground_material_dark">#d9d9d9</color>
-    <color name="primaryAccentTransparent">#60e78700</color>
+    <color name="primaryAccentTransparent">#8be78700</color>
 </resources>

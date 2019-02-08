@@ -12,6 +12,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,22 +39,21 @@ import com.google.firebase.storage.StorageReference;
 import com.iarcuschin.simpleratingbar.SimpleRatingBar;
 import com.visoft.network.R;
 import com.visoft.network.custom_views.CustomDialog;
-import com.visoft.network.funcionalidades.GsonerUser;
 import com.visoft.network.funcionalidades.HolderCurrentAccountManager;
 import com.visoft.network.funcionalidades.MapHighlighter;
 import com.visoft.network.funcionalidades.Messenger;
 import com.visoft.network.objects.QualityInfo;
 import com.visoft.network.objects.Review;
-import com.visoft.network.objects.User;
+import com.visoft.network.objects.RubroEspecifico;
 import com.visoft.network.objects.UserPro;
 import com.visoft.network.util.Constants;
 import com.visoft.network.util.Database;
 import com.visoft.network.util.GlideApp;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import eu.davidea.flexibleadapter.FlexibleAdapter;
 
 public class UserProFragment extends Fragment implements OnMapReadyCallback, View.OnClickListener {
     private UserPro user;
@@ -60,10 +61,11 @@ public class UserProFragment extends Fragment implements OnMapReadyCallback, Vie
     private boolean isRunning;
 
     //Componentes graficas
-    private TextView tvUsername, tvNumberReviews, tvHrAtencion, tvRubro;
+    private TextView tvUsername, tvNumberReviews, tvHrAtencion;
     private SimpleRatingBar ratingBar;
+    private RecyclerView rvRubro;
     private MapView mapView;
-    private ImageButton btnCV, btnShowContactInfo;
+    private ImageButton btnCV, btnShowContactInfo, btnMoreInfo;
     private Button btnShowReviews;
     private ImageView btnInstagram, btnWhatsapp, btnMail, btnFacebook;
     private LinearLayout profileControls;
@@ -91,7 +93,8 @@ public class UserProFragment extends Fragment implements OnMapReadyCallback, Vie
         tvUsername = view.findViewById(R.id.tvUsername);
         tvHrAtencion = view.findViewById(R.id.tvHrAtencion);
         btnCV = view.findViewById(R.id.btnCV);
-        tvRubro = view.findViewById(R.id.tvRubro);
+        rvRubro = view.findViewById(R.id.rvRubros);
+        btnMoreInfo = view.findViewById(R.id.btnMoreInfo);
         ratingBar = view.findViewById(R.id.ratingBar);
         mapView = view.findViewById(R.id.map);
         btnShowReviews = view.findViewById(R.id.btnShowReviews);
@@ -116,15 +119,16 @@ public class UserProFragment extends Fragment implements OnMapReadyCallback, Vie
     private void iniciarUI() {
         tvUsername.setText(user.getUsername());
 
-        int id1 = getResources().getIdentifier(user.getRubroGeneral(),
-                "string",
-                getActivity().getPackageName());
+        FlexibleAdapter<RubroEspecifico> adapter = new FlexibleAdapter<>(null);
 
-        int id3 = getResources().getIdentifier(user.getRubroEspecificoEspecifico(),
-                "string",
-                getActivity().getPackageName());
+        for (String s : user.getRubros()) {
+            RubroEspecifico aux = new RubroEspecifico(getContext(), s);
+            aux.setLayoutRes(R.layout.user_rubros);
+            adapter.addItem(aux);
+        }
 
-        tvRubro.setText(getString(id1) + " - " + getString(id3));
+        rvRubro.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        rvRubro.setAdapter(adapter);
 
         String[] diasL = getResources().getStringArray(R.array.dias);
         String[] hrAtencion = user.getHoraAtencion().split(" - ");
@@ -156,8 +160,10 @@ public class UserProFragment extends Fragment implements OnMapReadyCallback, Vie
                 }
             });
         } else {
-            btnCV.setVisibility(View.INVISIBLE);
+            btnCV.setVisibility(View.GONE);
         }
+
+        btnMoreInfo.setOnClickListener(this);
 
         if (user.getNumberReviews() > 0) {
             ratingBar.setRating(user.getRating());
@@ -172,7 +178,7 @@ public class UserProFragment extends Fragment implements OnMapReadyCallback, Vie
         } else {
             tvNumberReviews.setText("0");
             ratingBar.setRating(0);
-            btnShowReviews.setVisibility(View.INVISIBLE);
+            btnShowReviews.setVisibility(View.GONE);
         }
 
         if (user.getWhatsappNum() != null && user.getWhatsappNum().length() > 0) {
@@ -228,7 +234,6 @@ public class UserProFragment extends Fragment implements OnMapReadyCallback, Vie
 
         getProfilePic();
         getInsignias();
-
     }
 
     private void getProfilePic() {
@@ -285,6 +290,41 @@ public class UserProFragment extends Fragment implements OnMapReadyCallback, Vie
                 }
 
                 break;
+            case R.id.btnMoreInfo:
+
+                CustomDialog dialog = new CustomDialog(getContext());
+                dialog.setPositiveButton("OK", null);
+                View view = getLayoutInflater().inflate(R.layout.more_info_layout, null);
+                dialog.setView(view);
+                TextView tvCoworkers = view.findViewById(R.id.tvCoworkers);
+                TextView tvObraSocial = view.findViewById(R.id.tvobrasocial);
+                TextView tvMovilidadPropia = view.findViewById(R.id.tvmovilidadpropia);
+                TextView credit = view.findViewById(R.id.tvcredit);
+                TextView debit = view.findViewById(R.id.tvdebit);
+
+                if (user.getAcompanantes().size() > 0) {
+                    tvCoworkers.setText(getString(R.string.trabaja_acompanado, user.getAcompanantes().size()));
+                }
+
+                if (user.getObrasocial() != null) {
+                    tvObraSocial.setText(getString(R.string.posee_obra_social, user.getObrasocial()));
+                }
+
+                if (user.isMovilidadPropia()) {
+                    tvMovilidadPropia.setText(getString(R.string.posee_movilidad_propia));
+                }
+
+                if (user.isCredit()) {
+                    credit.setText(getString(R.string.acepta_cr_dito));
+                }
+
+                if (user.isDebit()) {
+                    debit.setText(getString(R.string.acepta_debito));
+                }
+
+                dialog.setView(view);
+                dialog.show();
+                break;
         }
     }
 
@@ -308,7 +348,7 @@ public class UserProFragment extends Fragment implements OnMapReadyCallback, Vie
     private void showContactInfo() {
         View view = getLayoutInflater().inflate(R.layout.contact_info, null);
         View containerTel2 = view.findViewById(R.id.containerTel2);
-        View containerEmail = view.findViewById(R.id.containerMail);
+        TextView tvEmail = view.findViewById(R.id.tvEmail);
 
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
@@ -342,10 +382,8 @@ public class UserProFragment extends Fragment implements OnMapReadyCallback, Vie
         }
 
         if (!user.getShowEmail()) {
-            containerEmail.setVisibility(View.GONE);
-
+            tvEmail.setVisibility(View.GONE);
         } else {
-            TextView tvEmail = view.findViewById(R.id.tvEmail);
             tvEmail.setText(user.getEmail());
         }
 
@@ -414,7 +452,6 @@ public class UserProFragment extends Fragment implements OnMapReadyCallback, Vie
                                 break;
                             }
                         }
-                        getCommentsPics(picList, uids);
                     }
 
                     @Override
@@ -422,39 +459,6 @@ public class UserProFragment extends Fragment implements OnMapReadyCallback, Vie
 
                     }
                 });
-    }
-
-    private void getCommentsPics(final List<CircleImageView> picList, final List<String> uids) {
-
-        for (int i = 0; i < uids.size(); i++) {
-            final int finalI = i;
-            database
-                    .child(Constants.FIREBASE_USERS_PRO_CONTAINER_NAME)
-                    .child(uids.get(i))
-                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            String json = dataSnapshot.getValue(String.class);
-                            User user = GsonerUser.getGson().fromJson(json, User.class);
-                            if (user != null && user.getHasPic() && isRunning) {
-                                StorageReference userRef = FirebaseStorage
-                                        .getInstance()
-                                        .getReference()
-                                        .child(Constants.FIREBASE_USERS_PRO_CONTAINER_NAME + "/" + uids.get(finalI) + user.getImgVersion() + ".jpg");
-                                GlideApp.with(getContext())
-                                        .load(userRef)
-                                        .into(picList.get(finalI));
-                            } else {
-                                picList.get(finalI).setImageDrawable(getResources().getDrawable(R.drawable.profile_pic));
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
-        }
     }
 
     @Override
@@ -503,7 +507,6 @@ public class UserProFragment extends Fragment implements OnMapReadyCallback, Vie
         mapView.onResume();
         super.onResume();
     }
-
 
     @Override
     public void onPause() {

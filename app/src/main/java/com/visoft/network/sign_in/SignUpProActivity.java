@@ -15,14 +15,16 @@ import com.visoft.network.funcionalidades.AccountManager;
 import com.visoft.network.funcionalidades.AccountManagerFirebaseNormal;
 import com.visoft.network.funcionalidades.HolderCurrentAccountManager;
 import com.visoft.network.funcionalidades.LoadingScreen;
-import com.visoft.network.turn_pro.TurnProActivity;
+import com.visoft.network.objects.UserPro;
+import com.visoft.network.turnpro.TurnProActivity;
 
 public class SignUpProActivity extends AppCompatActivity implements View.OnClickListener {
-    private static final int RC_SIGNUP = 3, RC_GOPRO = 5;
+    private static final int RC_SIGNUP = 3;
 
     private EditText etEmail, etPassword, etConfirmPassword, etUsername;
     private LoadingScreen loadingScreen;
     private AccountManager accountManager;
+    private UserPro user;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,6 +49,7 @@ public class SignUpProActivity extends AppCompatActivity implements View.OnClick
             public void onRequestResult(boolean result, int requestCode, Bundle data) {
                 loadingScreen.hide();
                 if (requestCode == RC_SIGNUP && result) {
+                    user = (UserPro) data.get("user");
                     startProConfig();
                 } else if (!result) {
                     if (data != null) {
@@ -59,9 +62,21 @@ public class SignUpProActivity extends AppCompatActivity implements View.OnClick
 
     private void startProConfig() {
         Intent intent = new Intent(this, TurnProActivity.class);
-        intent.putExtra("proUser", accountManager.getCurrentUser(1));
-        intent.putExtra("isEditing", false);
-        startActivityForResult(intent, RC_GOPRO);
+
+        String[] configurators = new String[8];
+        configurators[0] = "ConfiguratorRubro";
+        configurators[1] = "ConfiguratorWorkScope";
+        configurators[2] = "ConfiguratorProfilePic";
+        configurators[3] = "ConfiguratorContacto";
+        configurators[4] = "ConfiguratorPersonalInfo";
+        configurators[5] = "ConfiguratorAcompanante";
+        configurators[6] = "ConfiguratorSocialApps";
+        configurators[7] = "ConfiguratorCV";
+
+        intent.putExtra("user", user);
+        intent.putExtra("configurators", configurators);
+        intent.putExtra("isNewUser", true);
+        startActivityForResult(intent, 1);
     }
 
     @Override

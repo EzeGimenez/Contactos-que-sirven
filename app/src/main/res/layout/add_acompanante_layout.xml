@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="8dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/name" />
+
+    <EditText
+        android:id="@+id/etName"
+        style="@style/editText"
+        android:layout_gravity="center"
+        android:inputType="textCapWords|textPersonName" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/ingrese_dni" />
+
+    <EditText
+        android:id="@+id/etDNI"
+        style="@style/editText"
+        android:layout_gravity="center"
+        android:inputType="phone" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/ingrese_telefono" />
+
+    <EditText
+        android:id="@+id/ettel"
+        style="@style/editText"
+        android:layout_gravity="center"
+        android:hint="@string/opcional"
+        android:inputType="phone"
+        android:textColorHint="@color/black_transparent" />
+
+</LinearLayout>

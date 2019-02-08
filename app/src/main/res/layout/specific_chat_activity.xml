@@ -35,13 +35,26 @@
             android:textSize="16sp" />
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/listViewSpecificChat"
+    <TextView
+        android:id="@+id/tvFinalizarContrato"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/ContainerReceiver"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="68dp"
-        android:windowSoftInputMode="adjustResize" />
+        android:background="@color/colorAccentPrimary"
+        android:text="@string/finalizar_contrato"
+        android:textAlignment="center" />
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/tvFinalizarContrato">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/listViewSpecificChat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="68dp"
+            android:windowSoftInputMode="adjustResize" />
+
+    </RelativeLayout>
 </RelativeLayout>

@@ -1,9 +1,16 @@
 package com.visoft.network.objects;
 
+import android.content.Context;
+
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.visoft.network.R;
 import com.visoft.network.tab_search.FragmentSearchResults;
-import com.visoft.network.tab_search.VisitorUser;
+import com.visoft.network.util.Constants;
+import com.visoft.network.util.GlideApp;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import eu.davidea.flexibleadapter.FlexibleAdapter;
@@ -14,14 +21,17 @@ public class UserPro extends User implements IFilterable {
     private String telefono1 = "", telefono2 = "";
     private String cvText = "";
     private double mapCenterLat, mapCenterLng;
-    private String horaAtencion = "", rubroGeneral = "", rubroEspecifico = "", rubroNombre = "";
-    private String facebookID = "", instagramID = "", whatsappNum = "";
-    private boolean showEmail;
+    private String horaAtencion = "", dni = "";
+    private String facebookID = "", instagramID = "", whatsappNum = "", direccion, obrasocial, patente;
+    private List<String> rubro;
+    private List<Acompanante> acompanantes;
+    private boolean showEmail, movilidadPropia, debit, credit;
     private float mapZoom;
-    private int diasAtencion;
-    private String rubroEspecificoEspecifico = "";
+    private int diasAtencion = -1;
 
     public UserPro() {
+        rubro = new ArrayList<>();
+        acompanantes = new ArrayList<>();
         isPro = true;
     }
 
@@ -55,22 +65,6 @@ public class UserPro extends User implements IFilterable {
 
     public void setDiasAtencion(int diasAtencion) {
         this.diasAtencion = diasAtencion;
-    }
-
-    public String getRubroGeneral() {
-        return rubroGeneral;
-    }
-
-    public void setRubroGeneral(String rubroGeneral) {
-        this.rubroGeneral = rubroGeneral;
-    }
-
-    public String getRubroEspecifico() {
-        return rubroEspecifico;
-    }
-
-    public void setRubroEspecifico(String rubroEspecifico) {
-        this.rubroEspecifico = rubroEspecifico;
     }
 
     public boolean getShowEmail() {
@@ -137,20 +131,12 @@ public class UserPro extends User implements IFilterable {
         this.facebookID = facebookID;
     }
 
-    public String getRubroEspecificoEspecifico() {
-        return rubroEspecificoEspecifico;
+    public void setRubro(List<String> rubro) {
+        this.rubro = rubro;
     }
 
-    public void setRubroEspecificoEspecifico(String rubroEspecificoEspecifico) {
-        this.rubroEspecificoEspecifico = rubroEspecificoEspecifico;
-    }
-
-    public void acept(VisitorUser v) {
-        v.visit(this);
-    }
-
-    public void setRubroNombre(String a) {
-        this.rubroNombre = a;
+    public List<String> getRubros() {
+        return rubro;
     }
 
     @Override
@@ -160,8 +146,11 @@ public class UserPro extends User implements IFilterable {
         if (getUsername().toLowerCase().trim().contains(filter)) {
             return true;
         }
-        if (getRubroEspecificoEspecifico().toLowerCase().trim().contains(filter)) {
-            return true;
+
+        for (String a : rubro) {
+            if (a.toLowerCase().contains(filter)) {
+                return true;
+            }
         }
 
         return false;
@@ -172,11 +161,94 @@ public class UserPro extends User implements IFilterable {
         holder.ratingBar.setRating(getRating());
         holder.tvNumReviews.setText(getNumberReviews() + "");
         holder.tvUsername.setText(getUsername());
-        holder.tvRubro.setText(rubroNombre);
+
+        String aux = "";
+        Context context = holder.getContext();
+        for (String s : getRubros()) {
+            int id = context.getResources().getIdentifier(s, "string", context.getPackageName());
+            aux += " - " + context.getString(id);
+        }
+
+        holder.tvRubro.setText(aux);
+
+        if (hasPic) {
+            StorageReference storage = FirebaseStorage.getInstance().getReference();
+
+            StorageReference userRef = storage.child(Constants.FIREBASE_USERS_PRO_CONTAINER_NAME + "/" + getUid() + getImgVersion() + ".jpg");
+            GlideApp.with(context)
+                    .load(userRef)
+                    .into(holder.img);
+        } else {
+            holder.img.setImageDrawable(context.getResources().getDrawable(R.drawable.profile_pic));
+        }
     }
 
     @Override
     public String getUid() {
         return uid;
+    }
+
+    public boolean isMovilidadPropia() {
+        return movilidadPropia;
+    }
+
+    public void setMovilidadPropia(boolean movilidadPropia) {
+        this.movilidadPropia = movilidadPropia;
+    }
+
+    public String getDni() {
+        return dni;
+    }
+
+    public void setDni(String dni) {
+        this.dni = dni;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
+    public String getObrasocial() {
+        return obrasocial;
+    }
+
+    public void setObrasocial(String obrasocial) {
+        this.obrasocial = obrasocial;
+    }
+
+    public String getPatente() {
+        return patente;
+    }
+
+    public void setPatente(String patente) {
+        this.patente = patente;
+    }
+
+    public List<Acompanante> getAcompanantes() {
+        return acompanantes;
+    }
+
+    public void setAcompanantes(List<Acompanante> acompanantes) {
+        this.acompanantes = acompanantes;
+    }
+
+    public boolean isDebit() {
+        return debit;
+    }
+
+    public void setDebit(boolean debit) {
+        this.debit = debit;
+    }
+
+    public boolean isCredit() {
+        return credit;
+    }
+
+    public void setCredit(boolean credit) {
+        this.credit = credit;
     }
 }

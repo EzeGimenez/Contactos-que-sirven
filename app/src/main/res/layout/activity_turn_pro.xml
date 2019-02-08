@@ -1,86 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
-    tools:context=".turn_pro.TurnProActivity">
+    android:fillViewport="true">
 
-    <android.support.constraint.ConstraintLayout
+    <RelativeLayout
         android:id="@+id/rootView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:windowSoftInputMode="adjustResize">
 
-        <android.support.constraint.ConstraintLayout
-            android:id="@+id/ContainerTurnProFragments"
+        <TextView
+            android:id="@+id/tvInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="8dp"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textColor="@color/colorAccentPrimary"
+            android:textSize="18sp" />
+
+        <RelativeLayout
+            android:id="@+id/ContainerConfigurators"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginBottom="4dp"
-            app:layout_constraintBottom_toTopOf="@+id/btnPrev"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvInfo" />
+            android:layout_height="wrap_content"
+            android:layout_above="@id/btnNext"
+            android:layout_below="@id/tvInfo"
+            android:layout_margin="8dp" />
 
         <Button
             android:id="@+id/btnNext"
             style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:enabled="false"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
             android:text="@string/siguiente"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ContainerTurnProFragments" />
+            android:textColor="@color/colorAccentPrimary" />
 
         <Button
             android:id="@+id/btnPrev"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
             android:layout_marginEnd="24dp"
-            android:enabled="false"
-            android:text="@string/previo"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btnNext"
-            app:layout_constraintTop_toBottomOf="@+id/ContainerTurnProFragments" />
+            android:layout_toLeftOf="@id/btnNext"
+            android:text="@string/previo" />
 
-        <TextView
-            android:id="@+id/tvInfo"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginBottom="4dp"
-            android:textAlignment="center"
-            android:textAllCaps="true"
-            android:textColor="@color/colorAccentPrimary"
-            app:layout_constraintBottom_toTopOf="@+id/ContainerTurnProFragments"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </android.support.constraint.ConstraintLayout>
-
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/progressBarContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/semi_transparent"
-        android:clickable="true"
-        android:focusable="true"
-        android:visibility="gone">
-
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </android.support.constraint.ConstraintLayout>
-
-</FrameLayout>
+    </RelativeLayout>
+</ScrollView>

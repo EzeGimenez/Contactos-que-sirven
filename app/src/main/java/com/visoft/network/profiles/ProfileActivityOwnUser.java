@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -20,7 +21,7 @@ import com.visoft.network.funcionalidades.AccountManager;
 import com.visoft.network.funcionalidades.HolderCurrentAccountManager;
 import com.visoft.network.funcionalidades.LoadingScreen;
 import com.visoft.network.objects.User;
-import com.visoft.network.turn_pro.TurnProActivity;
+import com.visoft.network.turnpro.TurnProActivity;
 import com.visoft.network.util.Constants;
 
 public class ProfileActivityOwnUser extends AppCompatActivity {
@@ -89,7 +90,7 @@ public class ProfileActivityOwnUser extends AppCompatActivity {
             Bundle bundle = new Bundle();
             Fragment fragment;
             String id;
-            if ((user == null || user.getIsPro())) {
+            if (user.getIsPro()) {
                 editarPerfil.setVisible(true);
 
                 fragment = new UserProFragment();
@@ -153,11 +154,34 @@ public class ProfileActivityOwnUser extends AppCompatActivity {
      * Muestra pantalla de edicion del perfil
      */
     private void editarPerfil() {
-        Intent intent = new Intent(this, TurnProActivity.class);
-        intent.putExtra("proUser", user);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-        finish();
+        if (user != null) {
+            Intent intent = new Intent(this, TurnProActivity.class);
+
+            String[] configurators = new String[8];
+            configurators[0] = "ConfiguratorRubro";
+            configurators[1] = "ConfiguratorWorkScope";
+            configurators[2] = "ConfiguratorProfilePic";
+            configurators[3] = "ConfiguratorContacto";
+            configurators[4] = "ConfiguratorPersonalInfo";
+            configurators[5] = "ConfiguratorAcompanante";
+            configurators[6] = "ConfiguratorSocialApps";
+            configurators[7] = "ConfiguratorCV";
+
+            intent.putExtra("user", user);
+            intent.putExtra("configurators", configurators);
+            intent.putExtra("isNewUser", false);
+            startActivityForResult(intent, 1);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            Intent intent = new Intent(this, ProfileActivityOwnUser.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     @Override
@@ -167,10 +191,8 @@ public class ProfileActivityOwnUser extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.toolbar_perfil, menu);
         this.menu = menu;
-        menu.findItem(R.id.calificar).setVisible(false);
         menu.findItem(R.id.addContact).setVisible(false);
         iniciarUI();
         return true;

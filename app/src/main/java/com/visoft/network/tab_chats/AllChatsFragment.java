@@ -1,27 +1,21 @@
 package com.visoft.network.tab_chats;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.text.format.DateFormat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.visoft.network.R;
 import com.visoft.network.funcionalidades.AccountManager;
 import com.visoft.network.funcionalidades.GsonerUser;
@@ -32,15 +26,15 @@ import com.visoft.network.objects.UserNormal;
 import com.visoft.network.objects.UserPro;
 import com.visoft.network.util.Constants;
 import com.visoft.network.util.Database;
-import com.visoft.network.util.GlideApp;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
-import de.hdodenhof.circleimageview.CircleImageView;
+import eu.davidea.flexibleadapter.FlexibleAdapter;
 
 public class AllChatsFragment extends Fragment {
     private DatabaseReference database;
@@ -49,27 +43,85 @@ public class AllChatsFragment extends Fragment {
     private HashMap<String, User> mapUIDUser;
     private AccountManager accountManager;
     private User current;
-
+    private ValueEventListener listener;
+    private DatabaseReference userChatRef;
+    private long lastUpdate;
+    private ChatOverViewFlexibleAdapter adapter, adapterFinished;
+    private boolean got;
     //Componentes gráficas
-    private ListView listView;
+    private RecyclerView recyclerView, recyclerViewFinished;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        got = false;
 
         database = Database.getDatabase().getReference();
+        listener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (System.currentTimeMillis() - lastUpdate > 1000) {
+                    lastUpdate = System.currentTimeMillis();
+                    chatOverviews = new ArrayList<>();
+                    chatUIDS = new ArrayList<>();
+                    mapUIDUser = new HashMap<>();
+
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                        chatUIDS.add(ds.getKey());
+                        ChatOverview chatOverview = ds.getValue(ChatOverview.class);
+                        if (chatOverview != null) {
+                            chatOverviews.add(chatOverview);
+                        }
+                    }
+                    if (getView() != null) {
+                        if (chatUIDS.isEmpty()) {
+                            noChats();
+                            noCompleted();
+                        } else {
+                            yesChats();
+                            yesCompleted();
+                            getUsers();
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
+
         accountManager = HolderCurrentAccountManager.getCurrent(new AccountManager.ListenerRequestResult() {
             @Override
             public void onRequestResult(boolean result, int requestCode, Bundle data) {
-                if (current == null && result) {
+                if (!got && result) {
+                    got = true;
                     current = (User) data.get("user");
-                    populateChats();
+                    userChatRef = database
+                            .child(Constants.FIREBASE_CHATS_CONTAINER_NAME)
+                            .child(current.getUid());
+
+                    userChatRef
+                            .addValueEventListener(listener);
+
+                    Query q = userChatRef;
+                    q.keepSynced(true);
                 }
             }
         });
+
         current = accountManager.getCurrentUser(1);
-        if (current != null) {
-            populateChats();
+        if (current != null && !got) {
+            got = true;
+            userChatRef = database
+                    .child(Constants.FIREBASE_CHATS_CONTAINER_NAME)
+                    .child(current.getUid());
+
+            userChatRef
+                    .addValueEventListener(listener);
+            Query q = userChatRef;
+            q.keepSynced(true);
         }
 
         return inflater.inflate(R.layout.fragment_all_chats, container, false);
@@ -78,48 +130,34 @@ public class AllChatsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        listView = view.findViewById(R.id.listViewChats);
+        recyclerView = view.findViewById(R.id.rvChats);
+        recyclerViewFinished = view.findViewById(R.id.rvCompleted);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        recyclerViewFinished.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
     }
 
-    private void populateChats() {
-        final DatabaseReference userChatRef = database
-                .child(Constants.FIREBASE_CHATS_CONTAINER_NAME)
-                .child(current.getUid());
-
-        Query q = userChatRef;
-        q.keepSynced(true);
-
-        userChatRef
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        chatOverviews = new ArrayList<>();
-                        chatUIDS = new ArrayList<>();
-                        mapUIDUser = new HashMap<>();
-                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                            chatUIDS.add(ds.getKey());
-                            ChatOverview chatOverview = ds.getValue(ChatOverview.class);
-                            if (chatOverview != null) {
-                                chatOverviews.add(chatOverview);
-                            }
-                        }
-                        if (chatUIDS.isEmpty()) {
-                            noChats();
-                        } else {
-                            getUsers();
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
+    public HashMap<String, User> getMapUIDUser() {
+        return mapUIDUser;
     }
 
     private void noChats() {
-        listView.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.GONE);
         getView().findViewById(R.id.tvNoMessages).setVisibility(View.VISIBLE);
+    }
+
+    private void yesChats() {
+        recyclerView.setVisibility(View.VISIBLE);
+        getView().findViewById(R.id.tvNoMessages).setVisibility(View.GONE);
+    }
+
+    private void noCompleted() {
+        recyclerViewFinished.setVisibility(View.GONE);
+        getView().findViewById(R.id.tvNoCompleted).setVisibility(View.VISIBLE);
+    }
+
+    private void yesCompleted() {
+        recyclerViewFinished.setVisibility(View.VISIBLE);
+        getView().findViewById(R.id.tvNoCompleted).setVisibility(View.GONE);
     }
 
     private void getUsers() {
@@ -141,6 +179,7 @@ public class AllChatsFragment extends Fragment {
                 }
             });
         }
+
         DatabaseReference userProRef = database.child(Constants.FIREBASE_USERS_PRO_CONTAINER_NAME);
         for (String uid : chatUIDS) {
             userProRef.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -162,15 +201,53 @@ public class AllChatsFragment extends Fragment {
     }
 
     private void setAdapter() {
-        if (getContext() != null) {
 
-            ListViewChatsAdapter adapter = new ListViewChatsAdapter(getContext(), R.layout.chat_overview_layout, chatOverviews);
+        if (getContext() != null && chatUIDS.size() == mapUIDUser.size()) {
+
+            Iterator<ChatOverview> it = chatOverviews.iterator();
+            final List<ChatOverview> finished = new ArrayList<>();
+            while (it.hasNext()) {
+                ChatOverview c = it.next();
+                if (c.isFinished()) {
+                    finished.add(c);
+                    it.remove();
+                }
+            }
+
+            if (getView() != null) {
+                if (chatOverviews.isEmpty()) {
+                    noChats();
+                } else {
+                    yesChats();
+                }
+
+                if (finished.isEmpty()) {
+                    noCompleted();
+                } else {
+                    yesCompleted();
+                }
+            }
+
             Collections.sort(chatOverviews, new ChatOverviewComparator());
-            listView.setAdapter(adapter);
+            Collections.sort(finished, new ChatOverviewComparator());
+            if (adapter == null) {
+                adapterFinished = new ChatOverViewFlexibleAdapter(this, finished);
+                adapter = new ChatOverViewFlexibleAdapter(this, chatOverviews);
+                recyclerView.setAdapter(adapter);
+                recyclerViewFinished.setAdapter(adapterFinished);
+            } else {
+                adapter.clear();
+                adapter.addItems(0, chatOverviews);
+                adapter.notifyDataSetChanged();
 
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                adapterFinished.clear();
+                adapterFinished.addItems(0, finished);
+                adapterFinished.notifyDataSetChanged();
+            }
+
+            adapter.addListener(new FlexibleAdapter.OnItemClickListener() {
                 @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                public boolean onItemClick(View view, int position) {
                     Intent intent = new Intent(getContext(), SpecificChatActivity.class);
 
                     ChatOverview chatOverview = chatOverviews.get(position);
@@ -183,73 +260,51 @@ public class AllChatsFragment extends Fragment {
                     }
 
                     intent.putExtra("receiver", user);
+                    intent.putExtra("chatOverview", chatOverviews.get(position));
                     intent.putExtra("chatid", chatOverview.getChatID());
 
                     startActivity(intent);
+                    return false;
+                }
+            });
+
+            adapterFinished.addListener(new FlexibleAdapter.OnItemClickListener() {
+                @Override
+                public boolean onItemClick(View view, int position) {
+                    Intent intent = new Intent(getContext(), SpecificChatActivity.class);
+
+                    ChatOverview chatOverview = finished.get(position);
+
+                    User user;
+                    if (accountManager.getCurrentUser(1).getUid().equals(chatOverview.getAuthor())) {
+                        user = mapUIDUser.get(chatOverview.getReceiver());
+                    } else {
+                        user = mapUIDUser.get(chatOverview.getAuthor());
+                    }
+
+                    intent.putExtra("receiver", user);
+                    intent.putExtra("chatOverview", finished.get(position));
+                    intent.putExtra("chatid", chatOverview.getChatID());
+
+                    startActivity(intent);
+                    return false;
                 }
             });
         }
     }
 
-    private class ListViewChatsAdapter extends ArrayAdapter<ChatOverview> {
-        private List<ChatOverview> chats;
-        private LayoutInflater inflater;
+    public class ChatOverViewFlexibleAdapter extends FlexibleAdapter {
 
-        ListViewChatsAdapter(@NonNull Context context, int resource, @NonNull List<ChatOverview> chats) {
-            super(context, resource, chats);
-            inflater = LayoutInflater.from(context);
-            this.chats = chats;
+        private AllChatsFragment act;
+
+        ChatOverViewFlexibleAdapter(AllChatsFragment act, @Nullable List items) {
+            super(items);
+            this.act = act;
         }
 
-        @NonNull
-        @Override
-        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-            final ViewHolder holder;
-            if (convertView == null) {
-                convertView = inflater.inflate(R.layout.chat_overview_layout, null);
-
-                holder = new ViewHolder();
-                holder.ivPic = convertView.findViewById(R.id.ivProfilePic);
-                holder.tvUsername = convertView.findViewById(R.id.tvUsername);
-                holder.tvLastMessage = convertView.findViewById(R.id.tvLastMessage);
-                holder.tvTimeStamp = convertView.findViewById(R.id.timeStamp);
-
-                convertView.setTag(holder);
-            } else {
-                holder = (ViewHolder) convertView.getTag();
-            }
-
-            ChatOverview chatOverview = chats.get(position);
-            User user;
-            if (accountManager.getCurrentUser(1).getUid().equals(chatOverview.getAuthor())) {
-                user = mapUIDUser.get(chatOverview.getReceiver());
-            } else {
-                user = mapUIDUser.get(chatOverview.getAuthor());
-            }
-
-            if (user != null) {
-                holder.tvUsername.setText(user.getUsername());
-                holder.tvLastMessage.setText(chatOverview.getLastMessage());
-                holder.tvTimeStamp.setText(DateFormat.format("HH:mm",
-                        chatOverview.getTimeStamp()));
-                holder.ivPic.setImageDrawable(getResources().getDrawable(R.drawable.profile_pic));
-
-                if (user.getHasPic()) {
-                    StorageReference storage = FirebaseStorage.getInstance().getReference();
-                    StorageReference userRef = storage.child(Constants.FIREBASE_USERS_PRO_CONTAINER_NAME + "/" + user.getUid() + user.getImgVersion() + ".jpg");
-                    GlideApp.with(getContext())
-                            .load(userRef)
-                            .into(holder.ivPic);
-                }
-            }
-            return convertView;
+        public AllChatsFragment getAct() {
+            return act;
         }
-
-        private class ViewHolder {
-            CircleImageView ivPic;
-            TextView tvUsername, tvLastMessage, tvTimeStamp;
-        }
-
     }
 
     private class ChatOverviewComparator implements Comparator<ChatOverview> {
