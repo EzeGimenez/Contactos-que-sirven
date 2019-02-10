@@ -115,7 +115,7 @@
     <string name="a">to</string>
     <string name="de">From</string>
     <string name="contrase_a">Password</string>
-    <string name="iniciar_sesi_n">Sign in</string>
+    <string name="iniciar_sesi_n">Sign In</string>
     <string name="crear_usuario">Create an account!</string>
     <string name="email">Email</string>
     <string name="confirmar_contrase_a">Confirm password</string>
@@ -227,10 +227,15 @@
     <string name="acepta_debito">Accepts debit cards</string>
     <string name="please_finish_review">Please, finish reviewing the user</string>
     <string name="no_ser_mostrado">It won\'t be shown</string>
-    <string name="tutorial1">Log in as Client or as a service provider</string>
-    <string name="tutorial2">Create an account as a service provider and you\'ll be guided through steps to configure your profile</string>
-    <string name="tutorial4">If you use A Domicilio as a Client, search for service providers in numerous categories and chat with them!</string>
-    <string name="tutorial3">Once a contract is finished, rate the user!</string>
-    <string name="tutorial5">See and edit your profile</string>
+    <string name="tutorial1">Create your account as a service provider</string>
+    <string name="tutorial11">Join the community and offer your work to thousands of people</string>
+    <string name="tutorial2">Set up and configure your service provider profile</string>
+    <string name="tutorial22">Initialize it with your data, work scope and contact information</string>
+    <string name="tutorial3">Log in as client</string>
+    <string name="tutorial33">Search through numerous categories and find the best service provider that suits your needs</string>
+    <string name="tutorial44">Once chosen someone to contract, chat with them to arrange a meeting</string>
+    <string name="tutorial4">Contact the person</string>
+    <string name="tutorial5">Finishing and rating</string>
+    <string name="tutorial55">Click on the finish contract button and make a review of the service provider</string>
 
 </resources>

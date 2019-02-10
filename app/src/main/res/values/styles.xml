@@ -10,9 +10,9 @@
         <item name="android:textColor">@color/white</item>
         <item name="alertDialogTheme">@style/alertDialogs</item>
         <item name="android:editTextColor">@color/colorPrimary</item>
-        <item name="colorControlNormal">@color/colorAccentPrimary</item>
-        <item name="colorControlActivated">@color/colorAccentPrimary</item>
-        <item name="colorControlHighlight">@color/colorAccentPrimaryDark</item>
+        <item name="colorControlNormal">@color/colorPrimary</item>
+        <item name="colorControlActivated">@color/colorPrimary</item>
+        <item name="colorControlHighlight">@color/colorPrimary</item>
     </style>
 
     <style name="alertDialogs" parent="Theme.AppCompat.DayNight.Dialog.Alert">
@@ -37,7 +37,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@color/colorAccentPrimary</item>
+        <item name="android:textColor">@color/white</item>
         <item name="android:layout_margin">8dp</item>
     </style>
 

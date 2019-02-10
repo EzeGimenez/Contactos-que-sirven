@@ -49,10 +49,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:background="@drawable/edittext_background_coloraccentprimary"
-                android:padding="10dp"
+                android:background="@drawable/rectangle_outline"
                 android:text="@string/iniciar_sesi_n"
-                android:textColor="@color/colorPrimary" />
+                android:padding="10dp"
+                android:textAllCaps="false" />
 
             <com.google.android.gms.common.SignInButton
                 android:id="@+id/buttonSignInWithGoogle"
@@ -79,7 +79,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:text="@string/crear_usuario"
-                    android:textColor="@color/colorAccentPrimary" />
+                    android:textColor="@color/TEAL" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

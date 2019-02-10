@@ -181,7 +181,7 @@
     <string name="usuario_existente_pro">Su usuario ya está registrado como Cliente, por favor utilice las mismas credenciales para iniciar sesión como prestador de servicio</string>
     <string name="error_coneccion">Parece que no tiene internet</string>
     <string name="cliente">Cliente</string>
-    <string name="prestador_servicio">Prestador de servicio</string>
+    <string name="prestador_servicio">Prestador de Servicio</string>
     <string name="no_tienes_un_usuario">No tienes un usuario?</string>
     <string name="crear_usuario_pestadorservicio">Crea un usuario como prestador de servicio!</string>
     <string name="usuario_existente_normal">Su usuario ya está registrado como prestador de servicio, por favor utilice las mismas credenciales para iniciar sesión como cliente</string>
@@ -193,7 +193,7 @@
     <string name="seguro_salir">Estas seguro que deseas salir?</string>
     <string name="mensaje_enviado">Mensaje enviado</string>
     <string name="contador_contratos">Contratos cumplidos:</string>
-    <string name="tutorial">tutorial</string>
+    <string name="tutorial">Tutorial</string>
     <string name="no_results">No hay resultados para </string>
     <string name="finalizar_contrato">Finalizar contrato</string>
     <string name="pudo_concretar">¿Pudo realizar el contacto?</string>
@@ -228,9 +228,14 @@
     <string name="acepta_debito">Acepta tarjetas de débito</string>
     <string name="please_finish_review">Porfavor, termina de calificar al usuario</string>
     <string name="no_ser_mostrado">No será mostrado</string>
-    <string name="tutorial1">Inicia sesión como cliente o como prestador de servicio</string>
-    <string name="tutorial2">Crea una cuenta como prestador de servicio. Sigue la guia de configuración del perfil</string>
-    <string name="tutorial4">Si usas A Domicilio como Cliente, busca dentro de decenas de categorías a prestadores de servicios y chatea con ellos!</string>
-    <string name="tutorial3">Una vez finalizado un contrato, califica al usuario!</string>
-    <string name="tutorial5">Mira tu perfil, ve tus calificaciones y edítalo</string>
+    <string name="tutorial1">Crea su cuenta como prestador de servicio</string>
+    <string name="tutorial11">Únete a la comunidad y ofrece tus servicios a miles de personas</string>
+    <string name="tutorial2">Configura y edita tu perfil de prestador de servicios</string>
+    <string name="tutorial22">Inicializalo con tus datos, rango de trabajo e información de contacto. Podrás editarlo más adelante</string>
+    <string name="tutorial3">Inicia sesión como cliente</string>
+    <string name="tutorial33">Busca dentro de varias categorias hasta encontrar el prestador de servicio que necesites</string>
+    <string name="tutorial44">Una vez elegido a quien contratar, chatea con el para arreglar una visita o un acuerdo</string>
+    <string name="tutorial4">Contáctate con la persona</string>
+    <string name="tutorial5">Finalizar y calificar</string>
+    <string name="tutorial55">Clickeá en el botón de finalizar contrato y has una reseña del prestador de servicio</string>
 </resources>

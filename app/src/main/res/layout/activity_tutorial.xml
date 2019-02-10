@@ -3,56 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tvInfo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_margin="16dp"
-        android:text="Aca va la informacion respectiva de cada imagen"
-        android:textAlignment="center"
-        android:textAllCaps="true"
-        android:textColor="@color/colorAccentPrimary"
-        android:textSize="18sp" />
-
-    <ImageButton
-        android:id="@+id/btnPrev"
-        android:layout_width="60dp"
-        android:layout_height="300dp"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:background="@color/transparent"
-        android:src="@drawable/ic_navigate_before_black_24dp"
-        android:visibility="invisible" />
-
-    <com.visoft.network.custom_views.NonSwipeableViewPager
+    <android.support.v4.view.ViewPager
         android:id="@+id/ViewPagerTutorial"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/tabLayoutTutorial"
-        android:layout_below="@id/tvInfo"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:layout_toStartOf="@id/btnNext"
-        android:layout_toEndOf="@id/btnPrev" />
-
-    <ImageButton
-        android:id="@+id/btnNext"
-        android:layout_width="60dp"
-        android:layout_height="300dp"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:background="@color/transparent"
-        android:src="@drawable/ic_navigate_next_black_24dp" />
+        android:layout_height="match_parent" />
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tabLayoutTutorial"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/btnFinalizar"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         app:tabBackground="@drawable/tab_selector"
         app:tabIndicatorHeight="0dp"
@@ -62,12 +25,13 @@
         android:id="@+id/btnFinalizar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@id/tabLayoutTutorial"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:background="@color/colorAccentPrimary"
+        android:background="@color/black_transparent"
         android:text="@string/finalizar"
+        android:textAllCaps="false"
         android:textSize="18sp"
-        android:visibility="invisible" />
+        android:visibility="gone" />
 
 </RelativeLayout>
