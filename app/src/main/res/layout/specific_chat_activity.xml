@@ -22,7 +22,7 @@
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/ivPic"
             android:layout_width="40dp"
-            android:layout_height="match_parent"
+            android:layout_height="40dp"
             android:src="@drawable/profile_pic" />
 
         <TextView
@@ -30,7 +30,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:textAllCaps="true"
             android:textColor="@color/colorAccentPrimary"
             android:textSize="16sp" />
     </LinearLayout>

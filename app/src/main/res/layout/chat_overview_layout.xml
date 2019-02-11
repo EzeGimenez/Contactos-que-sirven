@@ -1,47 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/background_profile_search_result_row">
+    android:layout_margin="8dp"
+    app:cardCornerRadius="5dp">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/ivProfilePic"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="16dp"
-        android:src="@drawable/profile_pic"
-        android:transitionName="ivPic" />
-
-    <TextView
-        android:id="@+id/tvUsername"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:layout_toStartOf="@id/timeStamp"
-        android:layout_toEndOf="@id/ivProfilePic"
-        android:text="Username"
-        android:textAllCaps="true"
-        android:textColor="@color/colorAccentPrimary"
-        android:transitionName="username" />
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center">
 
-    <TextView
-        android:id="@+id/tvLastMessage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tvUsername"
-        android:layout_alignParentEnd="true"
-        android:layout_margin="8dp"
-        android:layout_toEndOf="@id/ivProfilePic"
-        android:text="message" />
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/ivProfilePic"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/profile_pic"
+            android:transitionName="ivPic" />
 
-    <TextView
-        android:id="@+id/timeStamp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_margin="8dp"
-        android:text="18:05"
-        android:textSize="15sp" />
+        <TextView
+            android:id="@+id/tvUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:layout_toStartOf="@id/timeStamp"
+            android:layout_toEndOf="@id/ivProfilePic"
+            android:text="Username"
+            android:textColor="@color/colorAccentPrimary"
+            android:textSize="16sp"
+            android:transitionName="username" />
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/tvLastMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvUsername"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_toEndOf="@id/ivProfilePic"
+            android:text="message" />
+
+        <TextView
+            android:id="@+id/timeStamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="4dp"
+            android:text="18:05"
+            android:textSize="15sp" />
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

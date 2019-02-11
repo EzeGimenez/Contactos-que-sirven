@@ -9,9 +9,9 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.visoft.network.R;
+import com.visoft.network.funcionalidades.CustomToast;
 
 
 public class ConfiguratorPersonalInfo extends ConfiguratorTurnPro {
@@ -117,22 +117,22 @@ public class ConfiguratorPersonalInfo extends ConfiguratorTurnPro {
     public boolean canContinue() {
 
         if (etdni.getText().length() < 4) {
-            Toast.makeText(getContext(), getString(R.string.ingrese_dni), Toast.LENGTH_SHORT).show();
+            CustomToast.makeText(getContext(), getString(R.string.ingrese_dni));
             return false;
         }
 
         if (etdireccionlegal.getText().length() < 3) {
-            Toast.makeText(getContext(), getString(R.string.ingrese_direccion_legal), Toast.LENGTH_SHORT).show();
+            CustomToast.makeText(getContext(), getString(R.string.ingrese_direccion_legal));
             return false;
         }
 
         if (checkBoxPatente.isChecked() && etpatente.getText().length() < 3) {
-            Toast.makeText(getContext(), getString(R.string.ingrese_patente), Toast.LENGTH_SHORT).show();
+            CustomToast.makeText(getContext(), getString(R.string.ingrese_patente));
             return false;
         }
 
         if (checkboxObraSocial.isChecked() && etobrasocial.getText().length() < 3) {
-            Toast.makeText(getContext(), getString(R.string.ingrese_obra_social), Toast.LENGTH_SHORT).show();
+            CustomToast.makeText(getContext(), getString(R.string.ingrese_obra_social));
             return false;
         }
 

@@ -36,6 +36,9 @@ public class FragmentSpecific extends FragmentFirstTab {
         RubroGeneral rubroGeneral = (RubroGeneral) getArguments().getSerializable("rubro");
 
         final ArrayList<RubroEspecifico> list = rubroGeneral.getSubRubros();
+        for (RubroEspecifico u : list) {
+            u.setColor(rubroGeneral.getColor());
+        }
 
         FlexibleAdapter adapter = new FlexibleAdapter<>(list);
 

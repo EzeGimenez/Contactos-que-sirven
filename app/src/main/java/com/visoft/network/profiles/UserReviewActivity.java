@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -25,6 +24,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.iarcuschin.simpleratingbar.SimpleRatingBar;
 import com.visoft.network.R;
+import com.visoft.network.funcionalidades.CustomToast;
 import com.visoft.network.funcionalidades.GsonerUser;
 import com.visoft.network.funcionalidades.LoadingScreen;
 import com.visoft.network.objects.QualityInfo;
@@ -205,7 +205,7 @@ public class UserReviewActivity extends AppCompatActivity {
     }
 
     public void goBack() {
-        Toast.makeText(this, getString(R.string.please_finish_review), Toast.LENGTH_SHORT).show();
+        CustomToast.makeText(this, getString(R.string.please_finish_review));
     }
 
     private void onForthPressed() {

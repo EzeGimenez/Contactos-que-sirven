@@ -5,8 +5,8 @@
 
     <ImageView
         android:id="@+id/ivProfilePic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_above="@id/tvUsername"
         android:layout_centerHorizontal="true"
         android:src="@drawable/profile_pic" />
@@ -16,15 +16,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="aaaaa"
-        android:textAllCaps="true" />
+        android:text="aaaaa" />
 
     <LinearLayout
         android:id="@+id/personalControls"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:background="@drawable/top_inner_shadow">
+        android:layout_alignParentBottom="true">
 
         <TextView
             android:id="@+id/eliminarCuenta"

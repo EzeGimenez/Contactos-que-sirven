@@ -11,9 +11,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.visoft.network.R;
+import com.visoft.network.funcionalidades.CustomToast;
 import com.visoft.network.objects.RubroEspecifico;
 
 import java.util.ArrayList;
@@ -101,7 +101,7 @@ public class ConfiguratorRubro extends ConfiguratorTurnPro {
             return true;
         }
 
-        Toast.makeText(getContext(), getString(R.string.selecciona_un_rubro), Toast.LENGTH_SHORT).show();
+        CustomToast.makeText(getContext(), getString(R.string.selecciona_un_rubro));
 
         return false;
     }

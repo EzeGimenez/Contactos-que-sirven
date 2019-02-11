@@ -20,12 +20,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="8dp"
-        android:background="@drawable/edittext_background_coloraccentprimary"
+        android:background="@drawable/rectangle_outline"
         android:padding="8dp"
         android:text="@string/chats"
-        android:textAlignment="center"
-        android:textAllCaps="true"
-        android:textColor="@color/colorPrimary" />
+        android:textAlignment="center" />
 
     <LinearLayout
         android:id="@+id/ContainerMainPro"

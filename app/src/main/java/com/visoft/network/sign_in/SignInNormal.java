@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -17,6 +16,7 @@ import com.visoft.network.MainActivityNormal;
 import com.visoft.network.R;
 import com.visoft.network.funcionalidades.AccountManager;
 import com.visoft.network.funcionalidades.AccountManagerFirebaseNormal;
+import com.visoft.network.funcionalidades.CustomSnackBar;
 import com.visoft.network.funcionalidades.HolderCurrentAccountManager;
 import com.visoft.network.funcionalidades.LoadingScreen;
 import com.visoft.network.util.Constants;
@@ -114,8 +114,8 @@ public class SignInNormal extends Fragment implements View.OnClickListener {
     }
 
     private void showSnackBar(String msg) {
-        Snackbar.make(getView().findViewById(R.id.rootView),
-                msg, Snackbar.LENGTH_LONG).show();
+        CustomSnackBar.makeText(getView().findViewById(R.id.rootView),
+                msg);
     }
 
     @Override

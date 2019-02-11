@@ -22,7 +22,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -39,6 +38,7 @@ import com.google.firebase.storage.StorageReference;
 import com.iarcuschin.simpleratingbar.SimpleRatingBar;
 import com.visoft.network.R;
 import com.visoft.network.custom_views.CustomDialog;
+import com.visoft.network.funcionalidades.CustomToast;
 import com.visoft.network.funcionalidades.HolderCurrentAccountManager;
 import com.visoft.network.funcionalidades.MapHighlighter;
 import com.visoft.network.funcionalidades.Messenger;
@@ -286,7 +286,7 @@ public class UserProFragment extends Fragment implements OnMapReadyCallback, Vie
                     intentWpp.setPackage("com.whatsapp");
                     startActivity(intentWpp);
                 } catch (ActivityNotFoundException e) {
-                    Toast.makeText(getContext(), "Whatsapp not installed", Toast.LENGTH_SHORT).show();
+                    CustomToast.makeText(getContext(), "Whatsapp not installed");
                 }
 
                 break;
@@ -405,7 +405,7 @@ public class UserProFragment extends Fragment implements OnMapReadyCallback, Vie
 
             @Override
             public void onFinish() {
-                Toast.makeText(getContext(), "Revisa tu conexión", Toast.LENGTH_SHORT).show();
+                CustomToast.makeText(getContext(), "Revisa tu conexión");
                 getActivity().onBackPressed();
             }
         }.start();

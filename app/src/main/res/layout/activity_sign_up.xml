@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
+    android:animateLayoutChanges="true"
     android:background="@color/TEALOSCURO">
 
     <ScrollView
@@ -47,28 +48,35 @@
                 style="@style/descTextView"
                 android:text="@string/contrase_a" />
 
-            <EditText
-                android:id="@+id/etPassword"
-                style="@style/editText"
-                android:inputType="textPassword"
-                android:singleLine="true" />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true">
 
-            <TextView
-                style="@style/descTextView"
-                android:text="@string/confirmar_contrase_a" />
+                <EditText
+                    android:id="@+id/etPassword"
+                    style="@style/editText"
+                    android:inputType="textPassword"
+                    android:singleLine="true" />
 
-            <EditText
-                android:id="@+id/edConfirmPassword"
-                style="@style/editText"
-                android:inputType="textPassword"
-                android:singleLine="true" />
+                <ImageView
+                    android:id="@+id/btnShowPassword"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="24dp"
+                    android:layout_toEndOf="@id/etPassword"
+                    android:src="@drawable/ic_show_password"
+                    android:visibility="gone" />
+
+            </RelativeLayout>
 
             <Button
                 android:id="@+id/btnSignUp"
                 style="@style/normalButton"
                 android:background="@drawable/rectangle_outline"
                 android:padding="10dp"
-                android:text="@string/registrarse"
+                android:text="@string/confirmar"
                 android:textAllCaps="false" />
 
         </LinearLayout>

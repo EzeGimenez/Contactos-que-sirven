@@ -11,9 +11,9 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.visoft.network.R;
+import com.visoft.network.funcionalidades.CustomToast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -97,7 +97,7 @@ public class ConfiguratorContacto extends ConfiguratorTurnPro {
             return true;
         }
 
-        Toast.makeText(getContext(), getString(R.string.ingrese_telefono), Toast.LENGTH_SHORT).show();
+        CustomToast.makeText(getContext(), getString(R.string.ingrese_telefono));
 
         return false;
     }

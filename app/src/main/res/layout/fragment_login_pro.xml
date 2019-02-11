@@ -54,11 +54,29 @@
                 android:text="@string/iniciar_sesi_n"
                 android:textAllCaps="false" />
 
-            <com.google.android.gms.common.SignInButton
+            <LinearLayout
+                android:background="@drawable/rectangle_outline"
                 android:id="@+id/buttonSignInWithGoogle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp" />
+                android:gravity="center_vertical"
+                android:padding="8dp">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@color/transparent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_google_logo"
+                    android:text="babaas" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/iniciar_sesi_n" />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -77,7 +95,12 @@
                     style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/crear_usuario_pestadorservicio" />
+                    android:layout_margin="10dp"
+                    android:background="@drawable/rectangle_outline"
+                    android:padding="8dp"
+                    android:text="@string/registrarse"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white" />
             </LinearLayout>
         </LinearLayout>
 

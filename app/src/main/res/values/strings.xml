@@ -147,7 +147,7 @@
     <string name="domingo">Domingo</string>
     <string name="aceptar">ACEPTAR</string>
     <string name="editar_perfil">Editar Perfil</string>
-    <string name="registrarse">Registrarse</string>
+    <string name="registrarse">Registrate</string>
     <string name="descripcion_personal">Descripción personal</string>
     <string name="contact_info">Información de Contacto</string>
     <string name="selecciona_foto">Añade una foto</string>
@@ -238,5 +238,6 @@
     <string name="tutorial4">Contáctate con la persona</string>
     <string name="tutorial5">Finalizar y calificar</string>
     <string name="tutorial55">Clickeá en el botón de finalizar contrato y has una reseña del prestador de servicio</string>
+    <string name="confirmar">Confirmar</string>
 
 </resources>

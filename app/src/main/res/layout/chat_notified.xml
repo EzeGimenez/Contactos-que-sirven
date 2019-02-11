@@ -10,7 +10,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:text="@string/chats"
-        android:textAllCaps="true"
         android:textSize="14sp"
         android:textStyle="bold" />
 

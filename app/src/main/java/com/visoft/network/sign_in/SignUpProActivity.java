@@ -3,8 +3,10 @@ package com.visoft.network.sign_in;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.text.method.PasswordTransformationMethod;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,7 @@ import android.widget.EditText;
 import com.visoft.network.R;
 import com.visoft.network.funcionalidades.AccountManager;
 import com.visoft.network.funcionalidades.AccountManagerFirebaseNormal;
+import com.visoft.network.funcionalidades.CustomSnackBar;
 import com.visoft.network.funcionalidades.HolderCurrentAccountManager;
 import com.visoft.network.funcionalidades.LoadingScreen;
 import com.visoft.network.objects.UserPro;
@@ -21,7 +24,7 @@ import com.visoft.network.turnpro.TurnProActivity;
 public class SignUpProActivity extends AppCompatActivity implements View.OnClickListener {
     private static final int RC_SIGNUP = 3;
 
-    private EditText etEmail, etPassword, etConfirmPassword, etUsername;
+    private EditText etEmail, etPassword, etUsername;
     private LoadingScreen loadingScreen;
     private AccountManager accountManager;
     private UserPro user;
@@ -36,9 +39,31 @@ public class SignUpProActivity extends AppCompatActivity implements View.OnClick
         etUsername = findViewById(R.id.etUsername);
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
-        etConfirmPassword = findViewById(R.id.edConfirmPassword);
 
+        findViewById(R.id.btnShowPassword).setOnClickListener(this);
         findViewById(R.id.btnSignUp).setOnClickListener(this);
+
+        etPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                if (charSequence.length() > 0) {
+                    findViewById(R.id.btnShowPassword).setVisibility(View.VISIBLE);
+                } else {
+                    findViewById(R.id.btnShowPassword).setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
     }
 
     @Override
@@ -92,28 +117,32 @@ public class SignUpProActivity extends AppCompatActivity implements View.OnClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnSignUp:
-                signUp(etUsername.getText().toString(), etEmail.getText().toString(), etPassword.getText().toString(), etConfirmPassword.getText().toString());
+                signUp(etUsername.getText().toString(), etEmail.getText().toString(), etPassword.getText().toString());
+                break;
+            case R.id.btnShowPassword:
+                if (etPassword.getTransformationMethod() == null) {
+                    etPassword.setTransformationMethod(new PasswordTransformationMethod());
+                } else {
+                    etPassword.setTransformationMethod(null);
+                }
+                etPassword.setSelection(etPassword.getText().length());
                 break;
         }
     }
 
-    private void signUp(final String username, String email, String pw, String pw2) {
-        if (pw.equals(pw2)) {
-            try {
-                loadingScreen.show();
-                accountManager.signUp(username, email, pw2, RC_SIGNUP);
-            } catch (Exception e) {
-                loadingScreen.hide();
-                showSnackBar(e.getMessage());
-            }
-        } else {
-            showSnackBar(getString(R.string.passwords_dont_match));
+    private void signUp(final String username, String email, String pw) {
+        try {
+            loadingScreen.show();
+            accountManager.signUp(username, email, pw, RC_SIGNUP);
+        } catch (Exception e) {
+            loadingScreen.hide();
+            showSnackBar(e.getMessage());
         }
     }
 
     private void showSnackBar(String msg) {
-        Snackbar.make(findViewById(R.id.rootView),
-                msg, Snackbar.LENGTH_LONG).show();
+        CustomSnackBar.makeText(findViewById(R.id.rootView),
+                msg);
     }
 
     @Override

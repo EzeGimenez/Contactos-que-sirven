@@ -241,8 +241,7 @@
             android:id="@+id/personalControls"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_gravity="bottom"
-            android:background="@drawable/top_inner_shadow">
+            android:layout_gravity="bottom">
 
             <TextView
                 android:id="@+id/eliminarCuenta"

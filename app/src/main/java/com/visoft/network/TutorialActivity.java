@@ -5,23 +5,24 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.TabLayout;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.rd.pageindicatorview.view.PageIndicatorView;
+import com.rd.pageindicatorview.view.animation.AnimationType;
 
 public class TutorialActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ViewPager viewPager;
     private Button btnFinalizar;
+    private PageIndicatorView p;
     private ImageAdapter adapter;
     private int current;
 
@@ -56,7 +57,6 @@ public class TutorialActivity extends AppCompatActivity implements View.OnClickL
 
         viewPager = findViewById(R.id.ViewPagerTutorial);
         btnFinalizar = findViewById(R.id.btnFinalizar);
-        TabLayout tabLayout = findViewById(R.id.tabLayoutTutorial);
 
         btnFinalizar.setOnClickListener(this);
 
@@ -84,17 +84,11 @@ public class TutorialActivity extends AppCompatActivity implements View.OnClickL
 
             }
         });
-        tabLayout.setupWithViewPager(viewPager, true);
-
-        LinearLayout tabStrip = ((LinearLayout) tabLayout.getChildAt(0));
-        for (int i = 0; i < tabStrip.getChildCount(); i++) {
-            tabStrip.getChildAt(i).setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    return true;
-                }
-            });
-        }
+        viewPager.setOffscreenPageLimit(5);
+        p = findViewById(R.id.tabLayoutTutorial);
+        p.setCount(adapter.getCount());
+        p.setInteractiveAnimation(true);
+        p.setAnimationType(AnimationType.WORM);
     }
 
     @Override
@@ -115,14 +109,17 @@ public class TutorialActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void avanzar() {
-
+        p.setSelection(viewPager.getCurrentItem());
         if (viewPager.getCurrentItem() + 1 == adapter.getCount()) {
             btnFinalizar.setVisibility(View.VISIBLE);
         }
     }
 
     private void retroceder() {
-        btnFinalizar.setVisibility(View.GONE);
+        p.setSelection(viewPager.getCurrentItem());
+        if (viewPager.getCurrentItem() == 0) {
+            btnFinalizar.setVisibility(View.GONE);
+        }
     }
 
     public class ImageAdapter extends PagerAdapter {

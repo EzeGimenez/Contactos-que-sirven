@@ -49,7 +49,7 @@ public class WelcomeScreen extends Fragment implements View.OnClickListener {
                                 tvCount.setText(String.valueOf(animation.getAnimatedValue()));
                             }
                         });
-                        animator.setDuration(2000); // here you set the duration of the anim
+                        animator.setDuration(3000); // here you set the duration of the anim
                         animator.start();
                     }
 

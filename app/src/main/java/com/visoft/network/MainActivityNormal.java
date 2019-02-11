@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -102,7 +101,6 @@ public class MainActivityNormal extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.black_transparent)));
 
         FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -206,6 +204,7 @@ public class MainActivityNormal extends AppCompatActivity {
 
             tabLayout = findViewById(R.id.tabLayoutMain);
             tabLayout.setupWithViewPager(viewPagerMain);
+
             viewPagerAdapter.addFragment(holderFirstTab, getString(R.string.buscar));
             viewPagerAdapter.addFragment(chatsFragment, getString(R.string.chats));
             viewPagerAdapter.addFragment(mainContactsFragment, getString(R.string.contactos));

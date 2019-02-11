@@ -166,7 +166,7 @@ public class UserPro extends User implements IFilterable {
         Context context = holder.getContext();
         for (String s : getRubros()) {
             int id = context.getResources().getIdentifier(s, "string", context.getPackageName());
-            aux += " - " + context.getString(id);
+            aux += context.getString(id) + "   ";
         }
 
         holder.tvRubro.setText(aux);

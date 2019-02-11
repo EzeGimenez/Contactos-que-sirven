@@ -116,7 +116,7 @@
     <string name="de">From</string>
     <string name="contrase_a">Password</string>
     <string name="iniciar_sesi_n">Sign In</string>
-    <string name="crear_usuario">Create an account!</string>
+    <string name="crear_usuario">Sign Up</string>
     <string name="email">Email</string>
     <string name="confirmar_contrase_a">Confirm password</string>
     <string name="usuario">Username</string>
@@ -146,7 +146,7 @@
     <string name="atencionReview">How would you rate the attention received?</string>
     <string name="calificacionFinalReview">Finally, make a general review</string>
     <string name="pequenaDescripcion">Write a short review</string>
-    <string name="registrarse">Sign Up</string>
+    <string name="registrarse">Sign Up!</string>
     <string name="descripcion_personal">Personal description</string>
     <string name="contact_info">Contact Info</string>
     <string name="selecciona_foto">Add a picture</string>
@@ -234,8 +234,9 @@
     <string name="tutorial3">Log in as client</string>
     <string name="tutorial33">Search through numerous categories and find the best service provider that suits your needs</string>
     <string name="tutorial44">Once chosen someone to contract, chat with them to arrange a meeting</string>
-    <string name="tutorial4">Contact the person</string>
+    <string name="tutorial4">Contact</string>
     <string name="tutorial5">Finishing and rating</string>
     <string name="tutorial55">Click on the finish contract button and make a review of the service provider</string>
+    <string name="confirmar">Accept</string>
 
 </resources>

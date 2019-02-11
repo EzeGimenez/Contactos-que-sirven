@@ -22,10 +22,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:background="@drawable/edittext_background_coloraccentprimary"
+        android:background="@drawable/rectangle_outline"
         android:text="@string/contratos_finalizados"
-        android:textAlignment="center"
-        android:textColor="@color/colorPrimary" />
+        android:textAlignment="center" />
 
     <TextView
         android:id="@+id/tvNoCompleted"

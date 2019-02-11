@@ -22,7 +22,7 @@
                 android:layout_height="100dp"
                 android:layout_centerInParent="true"
                 android:layout_centerHorizontal="true"
-                android:src="@drawable/ic_client" />
+                android:src="@drawable/profile_pic" />
 
             <TextView
                 android:layout_width="wrap_content"
