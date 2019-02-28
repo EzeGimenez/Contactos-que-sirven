@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -56,7 +57,7 @@ public class ConfiguratorAcompanante extends ConfiguratorTurnPro {
                         CustomDialog dialog = new CustomDialog(getContext());
 
                         dialog.setTitle(getString(R.string.borrar_acompanante));
-                        dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        dialog.setPositiveButton(getString(R.string.aceptar), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 adapter.removeItem(position);
@@ -70,7 +71,7 @@ public class ConfiguratorAcompanante extends ConfiguratorTurnPro {
                         final View addView = getLayoutInflater().inflate(R.layout.add_acompanante_layout, null);
                         dialog.setView(addView);
                         dialog.setTitle(getString(R.string.add_acompanante));
-                        dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        dialog.setPositiveButton(getString(R.string.aceptar), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 EditText etName = addView.findViewById(R.id.etName);
@@ -133,10 +134,12 @@ public class ConfiguratorAcompanante extends ConfiguratorTurnPro {
 
         public CircleImageView pic;
         public TextView name;
+        public CardView c;
 
         public ViewHolderAcompanantes(View view, FlexibleAdapter adapter) {
             super(view, adapter);
 
+            c = view.findViewById(R.id.rootView);
             pic = view.findViewById(R.id.pic);
             name = view.findViewById(R.id.name);
         }

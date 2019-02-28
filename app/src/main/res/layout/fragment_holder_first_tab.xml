@@ -1,13 +1,10 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.visoft.network.tab_search.HolderFirstTab">
-
+    android:orientation="vertical">
     <TextView
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:clickable="true"
         android:focusable="true"
@@ -17,32 +14,37 @@
         android:id="@+id/searchView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:background="@drawable/edittext_background"
         app:iconifiedByDefault="false" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:focusableInTouchMode="true" />
 
     <com.rd.pageindicatorview.view.PageIndicatorView
         android:id="@+id/tabLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
+        android:layout_below="@id/searchView"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="4dp"
         android:clickable="false"
         android:focusable="false"
         android:focusableInTouchMode="false" />
 
     <LinearLayout
-        android:layout_marginTop="4dp"
         android:id="@+id/ContainerFirstTab"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/tabLayout"
         android:focusableInTouchMode="true"
         android:orientation="vertical" />
 
-</LinearLayout>
+    <View
+        android:id="@+id/shadow"
+        android:layout_width="fill_parent"
+        android:layout_height="4dp"
+        android:layout_below="@id/tabLayout"
+        android:background="@drawable/bottom_external_shadow" />
+
+</RelativeLayout>

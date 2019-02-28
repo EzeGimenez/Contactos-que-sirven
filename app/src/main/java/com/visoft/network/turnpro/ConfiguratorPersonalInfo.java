@@ -11,7 +11,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import com.visoft.network.R;
-import com.visoft.network.funcionalidades.CustomToast;
+import com.visoft.network.custom_views.CustomSnackBar;
 
 
 public class ConfiguratorPersonalInfo extends ConfiguratorTurnPro {
@@ -98,6 +98,7 @@ public class ConfiguratorPersonalInfo extends ConfiguratorTurnPro {
 
         if (user.getObrasocial() != null) {
             etobrasocial.setVisibility(View.VISIBLE);
+            checkboxObraSocial.setChecked(true);
             etobrasocial.setText(user.getObrasocial());
         } else {
             etobrasocial.setVisibility(View.GONE);
@@ -106,6 +107,7 @@ public class ConfiguratorPersonalInfo extends ConfiguratorTurnPro {
 
         if (user.getPatente() != null) {
             etpatente.setVisibility(View.VISIBLE);
+            checkBoxPatente.setChecked(true);
             etpatente.setText(user.getPatente());
         } else {
             etpatente.setVisibility(View.GONE);
@@ -117,22 +119,22 @@ public class ConfiguratorPersonalInfo extends ConfiguratorTurnPro {
     public boolean canContinue() {
 
         if (etdni.getText().length() < 4) {
-            CustomToast.makeText(getContext(), getString(R.string.ingrese_dni));
+            CustomSnackBar.makeText(getView().findViewById(R.id.rootView), getString(R.string.ingrese_dni));
             return false;
         }
 
         if (etdireccionlegal.getText().length() < 3) {
-            CustomToast.makeText(getContext(), getString(R.string.ingrese_direccion_legal));
+            CustomSnackBar.makeText(getView().findViewById(R.id.rootView), getString(R.string.ingrese_direccion_legal));
             return false;
         }
 
         if (checkBoxPatente.isChecked() && etpatente.getText().length() < 3) {
-            CustomToast.makeText(getContext(), getString(R.string.ingrese_patente));
+            CustomSnackBar.makeText(getView().findViewById(R.id.rootView), getString(R.string.ingrese_patente));
             return false;
         }
 
         if (checkboxObraSocial.isChecked() && etobrasocial.getText().length() < 3) {
-            CustomToast.makeText(getContext(), getString(R.string.ingrese_obra_social));
+            CustomSnackBar.makeText(getView().findViewById(R.id.rootView), getString(R.string.ingrese_obra_social));
             return false;
         }
 

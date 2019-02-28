@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
+    android:id="@+id/rootView"
     android:fillViewport="true">
 
     <LinearLayout
@@ -20,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/no_ser_mostrado"
-            android:textColor="@color/colorAccentPrimary"
+            android:textColor="@color/black_transparent"
             android:textSize="11sp" />
 
         <EditText
@@ -40,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/no_ser_mostrado"
-            android:textColor="@color/colorAccentPrimary"
+            android:textColor="@color/black_transparent"
             android:textSize="11sp" />
 
         <EditText
@@ -69,7 +70,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@id/tvmovilidadpropia"
                 android:layout_alignParentEnd="true"
-                android:layout_marginEnd="32dp" />
+                android:layout_marginEnd="32dp"
+                android:theme="@style/checkBoxStyle" />
 
         </RelativeLayout>
 
@@ -93,7 +95,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@id/tvobrasocial"
                 android:layout_alignParentEnd="true"
-                android:layout_marginEnd="32dp" />
+                android:layout_marginEnd="32dp"
+                android:theme="@style/checkBoxStyle" />
 
             <EditText
                 android:id="@+id/etobrasocial"
@@ -126,7 +129,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@id/tvpatente"
                 android:layout_alignParentEnd="true"
-                android:layout_marginEnd="32dp" />
+                android:layout_marginEnd="32dp"
+                android:theme="@style/checkBoxStyle" />
 
             <EditText
                 android:id="@+id/etpatente"
@@ -159,7 +163,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@id/tvcredit"
                 android:layout_alignParentEnd="true"
-                android:layout_marginEnd="32dp" />
+                android:layout_marginEnd="32dp"
+                android:theme="@style/checkBoxStyle" />
 
         </RelativeLayout>
 
@@ -183,7 +188,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@id/tvdebit"
                 android:layout_alignParentEnd="true"
-                android:layout_marginEnd="32dp" />
+                android:layout_marginEnd="32dp"
+                android:theme="@style/checkBoxStyle" />
 
         </RelativeLayout>
 

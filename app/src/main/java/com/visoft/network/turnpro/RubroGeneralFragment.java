@@ -35,11 +35,18 @@ public class RubroGeneralFragment extends Fragment {
         TextView tvInfo = getActivity().findViewById(R.id.tvInfo);
         tvInfo.setText(R.string.selecciona_area_trabajo);
 
-        //Componentes gráficas
-        ListView listView = view.findViewById(R.id.listView);
-
         final String[] rubrosAID = getResources().getStringArray(R.array.rubrosGeneralesID);
-        listView.setAdapter(new RubrosGeneralesAdapter(getContext(), rubrosAID));
+        //Componentes gráficas
+        final ListView listView = view.findViewById(R.id.listView);
+        final RubrosGeneralesAdapter adapter = new RubrosGeneralesAdapter(getContext(), rubrosAID);
+        listView.setAdapter(adapter);
+
+        listView.post(new Runnable() {
+            @Override
+            public void run() {
+                listView.smoothScrollToPositionFromTop(adapter.getCount() - 1, 0, 17000);
+            }
+        });
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

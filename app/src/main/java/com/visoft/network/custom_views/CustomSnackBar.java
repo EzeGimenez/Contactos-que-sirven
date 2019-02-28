@@ -1,4 +1,4 @@
-package com.visoft.network.funcionalidades;
+package com.visoft.network.custom_views;
 
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;

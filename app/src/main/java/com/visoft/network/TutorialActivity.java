@@ -117,9 +117,6 @@ public class TutorialActivity extends AppCompatActivity implements View.OnClickL
 
     private void retroceder() {
         p.setSelection(viewPager.getCurrentItem());
-        if (viewPager.getCurrentItem() == 0) {
-            btnFinalizar.setVisibility(View.GONE);
-        }
     }
 
     public class ImageAdapter extends PagerAdapter {

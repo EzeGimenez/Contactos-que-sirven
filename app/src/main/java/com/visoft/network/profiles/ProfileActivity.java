@@ -1,6 +1,5 @@
 package com.visoft.network.profiles;
 
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -86,7 +85,6 @@ public class ProfileActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.black_transparent)));
 
         userContacts.child(shownUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -146,7 +144,6 @@ public class ProfileActivity extends AppCompatActivity {
 
         getMenuInflater().inflate(R.menu.toolbar_perfil, menu);
         this.menu = menu;
-        menu.findItem(R.id.edit).setVisible(false);
 
         if (esContacto) {
             menu.findItem(R.id.addContact).setIcon(R.drawable.ic_star_black_24dp);

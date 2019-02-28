@@ -37,12 +37,28 @@
                 style="@style/descTextView"
                 android:text="@string/contrase_a" />
 
-            <EditText
-                android:id="@+id/etPassword"
-                style="@style/editText"
-                android:ems="10"
-                android:inputType="textPassword"
-                android:singleLine="true" />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true">
+
+                <EditText
+                    android:id="@+id/etPassword"
+                    style="@style/editText"
+                    android:inputType="textPassword"
+                    android:singleLine="true" />
+
+                <ImageView
+                    android:id="@+id/btnShowPassword"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="24dp"
+                    android:layout_toEndOf="@id/etPassword"
+                    android:src="@drawable/ic_show_password"
+                    android:visibility="gone" />
+
+            </RelativeLayout>
 
             <Button
                 android:id="@+id/buttonAcceptLogIn"
@@ -98,9 +114,9 @@
                     android:layout_margin="10dp"
                     android:background="@drawable/rectangle_outline"
                     android:padding="8dp"
-                    android:text="@string/registrarse"
                     android:textAllCaps="false"
-                    android:textColor="@color/TEAL" />
+                    android:text="@string/registrarse"
+                    android:textColor="@color/white" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

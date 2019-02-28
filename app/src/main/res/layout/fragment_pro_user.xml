@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rootView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/colorPrimary"
     android:clickable="true"
     android:focusable="true"
     android:focusableInTouchMode="true">
@@ -13,7 +15,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/ContainerScreen1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -22,92 +24,110 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <FrameLayout
-                android:id="@+id/ContainerProfilePic"
-                android:layout_width="match_parent"
-                android:layout_height="230dp">
+            <ImageView
+                android:id="@+id/editar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="8dp"
+                android:src="@drawable/edit_24dp"
+                android:visibility="gone" />
 
-                <ImageView
-                    android:id="@+id/ivProfilePic"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/profile_pic"
-                    android:transitionName="ivPic" />
-
-            </FrameLayout>
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/ivProfilePic"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_margin="16dp"
+                android:src="@drawable/profile_pic" />
 
             <TextView
                 android:id="@+id/tvUsername"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                android:textAlignment="center"
-                android:textAllCaps="true"
-                android:textColor="@color/colorAccentPrimary"
+                android:layout_above="@id/ratingBar"
+                android:layout_alignTop="@id/ivProfilePic"
+                android:layout_alignParentEnd="true"
+                android:layout_toEndOf="@id/ivProfilePic"
+                android:gravity="center_vertical"
+                android:text="Ezequiel Gimenez"
+                android:textSize="16sp"
                 android:transitionName="username" />
+
+            <TextView
+                android:id="@+id/tvNumberReviews"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/ratingBar"
+                android:layout_alignBottom="@id/ratingBar"
+                android:layout_margin="4dp"
+                android:layout_toEndOf="@id/ratingBar"
+                android:gravity="center"
+                android:text="4" />
+
+            <com.iarcuschin.simpleratingbar.SimpleRatingBar
+                android:id="@+id/ratingBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/ivProfilePic"
+                android:layout_toEndOf="@id/ivProfilePic"
+                android:numStars="5"
+                android:transitionName="ratingBar"
+                app:srb_drawBorderEnabled="false"
+                app:srb_fillColor="@color/AMBER"
+                app:srb_isIndicator="true"
+                app:srb_numberOfStars="5"
+                app:srb_starBackgroundColor="@color/semi_transparent"
+                app:srb_starCornerRadius="3"
+                app:srb_starSize="30dp" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rvRubros"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp" />
+                android:layout_below="@id/ivProfilePic"
+                android:layout_margin="16dp"
+                android:background="@drawable/rectangle_outline"
+                android:padding="8dp" />
 
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/constraintLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tvNumberReviews"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <com.iarcuschin.simpleratingbar.SimpleRatingBar
-                    android:id="@+id/ratingBar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="8dp"
-                    android:numStars="5"
-                    android:transitionName="ratingBar"
-                    app:srb_drawBorderEnabled="false"
-                    app:srb_isIndicator="true"
-                    app:srb_numberOfStars="5"
-                    app:srb_starBackgroundColor="@color/semi_transparent"
-                    app:srb_starCornerRadius="3"
-                    app:srb_starSize="30dp" />
+                android:layout_below="@id/rvRubros">
 
                 <ImageButton
                     android:id="@+id/btnShowContactInfo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_margin="16dp"
                     android:background="@drawable/background_show_contact_info" />
 
                 <TextView
                     android:id="@+id/tvHrAtencion"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:focusedByDefault="true" />
+                    android:layout_alignTop="@id/btnShowContactInfo"
+                    android:layout_alignBottom="@id/btnShowContactInfo"
+                    android:layout_toStartOf="@id/btnMoreInfo"
+                    android:layout_toEndOf="@id/btnShowContactInfo"
+                    android:gravity="center" />
+
+                <ImageButton
+                    android:id="@+id/btnMoreInfo"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_margin="16dp"
+                    android:background="@drawable/circle_outline"
+                    android:src="@drawable/ic_info_black_24dp" />
 
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_below="@id/btnShowContactInfo"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_gravity="bottom"
                     android:layout_marginTop="20dp"
                     android:gravity="center"
@@ -115,33 +135,33 @@
 
                     <ImageView
                         android:id="@+id/ivInsigniaAtencion"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
                         android:layout_margin="8dp"
-                        android:src="@drawable/atencion_insignia_24dp"
+                        android:src="@drawable/insignia_atencion"
                         android:visibility="gone" />
 
                     <ImageView
                         android:id="@+id/ivInsigniaTiempoResp"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
                         android:layout_margin="8dp"
-                        android:src="@drawable/time_resp_insignia_24dp"
+                        android:src="@drawable/insignia_puntual"
                         android:visibility="gone" />
 
                     <ImageView
                         android:id="@+id/ivInsigniaCalidad"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
                         android:layout_margin="8dp"
-                        android:src="@drawable/quality_insignia_24dp"
+                        android:src="@drawable/insignia_buena_calidad"
                         android:visibility="gone" />
 
                 </LinearLayout>
 
-            </LinearLayout>
+            </RelativeLayout>
 
-        </LinearLayout>
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -156,7 +176,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                android:gravity="center">
+                android:gravity="center"
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/btnInstagram"
@@ -186,11 +207,15 @@
                 android:clickable="true"
                 android:focusable="true" />
 
-            <FrameLayout
+            <android.support.v7.widget.CardView
                 android:id="@+id/frameLayout"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:layout_marginTop="16dp">
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="0dp">
 
                 <com.google.android.gms.maps.MapView
                     android:id="@+id/map"
@@ -198,7 +223,7 @@
                     android:layout_height="match_parent"
                     android:src="@drawable/map" />
 
-            </FrameLayout>
+            </android.support.v7.widget.CardView>
 
 
             <LinearLayout
@@ -212,7 +237,7 @@
                     android:layout_width="75dp"
                     android:layout_height="75dp"
                     android:layout_margin="8dp"
-                    android:background="@drawable/main_buttons"
+                    android:background="@drawable/circle_outline"
                     android:drawableStart="@drawable/comment"
                     android:padding="8dp"
                     android:text="1" />
@@ -222,16 +247,8 @@
                     android:layout_width="75dp"
                     android:layout_height="75dp"
                     android:layout_margin="8dp"
-                    android:background="@drawable/main_buttons"
+                    android:background="@drawable/circle_outline"
                     android:src="@drawable/curriculum" />
-
-                <ImageButton
-                    android:id="@+id/btnMoreInfo"
-                    android:layout_width="75dp"
-                    android:layout_height="75dp"
-                    android:layout_margin="8dp"
-                    android:background="@drawable/main_buttons"
-                    android:src="@drawable/ic_info_black_24dp" />
 
             </LinearLayout>
 

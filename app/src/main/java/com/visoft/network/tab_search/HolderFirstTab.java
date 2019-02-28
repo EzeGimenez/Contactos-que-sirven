@@ -128,12 +128,13 @@ public class HolderFirstTab extends Fragment {
         searchView.setOnQueryTextListener(listenerSearchView);
     }
 
-    public void onBackPressed() {
+    public boolean onBackPressed() {
         if (fragmentManager.getBackStackEntryCount() > 0) {
             fragmentManager.popBackStack();
             tabLayout.setSelection(--current);
+            return true;
         } else {
-            getActivity().finishAffinity();
+            return false;
         }
     }
 

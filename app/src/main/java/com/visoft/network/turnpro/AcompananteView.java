@@ -54,7 +54,7 @@ public class AcompananteView extends AbstractFlexibleItem<ConfiguratorAcompanant
         } else {
             holder.pic.setImageDrawable(holder.pic.getContext().getResources().getDrawable((R.drawable.ic_add_black_24dp)));
             holder.name.setText(holder.name.getContext().getString(R.string.add));
-            holder.name.setTextColor(holder.pic.getContext().getResources().getColor(R.color.colorPrimary));
+            holder.c.setCardBackgroundColor(holder.c.getContext().getResources().getColor(R.color.transparent));
         }
     }
 

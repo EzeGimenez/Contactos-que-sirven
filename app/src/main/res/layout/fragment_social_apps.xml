@@ -20,23 +20,23 @@
         android:layout_margin="16dp"
         android:gravity="center_horizontal">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/btnInstagram"
             style="@style/SocialButton"
             android:layout_marginStart="16dp"
-            android:src="@drawable/social_instagram_icon" />
+            android:src="@drawable/instagram" />
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/btnFacebook"
             style="@style/SocialButton"
-            android:src="@drawable/social_facebook_icon" />
+            android:src="@drawable/social_facebook_iconfore" />
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/btnWhatsapp"
             style="@style/SocialButton"
-            android:src="@drawable/social_whatsapp_icon" />
+            android:src="@drawable/social_whatsapp_iconfore" />
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/btnMail"
             style="@style/SocialButton"
             android:layout_marginEnd="16dp"
@@ -59,23 +59,23 @@
         android:layout_margin="16dp"
         android:gravity="center_horizontal">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/btnInstagramA"
             style="@style/SocialButton"
             android:layout_marginStart="16dp"
-            android:src="@drawable/social_instagram_icon" />
+            android:src="@drawable/instagram" />
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/btnFacebookA"
             style="@style/SocialButton"
-            android:src="@drawable/social_facebook_icon" />
+            android:src="@drawable/social_facebook_iconfore" />
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/btnWhatsappA"
             style="@style/SocialButton"
-            android:src="@drawable/social_whatsapp_icon" />
+            android:src="@drawable/social_whatsapp_iconfore" />
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/btnMailA"
             style="@style/SocialButton"
             android:layout_marginEnd="16dp"

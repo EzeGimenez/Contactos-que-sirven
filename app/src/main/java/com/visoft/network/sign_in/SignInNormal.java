@@ -1,5 +1,7 @@
 package com.visoft.network.sign_in;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -7,16 +9,21 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.visoft.network.MainActivityNormal;
 import com.visoft.network.R;
+import com.visoft.network.custom_views.CustomSnackBar;
 import com.visoft.network.funcionalidades.AccountManager;
 import com.visoft.network.funcionalidades.AccountManagerFirebaseNormal;
-import com.visoft.network.funcionalidades.CustomSnackBar;
 import com.visoft.network.funcionalidades.HolderCurrentAccountManager;
 import com.visoft.network.funcionalidades.LoadingScreen;
 import com.visoft.network.util.Constants;
@@ -27,8 +34,9 @@ import static android.content.Context.MODE_PRIVATE;
 public class SignInNormal extends Fragment implements View.OnClickListener {
     private static final int RC_SIGNINEMAIL = 1, RC_SIGNINGOOGLE = 2, RC_SIGNUP = 4;
 
-    private EditText emailET, passwordET;
+    private EditText etEmail, etPassword;
     private AccountManager accountManager;
+    private ImageView btnShowPassword;
     private LoadingScreen loadingScreen;
 
     @Override
@@ -44,13 +52,37 @@ public class SignInNormal extends Fragment implements View.OnClickListener {
         this.loadingScreen = new LoadingScreen(getContext(), (ViewGroup) view.findViewById(R.id.rootView));
 
         //Initialization of UI Components
-        emailET = view.findViewById(R.id.etUsername);
-        passwordET = view.findViewById(R.id.etPassword);
+        etEmail = view.findViewById(R.id.etUsername);
+        etPassword = view.findViewById(R.id.etPassword);
 
         //Listeners for buttons
         view.findViewById(R.id.buttonAcceptLogIn).setOnClickListener(this);
         view.findViewById(R.id.buttonSignInWithGoogle).setOnClickListener(this);
         view.findViewById(R.id.buttonSignUp).setOnClickListener(this);
+
+        btnShowPassword = view.findViewById(R.id.btnShowPassword);
+        btnShowPassword.setOnClickListener(this);
+        etPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                if (charSequence.length() > 0) {
+                    btnShowPassword.setVisibility(View.VISIBLE);
+                } else {
+                    btnShowPassword.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
     }
 
     /**
@@ -66,17 +98,37 @@ public class SignInNormal extends Fragment implements View.OnClickListener {
             case R.id.buttonSignInWithGoogle:
                 signInWithGoogle();
                 loadingScreen.show();
+                hideKeyboard();
                 break;
             case R.id.buttonAcceptLogIn:
                 loadingScreen.show();
-                signInWithEmail(emailET.getText().toString(), passwordET.getText().toString());
+                hideKeyboard();
+                signInWithEmail(etEmail.getText().toString(), etPassword.getText().toString());
                 break;
             case R.id.buttonSignUp:
                 startSignUpActivity();
                 break;
+            case R.id.btnShowPassword:
+                if (etPassword.getTransformationMethod() == null) {
+                    btnShowPassword.setImageDrawable(getResources().getDrawable(R.drawable.ic_show_password));
+                    etPassword.setTransformationMethod(new PasswordTransformationMethod());
+                } else {
+                    btnShowPassword.setImageDrawable(getResources().getDrawable(R.drawable.ic_hide_password));
+                    etPassword.setTransformationMethod(null);
+                }
+                etPassword.setSelection(etPassword.getText().length());
+                break;
         }
 
     }
+
+    public void hideKeyboard() {
+        Context context = getContext();
+        View view = getView().getRootView();
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
 
     private void signInWithEmail(String email, String password) {
         try {

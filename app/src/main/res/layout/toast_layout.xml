@@ -2,15 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/rectangle_outline_semi"
-    android:gravity="center"
-    android:padding="4dp">
+    android:background="@drawable/snack_bar_background"
+    android:padding="18dp">
 
     <TextView
         android:id="@+id/text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="blablbal b"
-        android:textAlignment="center" />
+        android:textColor="@color/colorPrimary" />
 
 </LinearLayout>

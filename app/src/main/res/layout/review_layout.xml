@@ -1,37 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/tvQuery"
+    <LinearLayout
+        android:id="@+id/rootView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvQuery"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="TextView"
+            android:textAlignment="center"
+            android:textSize="18sp" />
+
+        <com.iarcuschin.simpleratingbar.SimpleRatingBar
+            android:id="@+id/ratingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:visibility="gone"
+            app:srb_backgroundColor="@color/transparent"
+            app:srb_borderColor="@color/white"
+            app:srb_fillColor="@color/white"
+            app:srb_starBorderWidth="3"
+            app:srb_starSize="40dp"
+            app:srb_stepSize="0.5" />
+
+        <LinearLayout
+            android:id="@+id/ContainerButtonsRating"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:gravity="center"
+            android:orientation="vertical" />
+
+        <EditText
+            android:id="@+id/editText"
+            style="@style/editText"
+            android:hint="@string/pequenaDescripcion"
+            android:inputType="textCapSentences"
+            android:textColorHint="@color/black_transparent"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/buttonFinish"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textAlignment="center"
-        android:textAllCaps="true"
-        android:textColor="@color/colorAccentPrimary"
-        android:textSize="20sp" />
-
-    <com.iarcuschin.simpleratingbar.SimpleRatingBar
-        android:id="@+id/ratingBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        app:srb_drawBorderEnabled="false"
-        app:srb_starBackgroundColor="@color/colorPrimary"
-        app:srb_starSize="40dp"
-        app:srb_stepSize="0.5" />
-
-    <EditText
-        android:id="@+id/editText"
-        style="@style/editText"
-        android:hint="@string/pequenaDescripcion"
-        android:inputType="textCapSentences"
-        android:textColorHint="@color/black_transparent"
-        android:visibility="invisible" />
-
-</LinearLayout>
+        android:layout_alignParentBottom="true"
+        android:background="@color/black_transparent"
+        android:text="@string/finalizar"
+        android:textAllCaps="false"
+        android:visibility="gone" />
+</RelativeLayout>

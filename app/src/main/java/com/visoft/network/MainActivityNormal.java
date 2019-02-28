@@ -1,17 +1,16 @@
 package com.visoft.network;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -19,67 +18,50 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.visoft.network.custom_views.CustomNavigationBar;
 import com.visoft.network.funcionalidades.AccountManager;
 import com.visoft.network.funcionalidades.AccountManagerFirebaseNormal;
 import com.visoft.network.funcionalidades.HolderCurrentAccountManager;
-import com.visoft.network.profiles.ProfileActivityOwnUser;
+import com.visoft.network.profiles.ProfileFragmentOwnUser;
 import com.visoft.network.sign_in.SignInActivity;
-import com.visoft.network.tab_chats.ChatsFragment;
-import com.visoft.network.tab_contacts.MainContactsFragment;
-import com.visoft.network.tab_search.HolderFirstTab;
 import com.visoft.network.util.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivityNormal extends AppCompatActivity {
-    public static final String RECEIVER_INTENT = "RECEIVER_INTENT";
+import static com.visoft.network.MainActivityNormalFragment.RECEIVER_INTENT;
 
+public class MainActivityNormal extends AppCompatActivity {
     public static boolean isRunning;
     private FirebaseAuth mAuth;
-    private SharedPreferences sharedPref;
-
-    private HolderFirstTab holderFirstTab;
-    private ChatsFragment chatsFragment;
-    private MainContactsFragment mainContactsFragment;
-
     private BroadcastReceiver broadcastReceiver;
-    private TabLayout tabLayout;
-
-    private Menu menu;
-    private int currentTab;
-    private ViewPager viewPagerMain;
+    private ProfileFragmentOwnUser profileFragmentOwnUser;
+    private MainActivityNormalFragment mainActivityNormalFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_normal);
 
-        sharedPref = getSharedPreferences(Constants.SHARED_PREF_NAME, MODE_PRIVATE);
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                mainActivityNormalFragment.notifyNewMessage();
+            }
+        };
+
         mAuth = FirebaseAuth.getInstance();
 
         if (mAuth.getCurrentUser() == null) {
             showLogInScreen();
         }
-
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                notifyNewMessage();
-            }
-        };
 
         AccountManager accountManager;
         SharedPreferences sharedPref = getSharedPreferences(Constants.SHARED_PREF_NAME, MODE_PRIVATE);
@@ -95,52 +77,10 @@ public class MainActivityNormal extends AppCompatActivity {
         HolderCurrentAccountManager.setCurrent(accountManager);
         accountManager.getCurrentUser(1);
 
-        holderFirstTab = holderFirstTab == null ? new HolderFirstTab() : holderFirstTab;
-        chatsFragment = chatsFragment == null ? new ChatsFragment() : chatsFragment;
-        mainContactsFragment = mainContactsFragment == null ? new MainContactsFragment() : mainContactsFragment;
+        mainActivityNormalFragment = new MainActivityNormalFragment();
+        profileFragmentOwnUser = new ProfileFragmentOwnUser();
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        mFusedLocationClient.getLastLocation()
-                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        if (location != null) {
-                            holderFirstTab.setLocation(new LatLng(location.getLatitude(), location.getAltitude()));
-                        } else {
-                            holderFirstTab.setLocation(null);
-                        }
-                    }
-                });
-    }
-
-    public void notifyNewMessage() {
-        if (viewPagerMain.getCurrentItem() != 1) {
-            View view = tabLayout.getTabAt(1).getCustomView();
-            view.findViewById(R.id.notImg).setVisibility(View.VISIBLE);
-        }
-        sharedPref.edit().putBoolean("unreadMessages", false).apply();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        LocalBroadcastManager.getInstance(this).registerReceiver((broadcastReceiver),
-                new IntentFilter(RECEIVER_INTENT)
-        );
-        isRunning = true;
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver);
-        isRunning = false;
+        updateLogIn();
     }
 
     @Override
@@ -154,20 +94,49 @@ public class MainActivityNormal extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        update();
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        super.onStart();
+        LocalBroadcastManager.getInstance(this).registerReceiver((broadcastReceiver),
+                new IntentFilter(RECEIVER_INTENT)
+        );
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver);
+    }
+
+    public void update() {
         if (mAuth.getCurrentUser() == null) {
             showLogInScreen();
-        }
-        if (viewPagerMain != null) {
-            viewPagerMain.setCurrentItem(currentTab);
         }
     }
 
     @Override
     public void onBackPressed() {
-        if (holderFirstTab != null && holderFirstTab.isVisible()) {
-            holderFirstTab.onBackPressed();
+        if (mainActivityNormalFragment.isVisible()) {
+            mainActivityNormalFragment.onBackPressed();
+        } else {
+            super.onBackPressed();
         }
+        if (isRunning) {
+            hideKeyboard();
+        }
+    }
+
+    public void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+        View view = getCurrentFocus();
+        if (view == null) {
+            view = new View(this);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     /**
@@ -178,67 +147,78 @@ public class MainActivityNormal extends AppCompatActivity {
         updateUI(acc);
     }
 
-    /**
-     * Actualiza la interfaz de acuerdo si el usuario ya está registrado
-     *
-     * @param user firebase user, puede ser null
-     */
     private void updateUI(@Nullable FirebaseUser user) {
-        final MenuItem goToProfileItem = menu.findItem(R.id.goToProfile);
 
         if (user != null) {
-            final View view = menu.findItem(R.id.goToProfile).getActionView();
-            view.setOnClickListener(new View.OnClickListener() {
+            CustomNavigationBar customNavigationBar = findViewById(R.id.customNavBar);
+            customNavigationBar.setCantItems(3);
+            ViewGroup viewGroup = customNavigationBar.getItem(2);
+
+            final ImageView ivHome = customNavigationBar.getItem(1).findViewById(R.id.imageView);
+            final ImageView ivBack = customNavigationBar.getItem(0).findViewById(R.id.imageView);
+            final ImageView ivPerson = viewGroup.findViewById(R.id.imageView);
+
+            ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+            adapter.addFragment(mainActivityNormalFragment, "");
+            adapter.addFragment(profileFragmentOwnUser, "");
+            final ViewPager vp = findViewById(R.id.Container);
+            vp.setAdapter(adapter);
+
+            vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
-                public void onClick(View v) {
-                    onOptionsItemSelected(goToProfileItem);
+                public void onPageScrolled(int i, float v, int i1) {
+
                 }
-            });
-            TextView tvusername = view.findViewById(R.id.tvUsername);
-            tvusername.setText(user.getDisplayName());
-            tvusername.setVisibility(View.VISIBLE);
-            goToProfileItem.setVisible(true);
 
-            viewPagerMain = findViewById(R.id.ViewPagerMain);
-            ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-
-            tabLayout = findViewById(R.id.tabLayoutMain);
-            tabLayout.setupWithViewPager(viewPagerMain);
-
-            viewPagerAdapter.addFragment(holderFirstTab, getString(R.string.buscar));
-            viewPagerAdapter.addFragment(chatsFragment, getString(R.string.chats));
-            viewPagerAdapter.addFragment(mainContactsFragment, getString(R.string.contactos));
-            viewPagerMain.setOffscreenPageLimit(3);
-            viewPagerMain.setAdapter(viewPagerAdapter);
-
-            tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                 @Override
-                public void onTabSelected(TabLayout.Tab tab) {
-                    currentTab = tab.getPosition();
-                    if (tab.getPosition() == 1) {
-                        View view = tab.getCustomView();
-                        if (view != null) {
-                            view.findViewById(R.id.notImg).setVisibility(View.INVISIBLE);
-                        }
-                        sharedPref.edit().putBoolean("unreadMessages", false).apply();
+                public void onPageSelected(int i) {
+                    if (i == 0) {
+                        ivHome.setImageDrawable(getResources().getDrawable(R.drawable.home_filled));
+                        ivPerson.setImageDrawable(getResources().getDrawable(R.drawable.person_unfilled));
+                    } else if (i == 1) {
+                        ivHome.setImageDrawable(getResources().getDrawable(R.drawable.home_unfilled));
+                        ivPerson.setImageDrawable(getResources().getDrawable(R.drawable.person_filled));
                     }
                 }
 
                 @Override
-                public void onTabUnselected(TabLayout.Tab tab) {
-                }
-
-                @Override
-                public void onTabReselected(TabLayout.Tab tab) {
+                public void onPageScrollStateChanged(int i) {
 
                 }
             });
 
-            tabLayout.getTabAt(1).setCustomView(R.layout.chat_notified);
+            ivPerson.setImageDrawable(getResources().getDrawable(R.drawable.person_unfilled));
+            ivHome.setImageDrawable(getResources().getDrawable(R.drawable.home_filled));
+            ivBack.setImageDrawable(getResources().getDrawable(R.drawable.arrow_back_2));
 
-            if (!sharedPref.getBoolean("unreadMessages", false)) {
-                tabLayout.getTabAt(1).getCustomView().findViewById(R.id.notImg).setVisibility(View.INVISIBLE);
-            }
+            viewGroup.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (vp.getCurrentItem() != 1) {
+                        vp.setCurrentItem(1);
+                        ivPerson.setImageDrawable(getResources().getDrawable(R.drawable.person_filled));
+                        ivHome.setImageDrawable(getResources().getDrawable(R.drawable.home_unfilled));
+                    }
+                }
+            });
+
+            customNavigationBar.getItem(1).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (vp.getCurrentItem() != 0) {
+                        vp.setCurrentItem(0);
+                        ivPerson.setImageDrawable(getResources().getDrawable(R.drawable.person_unfilled));
+                        ivHome.setImageDrawable(getResources().getDrawable(R.drawable.home_filled));
+                    }
+                }
+            });
+
+            customNavigationBar.getItem(0).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onBackPressed();
+                }
+            });
         }
     }
 
@@ -246,32 +226,6 @@ public class MainActivityNormal extends AppCompatActivity {
         Intent intent = new Intent(this, SignInActivity.class);
         startActivity(intent);
         finish();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.goToProfile:
-                Intent intent = new Intent(this, ProfileActivityOwnUser.class);
-                startActivity(intent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        return super.onPrepareOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.toolbar_main, menu);
-        this.menu = menu;
-        updateLogIn();
-        return true;
     }
 
     private class ViewPagerAdapter extends FragmentPagerAdapter {

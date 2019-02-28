@@ -1,8 +1,10 @@
 package com.visoft.network.profiles;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -15,6 +17,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -38,7 +41,7 @@ import com.google.firebase.storage.StorageReference;
 import com.iarcuschin.simpleratingbar.SimpleRatingBar;
 import com.visoft.network.R;
 import com.visoft.network.custom_views.CustomDialog;
-import com.visoft.network.funcionalidades.CustomToast;
+import com.visoft.network.custom_views.CustomSnackBar;
 import com.visoft.network.funcionalidades.HolderCurrentAccountManager;
 import com.visoft.network.funcionalidades.MapHighlighter;
 import com.visoft.network.funcionalidades.Messenger;
@@ -49,8 +52,6 @@ import com.visoft.network.objects.UserPro;
 import com.visoft.network.util.Constants;
 import com.visoft.network.util.Database;
 import com.visoft.network.util.GlideApp;
-
-import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
@@ -68,8 +69,8 @@ public class UserProFragment extends Fragment implements OnMapReadyCallback, Vie
     private ImageButton btnCV, btnShowContactInfo, btnMoreInfo;
     private Button btnShowReviews;
     private ImageView btnInstagram, btnWhatsapp, btnMail, btnFacebook;
-    private LinearLayout profileControls;
-    private ImageView ivProfilePic;
+    private LinearLayout profileControls, containerSocialMedia;
+    private ImageView ivProfilePic, editarPerfil;
     private View containerScreens;
 
     @Override
@@ -105,6 +106,8 @@ public class UserProFragment extends Fragment implements OnMapReadyCallback, Vie
         btnFacebook = view.findViewById(R.id.btnFacebook);
         btnWhatsapp = view.findViewById(R.id.btnWhatsapp);
         profileControls = view.findViewById(R.id.personalControls);
+        containerSocialMedia = view.findViewById(R.id.ContainerSocialMedia);
+        editarPerfil = view.findViewById(R.id.editar);
 
         containerScreens = view.findViewById(R.id.ContainerScreen);
 
@@ -162,7 +165,6 @@ public class UserProFragment extends Fragment implements OnMapReadyCallback, Vie
         } else {
             btnCV.setVisibility(View.GONE);
         }
-
         btnMoreInfo.setOnClickListener(this);
 
         if (user.getNumberReviews() > 0) {
@@ -172,7 +174,7 @@ public class UserProFragment extends Fragment implements OnMapReadyCallback, Vie
             btnShowReviews.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showComments();
+                    showReviews();
                 }
             });
         } else {
@@ -182,6 +184,7 @@ public class UserProFragment extends Fragment implements OnMapReadyCallback, Vie
         }
 
         if (user.getWhatsappNum() != null && user.getWhatsappNum().length() > 0) {
+            containerSocialMedia.setVisibility(View.VISIBLE);
             btnWhatsapp.setVisibility(View.VISIBLE);
             btnWhatsapp.setOnClickListener(this);
         } else {
@@ -189,6 +192,7 @@ public class UserProFragment extends Fragment implements OnMapReadyCallback, Vie
         }
 
         if (user.getInstagramID() != null && user.getInstagramID().length() > 0) {
+            containerSocialMedia.setVisibility(View.VISIBLE);
             btnInstagram.setVisibility(View.VISIBLE);
             btnInstagram.setOnClickListener(this);
         } else {
@@ -196,6 +200,7 @@ public class UserProFragment extends Fragment implements OnMapReadyCallback, Vie
         }
 
         if (user.getFacebookID() != null && user.getFacebookID().length() > 0) {
+            containerSocialMedia.setVisibility(View.VISIBLE);
             btnFacebook.setOnClickListener(this);
             btnFacebook.setVisibility(View.VISIBLE);
         } else {
@@ -203,6 +208,7 @@ public class UserProFragment extends Fragment implements OnMapReadyCallback, Vie
         }
 
         if (user.getShowEmail()) {
+            containerSocialMedia.setVisibility(View.VISIBLE);
             btnMail.setOnClickListener(this);
             btnMail.setVisibility(View.VISIBLE);
         } else {
@@ -210,7 +216,7 @@ public class UserProFragment extends Fragment implements OnMapReadyCallback, Vie
         }
 
         final Activity act = getActivity();
-        if (!(act instanceof ProfileActivityOwnUser)) {
+        if (act instanceof ProfileActivity) {
             ProfileActivity.hideLoadingScreen();
             new Messenger(getContext(), HolderCurrentAccountManager.getCurrent(null).getCurrentUser(1).getUid(), user.getUid(), (ViewGroup) getView().findViewById(R.id.rootView), containerScreens, database);
 
@@ -219,17 +225,25 @@ public class UserProFragment extends Fragment implements OnMapReadyCallback, Vie
             profileControls.findViewById(R.id.cerrarSesion).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ((ProfileActivityOwnUser) act).signOut();
+                    ((ProfileFragmentOwnUser) getParentFragment()).signOut();
                 }
             });
             profileControls.findViewById(R.id.eliminarCuenta).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ((ProfileActivityOwnUser) act).eliminarCuenta();
+                    ((ProfileFragmentOwnUser) getParentFragment()).eliminarCuenta();
                 }
             });
-
-            ProfileActivityOwnUser.hideLoadingScreen();
+            if (user.getIsPro()) {
+                editarPerfil.setVisibility(View.VISIBLE);
+                editarPerfil.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ((ProfileFragmentOwnUser) getParentFragment()).editarPerfil();
+                    }
+                });
+            }
+            ProfileFragmentOwnUser.hideLoadingScreen();
         }
 
         getProfilePic();
@@ -239,12 +253,50 @@ public class UserProFragment extends Fragment implements OnMapReadyCallback, Vie
     private void getProfilePic() {
         if (user.getHasPic()) {
             StorageReference storage = FirebaseStorage.getInstance().getReference();
-
-            StorageReference userRef = storage.child(Constants.FIREBASE_USERS_PRO_CONTAINER_NAME + "/" + user.getUid() + user.getImgVersion() + ".jpg");
+            final StorageReference userRef = storage.child(Constants.FIREBASE_USERS_PRO_CONTAINER_NAME + "/" + user.getUid() + user.getImgVersion() + ".jpg");
             GlideApp.with(getContext())
                     .load(userRef)
                     .into(ivProfilePic);
+
+            ivProfilePic.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    showImageExpanded(getContext(), ivProfilePic, userRef);
+                    return false;
+                }
+            });
         }
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void showImageExpanded(Context context, ImageView source, StorageReference ref) {
+
+        View dialogView = LayoutInflater.from(context).inflate(R.layout.expanded_iv, null);
+        ImageView imageView = dialogView.findViewById(R.id.img);
+
+        GlideApp.with(getContext())
+                .load(ref)
+                .into(imageView);
+
+        final CustomDialog dialog = new CustomDialog(context);
+        dialog.setView(dialogView);
+        dialog.show();
+
+        source.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (dialog.isShown()) {
+                    v.getParent().requestDisallowInterceptTouchEvent(true);
+                    int action = event.getActionMasked();
+                    if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL) {
+                        v.getParent().requestDisallowInterceptTouchEvent(false);
+                        dialog.hide();
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
     }
 
     @Override
@@ -286,14 +338,14 @@ public class UserProFragment extends Fragment implements OnMapReadyCallback, Vie
                     intentWpp.setPackage("com.whatsapp");
                     startActivity(intentWpp);
                 } catch (ActivityNotFoundException e) {
-                    CustomToast.makeText(getContext(), "Whatsapp not installed");
+                    CustomSnackBar.makeText(getView().findViewById(R.id.rootView), "Whatsapp not installed");
                 }
 
                 break;
             case R.id.btnMoreInfo:
 
                 CustomDialog dialog = new CustomDialog(getContext());
-                dialog.setPositiveButton("OK", null);
+                dialog.setPositiveButton(getString(R.string.aceptar), null);
                 View view = getLayoutInflater().inflate(R.layout.more_info_layout, null);
                 dialog.setView(view);
                 TextView tvCoworkers = view.findViewById(R.id.tvCoworkers);
@@ -395,7 +447,7 @@ public class UserProFragment extends Fragment implements OnMapReadyCallback, Vie
 
     }
 
-    public void showComments() {
+    public void showReviews() {
 
         final CountDownTimer timer = new CountDownTimer(8000, 1000) {
             @Override
@@ -405,7 +457,7 @@ public class UserProFragment extends Fragment implements OnMapReadyCallback, Vie
 
             @Override
             public void onFinish() {
-                CustomToast.makeText(getContext(), "Revisa tu conexión");
+                CustomSnackBar.makeText(getView().findViewById(R.id.rootView), "Revisa tu conexión");
                 getActivity().onBackPressed();
             }
         }.start();
@@ -426,8 +478,6 @@ public class UserProFragment extends Fragment implements OnMapReadyCallback, Vie
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         timer.cancel();
                         int i = 0;
-                        ArrayList<CircleImageView> picList = new ArrayList<>();
-                        ArrayList<String> uids = new ArrayList<>();
                         for (DataSnapshot d : dataSnapshot.getChildren()) {
                             Review r = d.getValue(Review.class);
                             if (r != null) {
@@ -438,13 +488,14 @@ public class UserProFragment extends Fragment implements OnMapReadyCallback, Vie
                                 CircleImageView ivPic = comment.findViewById(R.id.ivImage);
 
                                 tvUsername.setText(r.getReviewerUsername());
-                                msg.setText(r.getMsg());
+                                if (r.getMsg() != null && r.getMsg().length() > 0) {
+                                    msg.setText(r.getMsg());
+                                } else {
+                                    msg.setVisibility(View.GONE);
+                                }
                                 ratingBar.setRating(r.getRating());
 
                                 containerReviews.addView(comment);
-
-                                picList.add(ivPic);
-                                uids.add(r.getReviewerUID());
 
                                 i++;
                             }

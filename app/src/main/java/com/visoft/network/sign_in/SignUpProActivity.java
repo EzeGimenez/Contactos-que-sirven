@@ -11,11 +11,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.visoft.network.R;
+import com.visoft.network.custom_views.CustomSnackBar;
 import com.visoft.network.funcionalidades.AccountManager;
 import com.visoft.network.funcionalidades.AccountManagerFirebaseNormal;
-import com.visoft.network.funcionalidades.CustomSnackBar;
 import com.visoft.network.funcionalidades.HolderCurrentAccountManager;
 import com.visoft.network.funcionalidades.LoadingScreen;
 import com.visoft.network.objects.UserPro;
@@ -26,6 +27,7 @@ public class SignUpProActivity extends AppCompatActivity implements View.OnClick
 
     private EditText etEmail, etPassword, etUsername;
     private LoadingScreen loadingScreen;
+    private ImageView btnShowPassword;
     private AccountManager accountManager;
     private UserPro user;
 
@@ -40,7 +42,8 @@ public class SignUpProActivity extends AppCompatActivity implements View.OnClick
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
 
-        findViewById(R.id.btnShowPassword).setOnClickListener(this);
+        btnShowPassword = findViewById(R.id.btnShowPassword);
+        btnShowPassword.setOnClickListener(this);
         findViewById(R.id.btnSignUp).setOnClickListener(this);
 
         etPassword.addTextChangedListener(new TextWatcher() {
@@ -121,8 +124,10 @@ public class SignUpProActivity extends AppCompatActivity implements View.OnClick
                 break;
             case R.id.btnShowPassword:
                 if (etPassword.getTransformationMethod() == null) {
+                    btnShowPassword.setImageDrawable(getResources().getDrawable(R.drawable.ic_show_password));
                     etPassword.setTransformationMethod(new PasswordTransformationMethod());
                 } else {
+                    btnShowPassword.setImageDrawable(getResources().getDrawable(R.drawable.ic_hide_password));
                     etPassword.setTransformationMethod(null);
                 }
                 etPassword.setSelection(etPassword.getText().length());

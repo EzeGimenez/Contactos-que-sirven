@@ -7,13 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.visoft.network.R;
-import com.visoft.network.funcionalidades.CustomToast;
+import com.visoft.network.custom_views.CustomSnackBar;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,7 +22,6 @@ import java.util.List;
 public class ConfiguratorContacto extends ConfiguratorTurnPro {
 
     //Componentes gráficas
-    private CheckBox cbEmail;
     private EditText etTel1, etTel2;
     private Spinner sFecha1, sFecha2, sHora1, sHora2;
 
@@ -43,7 +41,6 @@ public class ConfiguratorContacto extends ConfiguratorTurnPro {
         TextView tvInfo = getActivity().findViewById(R.id.tvInfo);
         tvInfo.setText(R.string.complete_info_contacto);
 
-        cbEmail = view.findViewById(R.id.cbEmail);
         etTel1 = view.findViewById(R.id.etTel1);
         etTel2 = view.findViewById(R.id.etTel2);
         sFecha1 = view.findViewById(R.id.sFecha1);
@@ -66,7 +63,6 @@ public class ConfiguratorContacto extends ConfiguratorTurnPro {
 
     @Override
     protected void finalizar() {
-        user.setShowEmail(cbEmail.isChecked());
         user.setTelefono1(etTel1.getText().toString());
         user.setTelefono2(etTel2.getText().toString());
         user.setDiasAtencion(
@@ -79,7 +75,6 @@ public class ConfiguratorContacto extends ConfiguratorTurnPro {
     protected void iniciar() {
         etTel1.setText(user.getTelefono1());
         etTel2.setText(user.getTelefono2());
-        cbEmail.setChecked(user.getShowEmail());
         if (user.getDiasAtencion() != -1) {
             sFecha1.setSelection(user.getDiasAtencion() / 10);
             sFecha2.setSelection(user.getDiasAtencion() % 10);
@@ -97,7 +92,7 @@ public class ConfiguratorContacto extends ConfiguratorTurnPro {
             return true;
         }
 
-        CustomToast.makeText(getContext(), getString(R.string.ingrese_telefono));
+        CustomSnackBar.makeText(getView().findViewById(R.id.rootView), getString(R.string.ingrese_telefono));
 
         return false;
     }

@@ -2,33 +2,38 @@ package com.visoft.network;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.visoft.network.custom_views.CustomNavigationBar;
 import com.visoft.network.funcionalidades.AccountManager;
 import com.visoft.network.funcionalidades.AccountManagerFirebasePro;
 import com.visoft.network.funcionalidades.HolderCurrentAccountManager;
-import com.visoft.network.profiles.ProfileActivityOwnUser;
+import com.visoft.network.profiles.ProfileFragmentOwnUser;
 import com.visoft.network.sign_in.SignInActivity;
 import com.visoft.network.tab_chats.ChatsFragment;
 import com.visoft.network.util.Constants;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivityPro extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private SharedPreferences sharedPref;
-    private ChatsFragment chatsFragment;
     private boolean updated = false;
 
-    private Menu menu;
+    private ProfileFragmentOwnUser profileFragmentOwnUser;
+    private ChatsFragment chatsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,32 +55,26 @@ public class MainActivityPro extends AppCompatActivity {
             }
         };
 
+        profileFragmentOwnUser = new ProfileFragmentOwnUser();
+        chatsFragment = new ChatsFragment();
         AccountManager accountManager = AccountManagerFirebasePro.getInstance(l, this);
         HolderCurrentAccountManager.setCurrent(accountManager);
         accountManager.getCurrentUser(1);
-
-        chatsFragment = chatsFragment == null ? new ChatsFragment() : chatsFragment;
-
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.black_transparent)));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        if (mAuth.getCurrentUser() == null) {
-            showLogInScreen();
-        }
+        update();
     }
 
-    /**
-     * If user is signed in it will updateUI accordingly
-     */
-    private void updateLogIn() {
-        FirebaseUser acc = mAuth.getCurrentUser();
-        updateUI(acc);
+    public void update() {
+        if (mAuth.getCurrentUser() == null) {
+            showLogInScreen();
+        } else {
+            updateUI(mAuth.getCurrentUser());
+        }
     }
 
     /**
@@ -84,26 +83,63 @@ public class MainActivityPro extends AppCompatActivity {
      * @param user firebase user, puede ser null
      */
     private void updateUI(@Nullable FirebaseUser user) {
-        if (!updated && user != null && menu != null) {
-            final MenuItem goToProfileItem = menu.findItem(R.id.goToProfile);
+        if (!updated && user != null) {
+            final CustomNavigationBar customNavigationBar = findViewById(R.id.customNavBar);
+            customNavigationBar.setCantItems(2);
+            ViewGroup viewGroup = customNavigationBar.getItem(1);
+            final ImageView icHome = customNavigationBar.getItem(0).findViewById(R.id.imageView);
+            final ImageView icPerson = viewGroup.findViewById(R.id.imageView);
 
-            final View view = menu.findItem(R.id.goToProfile).getActionView();
-            view.setOnClickListener(new View.OnClickListener() {
+            final ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+            adapter.addFragment(chatsFragment, "");
+            adapter.addFragment(profileFragmentOwnUser, "");
+            final ViewPager vp = findViewById(R.id.ContainerMainPro);
+            vp.setAdapter(adapter);
+            vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
-                public void onClick(View v) {
-                    onOptionsItemSelected(goToProfileItem);
+                public void onPageScrolled(int i, float v, int i1) {
+
+                }
+
+                @Override
+                public void onPageSelected(int i) {
+                    if (i == 0) {
+                        icHome.setImageDrawable(getResources().getDrawable(R.drawable.home_filled));
+                        icPerson.setImageDrawable(getResources().getDrawable(R.drawable.person_unfilled));
+                    } else {
+                        icHome.setImageDrawable(getResources().getDrawable(R.drawable.home_unfilled));
+                        icPerson.setImageDrawable(getResources().getDrawable(R.drawable.person_filled));
+                    }
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int i) {
+
                 }
             });
 
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .add(R.id.ContainerMainPro, chatsFragment)
-                    .commit();
-
-            TextView tvusername = view.findViewById(R.id.tvUsername);
-            tvusername.setText(user.getDisplayName());
-            tvusername.setVisibility(View.VISIBLE);
-            goToProfileItem.setVisible(true);
+            icHome.setImageDrawable(getResources().getDrawable(R.drawable.home_filled));
+            icPerson.setImageDrawable(getResources().getDrawable(R.drawable.person_unfilled));
+            viewGroup.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (vp.getCurrentItem() != 1) {
+                        vp.setCurrentItem(1);
+                        icHome.setImageDrawable(getResources().getDrawable(R.drawable.home_unfilled));
+                        icPerson.setImageDrawable(getResources().getDrawable(R.drawable.person_filled));
+                    }
+                }
+            });
+            customNavigationBar.getItem(0).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (vp.getCurrentItem() != 0) {
+                        vp.setCurrentItem(0);
+                        icHome.setImageDrawable(getResources().getDrawable(R.drawable.home_filled));
+                        icPerson.setImageDrawable(getResources().getDrawable(R.drawable.person_unfilled));
+                    }
+                }
+            });
 
             if (!sharedPref.getBoolean("unreadMessages", false)) {
                 //TODO no hay mensajes nuevos
@@ -125,22 +161,36 @@ public class MainActivityPro extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.goToProfile:
-                Intent intent = new Intent(this, ProfileActivityOwnUser.class);
-                startActivity(intent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        profileFragmentOwnUser.onActivityResult(requestCode, resultCode, data);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_main, menu);
-        this.menu = menu;
-        updateLogIn();
-        return true;
+    private class ViewPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        public ViewPagerAdapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
     }
 }

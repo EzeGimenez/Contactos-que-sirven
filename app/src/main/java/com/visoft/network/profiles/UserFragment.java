@@ -31,10 +31,10 @@ public class UserFragment extends Fragment {
 
         tvUsername = view.findViewById(R.id.tvUsername);
 
-        if (getActivity() instanceof ProfileActivityOwnUser) {
-            ProfileActivityOwnUser.hideLoadingScreen();
-        } else {
+        if (getActivity() instanceof ProfileActivity) {
             ProfileActivity.hideLoadingScreen();
+        } else {
+            ProfileFragmentOwnUser.hideLoadingScreen();
         }
 
         iniciarUI();
@@ -46,13 +46,13 @@ public class UserFragment extends Fragment {
         getView().findViewById(R.id.cerrarSesion).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((ProfileActivityOwnUser) getActivity()).signOut();
+                ((ProfileFragmentOwnUser) getParentFragment()).signOut();
             }
         });
         getView().findViewById(R.id.eliminarCuenta).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((ProfileActivityOwnUser) getActivity()).eliminarCuenta();
+                ((ProfileFragmentOwnUser) getParentFragment()).eliminarCuenta();
             }
         });
     }

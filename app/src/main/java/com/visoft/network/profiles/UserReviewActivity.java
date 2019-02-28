@@ -7,12 +7,9 @@ import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -24,7 +21,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.iarcuschin.simpleratingbar.SimpleRatingBar;
 import com.visoft.network.R;
-import com.visoft.network.funcionalidades.CustomToast;
+import com.visoft.network.custom_views.CustomSnackBar;
+import com.visoft.network.funcionalidades.FillerRatingOptions;
 import com.visoft.network.funcionalidades.GsonerUser;
 import com.visoft.network.funcionalidades.LoadingScreen;
 import com.visoft.network.objects.QualityInfo;
@@ -39,12 +37,10 @@ public class UserReviewActivity extends AppCompatActivity {
     private DatabaseReference database;
     private QualityInfo qualityInfo;
     private UserPro proUserReviewed;
-    private SparseArray<View> mapPage;
     private FirebaseAuth mAuth;
     private LoadingScreen loadingScreen;
 
     //Componentes gráficas
-    private Button btnNext, btnPrev;
     private ViewPager viewPager;
 
     @SuppressLint("ClickableViewAccessibility")
@@ -57,7 +53,6 @@ public class UserReviewActivity extends AppCompatActivity {
 
         database = Database.getDatabase().getReference();
         mAuth = FirebaseAuth.getInstance();
-        mapPage = new SparseArray<>();
         proUserReviewed = (UserPro) getIntent().getSerializableExtra("user");
 
         database.child(Constants.FIREBASE_QUALITY_CONTAINER_NAME)
@@ -70,18 +65,6 @@ public class UserReviewActivity extends AppCompatActivity {
                             qualityInfo = new QualityInfo();
                         }
                         setup();
-                        btnNext.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                onForthPressed();
-                            }
-                        });
-                        btnPrev.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                onBackPressed();
-                            }
-                        });
                     }
 
                     @Override
@@ -90,9 +73,12 @@ public class UserReviewActivity extends AppCompatActivity {
                     }
                 });
 
-        btnNext = findViewById(R.id.btnNext);
-        btnPrev = findViewById(R.id.btnPrev);
         viewPager = findViewById(R.id.viewPager);
+    }
+
+    private void setup() {
+        review = new Review();
+        viewPager.setAdapter(new LayoutAdapter());
     }
 
     private void saveReview() {
@@ -205,127 +191,121 @@ public class UserReviewActivity extends AppCompatActivity {
     }
 
     public void goBack() {
-        CustomToast.makeText(this, getString(R.string.please_finish_review));
+        CustomSnackBar.makeText(findViewById(R.id.rootView), getString(R.string.please_finish_review));
     }
 
-    private void onForthPressed() {
-        int shown = viewPager.getCurrentItem();
-
-        SimpleRatingBar ratingBar = mapPage.get(shown).findViewById(R.id.ratingBar);
-        switch (shown) {
+    private void onForthPressed(int pos, int result) {
+        switch (pos) {
             case 0:
-
-                viewPager.setCurrentItem(shown + 1);
-                btnPrev.setVisibility(View.VISIBLE);
-                btnPrev.setText(getString(R.string.previo));
-                review.setTiempoResp(ratingBar.getRating());
-
+                review.setCalidad(5 - result);
                 break;
             case 1:
-
-                viewPager.setCurrentItem(shown + 1);
-                review.setAtencion(ratingBar.getRating());
-
+                if (result == 0) {
+                    review.setTiempoResp(5);
+                } else {
+                    review.setTiempoResp(0);
+                }
                 break;
             case 2:
-
-                viewPager.setCurrentItem(shown + 1);
-                review.setCalidad(ratingBar.getRating());
-                btnNext.setText(getString(R.string.finalizar));
-
-                break;
-            case 3:
-
-                EditText et = mapPage.get(shown).findViewById(R.id.editText);
-                review.setMsg(et.getText().toString());
-                review.setRating(ratingBar.getRating());
-                saveReview();
-
+                review.setAtencion(5 - result);
                 break;
         }
-
+        viewPager.setCurrentItem(pos + 1);
     }
 
     @Override
     public void onBackPressed() {
-        int shown = viewPager.getCurrentItem();
-
-        SimpleRatingBar ratingBar = null;
-        if (shown > 0) {
-            ratingBar = mapPage.get(shown - 1).findViewById(R.id.ratingBar);
-        }
-        switch (shown) {
-            case 0:
-                goBack();
-                break;
-            case 1:
-                ratingBar.setRating(review.getTiempoResp());
-                btnPrev.setVisibility(View.GONE);
-                viewPager.setCurrentItem(shown - 1);
-                break;
-            case 2:
-                ratingBar.setRating(review.getAtencion());
-                viewPager.setCurrentItem(shown - 1);
-                break;
-            case 3:
-                ratingBar.setRating(review.getCalidad());
-                btnNext.setText(getString(R.string.siguiente));
-                viewPager.setCurrentItem(shown - 1);
-                break;
-        }
-
-    }
-
-    private void setup() {
-        review = new Review();
-        viewPager.setAdapter(new LayoutAdapter());
+        goBack();
     }
 
     private class LayoutAdapter extends PagerAdapter {
 
         @Override
         public int getCount() {
-            int MAX_SLIDES = 4;
-            return MAX_SLIDES;
+            return 4;
         }
 
         @NonNull
         @Override
-        public Object instantiateItem(@NonNull ViewGroup container, int position) {
+        public Object instantiateItem(@NonNull ViewGroup container, final int position) {
             LayoutInflater inflater = (LayoutInflater) container.getContext()
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
             View view = inflater.inflate(R.layout.review_layout, container, false);
 
-            TextView tvQuery = view.findViewById(R.id.tvQuery);
+            String[] options = new String[0];
+            TextView tvInfo = view.findViewById(R.id.tvQuery);
+            String query = null;
             switch (position) {
                 case 0:
-                    tvQuery.setText(getString(R.string.tiempoRespReview));
+                    query = getString(R.string.calidadTrabajoReview);
+                    options = new String[]{
+                            getString(R.string.muy_buena),
+                            getString(R.string.buena),
+                            getString(R.string.aceptable),
+                            getString(R.string.mala),
+                            getString(R.string.muy_mala)
+                    };
+
                     break;
                 case 1:
-                    tvQuery.setText(getString(R.string.atencionReview));
+                    query = getString(R.string.tiempoRespReview);
+                    options = new String[]{
+                            getString(R.string.si),
+                            getString(R.string.no)
+                    };
+
                     break;
                 case 2:
-                    tvQuery.setText(getString(R.string.calidadTrabajoReview));
+                    query = getString(R.string.atencionReview);
+                    options = new String[]{
+                            getString(R.string.muy_buena),
+                            getString(R.string.buena),
+                            getString(R.string.aceptable),
+                            getString(R.string.mala),
+                            getString(R.string.muy_mala)
+                    };
+
                     break;
                 case 3:
-                    view.findViewById(R.id.editText).setVisibility(View.VISIBLE);
-                    tvQuery.setText(getString(R.string.calificacionFinalReview));
+                    query = getString(R.string.calificacionFinalReview);
                     break;
             }
 
-            mapPage.put(position, view);
+            tvInfo.setText(query);
+            if (position < 3) {
+                new FillerRatingOptions((ViewGroup) view.findViewById(R.id.ContainerButtonsRating), options, new FillerRatingOptions.ListenerButtonsRating() {
+                    @Override
+                    public void onClick(int result) {
+                        onForthPressed(position, result);
+                    }
+                });
+            } else {
+                final SimpleRatingBar ratingBar = view.findViewById(R.id.ratingBar);
+                ratingBar.setVisibility(View.VISIBLE);
+                ratingBar.setStarCornerRadius(10);
+                view.findViewById(R.id.editText).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.buttonFinish).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.buttonFinish).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        review.setRating(ratingBar.getRating());
+                        saveReview();
+                    }
+                });
+            }
+
             viewPager.addView(view, 0);
             return view;
         }
 
         @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
+        public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
             container.removeView((View) object);
         }
 
         @Override
-        public boolean isViewFromObject(View view, Object object) {
+        public boolean isViewFromObject(@NonNull View view, Object object) {
             return view == object;
         }
     }

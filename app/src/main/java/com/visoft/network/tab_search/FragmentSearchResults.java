@@ -88,18 +88,20 @@ public class FragmentSearchResults extends FragmentFirstTab {
                         );
                         noResults(getString(id));
                     } else {
-                        yesResults();
-                        recyclerView.setAdapter(adapter);
-                        adapter.addListener(new FlexibleAdapter.OnItemClickListener() {
-                            @Override
-                            public boolean onItemClick(View view, int position) {
-                                Intent intent = new Intent(getContext(), ProfileActivity.class);
-                                intent.putExtra("user", list.get(position));
+                        if (isVisible()) {
+                            yesResults();
+                            recyclerView.setAdapter(adapter);
+                            adapter.addListener(new FlexibleAdapter.OnItemClickListener() {
+                                @Override
+                                public boolean onItemClick(View view, int position) {
+                                    Intent intent = new Intent(getContext(), ProfileActivity.class);
+                                    intent.putExtra("user", list.get(position));
 
-                                startActivity(intent);
-                                return true;
-                            }
-                        });
+                                    startActivity(intent);
+                                    return true;
+                                }
+                            });
+                        }
                     }
                 }
             }, a);

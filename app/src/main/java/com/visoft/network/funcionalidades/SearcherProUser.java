@@ -147,12 +147,12 @@ public class SearcherProUser {
         }
     }
 
-    public interface OnFinishListenerUserPro {
-        void onFinish(List<UserPro> list);
-    }
-
     public void setLocation(LatLng l) {
         location = l;
+    }
+
+    public interface OnFinishListenerUserPro {
+        void onFinish(List<UserPro> list);
     }
 
     private class ProUserComparator implements Comparator<UserPro> {

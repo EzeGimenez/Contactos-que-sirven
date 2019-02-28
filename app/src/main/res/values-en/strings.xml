@@ -104,7 +104,7 @@
 
 
     <string name="editar_perfil">Edit Profile</string>
-    <string name="aceptar">OK</string>
+    <string name="aceptar">Ok</string>
 
     <string name="previo">Prev</string>
     <string name="siguiente">Next</string>
@@ -141,9 +141,9 @@
     <string name="viernes">Friday</string>
     <string name="sabado">Saturday</string>
     <string name="domingo">Sunday</string>
-    <string name="tiempoRespReview">How would you rate the punctuality?</string>
-    <string name="calidadTrabajoReview">How would you rate the quality of service received?</string>
-    <string name="atencionReview">How would you rate the attention received?</string>
+    <string name="tiempoRespReview">Where they punctual?</string>
+    <string name="calidadTrabajoReview">How was the quality of the service received?</string>
+    <string name="atencionReview">How good was the way they addressed your issue?</string>
     <string name="calificacionFinalReview">Finally, make a general review</string>
     <string name="pequenaDescripcion">Write a short review</string>
     <string name="registrarse">Sign Up!</string>
@@ -196,7 +196,7 @@
     <string name="no_results">No results found for </string>
     <string name="finalizar_contrato">Finish contract</string>
     <string name="pudo_concretar">Can you confirm the contract has ended successfully?</string>
-    <string name="contratos_finalizados">Contracts finished</string>
+    <string name="contratos_finalizados">Finished contracts</string>
     <string name="todavia_no_tienes_completados">Your finished contracts will appear here</string>
     <string name="finished_at">Finished:</string>
     <string name="no_hay_usuario_registrado">Credentials don\'t match any created users</string>
@@ -238,5 +238,12 @@
     <string name="tutorial5">Finishing and rating</string>
     <string name="tutorial55">Click on the finish contract button and make a review of the service provider</string>
     <string name="confirmar">Accept</string>
+    <string name="si">Yes</string>
+    <string name="no">No</string>
+    <string name="muy_buena">Very good</string>
+    <string name="buena">Good</string>
+    <string name="aceptable">Acceptable</string>
+    <string name="mala">Bad</string>
+    <string name="muy_mala">Very bad</string>
 
 </resources>

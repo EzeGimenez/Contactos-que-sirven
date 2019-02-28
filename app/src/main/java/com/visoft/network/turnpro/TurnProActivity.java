@@ -104,7 +104,7 @@ public class TurnProActivity extends AppCompatActivity implements View.OnClickLi
         } else {
             CustomDialog dialog = new CustomDialog(this);
             dialog.setTitle(getString(R.string.seguro_salir))
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    .setPositiveButton(getString(R.string.aceptar), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             TurnProActivity.super.onBackPressed();

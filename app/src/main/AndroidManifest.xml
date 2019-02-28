@@ -33,7 +33,7 @@
         <activity
             android:name=".sign_in.SignInActivity"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".profiles.ProfileActivityOwnUser" />
+        <activity android:name=".profiles.ProfileFragmentOwnUser" />
         <activity android:name=".turnpro.TurnProActivity" />
         <activity
             android:name=".tab_chats.SpecificChatActivity"

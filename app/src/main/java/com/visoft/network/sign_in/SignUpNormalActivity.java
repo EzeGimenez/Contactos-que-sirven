@@ -11,11 +11,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.visoft.network.R;
+import com.visoft.network.custom_views.CustomSnackBar;
 import com.visoft.network.funcionalidades.AccountManager;
 import com.visoft.network.funcionalidades.AccountManagerFirebaseNormal;
-import com.visoft.network.funcionalidades.CustomSnackBar;
 import com.visoft.network.funcionalidades.HolderCurrentAccountManager;
 import com.visoft.network.funcionalidades.LoadingScreen;
 
@@ -24,7 +25,7 @@ public class SignUpNormalActivity extends AppCompatActivity implements View.OnCl
     private static final int RC_SIGNUP = 3;
 
     private EditText etEmail, etPassword, etUsername;
-    private View btnShowPassword;
+    private ImageView btnShowPassword;
     private LoadingScreen loadingScreen;
     private AccountManager accountManager;
 
@@ -52,6 +53,8 @@ public class SignUpNormalActivity extends AppCompatActivity implements View.OnCl
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
 
+        btnShowPassword = findViewById(R.id.btnShowPassword);
+        btnShowPassword.setOnClickListener(this);
         etPassword.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -75,8 +78,6 @@ public class SignUpNormalActivity extends AppCompatActivity implements View.OnCl
         });
 
         findViewById(R.id.btnSignUp).setOnClickListener(this);
-        btnShowPassword = findViewById(R.id.btnShowPassword);
-        btnShowPassword.setOnClickListener(this);
     }
 
     private void finishSuccessfully() {
@@ -94,8 +95,10 @@ public class SignUpNormalActivity extends AppCompatActivity implements View.OnCl
                 break;
             case R.id.btnShowPassword:
                 if (etPassword.getTransformationMethod() == null) {
+                    btnShowPassword.setImageDrawable(getResources().getDrawable(R.drawable.ic_show_password));
                     etPassword.setTransformationMethod(new PasswordTransformationMethod());
                 } else {
+                    btnShowPassword.setImageDrawable(getResources().getDrawable(R.drawable.ic_hide_password));
                     etPassword.setTransformationMethod(null);
                 }
                 etPassword.setSelection(etPassword.getText().length());

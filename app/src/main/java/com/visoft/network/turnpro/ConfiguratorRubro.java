@@ -3,7 +3,6 @@ package com.visoft.network.turnpro;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,8 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.rd.pageindicatorview.view.PageIndicatorView;
+import com.rd.pageindicatorview.view.animation.AnimationType;
 import com.visoft.network.R;
-import com.visoft.network.funcionalidades.CustomToast;
+import com.visoft.network.custom_views.CustomSnackBar;
 import com.visoft.network.objects.RubroEspecifico;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class ConfiguratorRubro extends ConfiguratorTurnPro {
     private final String TAG_GENERAL = "GENERAL_TAG", TAG_ESP_1 = "ESP1_TAG";
 
     private RecyclerView rvSelectedRubros;
-    private TabLayout tabLayout;
+    private PageIndicatorView tabLayout;
     private int current;
     private FlexibleAdapter<RubroEspecifico> adapterSelectedRubros;
 
@@ -57,8 +58,10 @@ public class ConfiguratorRubro extends ConfiguratorTurnPro {
         rvSelectedRubros = view.findViewById(R.id.rvSelectedRubros);
         tabLayout = view.findViewById(R.id.tabLayout);
         current = 0;
-        tabLayout.addTab(tabLayout.newTab());
-        tabLayout.addTab(tabLayout.newTab());
+        tabLayout.setCount(2);
+        tabLayout.setRadius(3);
+        tabLayout.setAnimationDuration(1000);
+        tabLayout.setAnimationType(AnimationType.WORM);
 
         fragmentManager.beginTransaction()
                 .add(R.id.ContainerSelector, rubroGeneral, TAG_GENERAL)
@@ -81,7 +84,6 @@ public class ConfiguratorRubro extends ConfiguratorTurnPro {
                 @Override
                 public boolean onItemClick(View view, int position) {
                     adapterSelectedRubros.removeItem(position);
-
                     return true;
                 }
             });
@@ -101,7 +103,7 @@ public class ConfiguratorRubro extends ConfiguratorTurnPro {
             return true;
         }
 
-        CustomToast.makeText(getContext(), getString(R.string.selecciona_un_rubro));
+        CustomSnackBar.makeText(getView().findViewById(R.id.rootView), getString(R.string.selecciona_un_rubro));
 
         return false;
     }
@@ -116,7 +118,7 @@ public class ConfiguratorRubro extends ConfiguratorTurnPro {
 
         if (fragmentManager.getBackStackEntryCount() > 0) {
             fragmentManager.popBackStack();
-            tabLayout.getTabAt(--current).select();
+            tabLayout.setSelection(--current);
             return true;
         }
 
@@ -130,7 +132,6 @@ public class ConfiguratorRubro extends ConfiguratorTurnPro {
             aux.add(r.getId());
         }
         user.setRubro(aux);
-
         for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
             fragmentManager.popBackStack();
         }
@@ -151,7 +152,7 @@ public class ConfiguratorRubro extends ConfiguratorTurnPro {
                         .commit();
 
                 this.current = 1;
-                tabLayout.getTabAt(1).select();
+                tabLayout.setSelection(1);
 
                 break;
             case TAG_ESP_1:
@@ -175,7 +176,7 @@ public class ConfiguratorRubro extends ConfiguratorTurnPro {
                     fragmentManager.popBackStack();
 
                     this.current = 0;
-                    tabLayout.getTabAt(0).select();
+                    tabLayout.setSelection(0);
                 }
                 break;
         }

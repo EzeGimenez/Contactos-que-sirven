@@ -19,6 +19,7 @@ import com.visoft.network.R;
 public class CustomDialog {
 
     private AlertDialog.Builder builder;
+    private Dialog dialog;
 
     public CustomDialog(Context context) {
         builder = new AlertDialog.Builder(context, R.style.alertDialogs);
@@ -89,9 +90,16 @@ public class CustomDialog {
      * Muestra el diálogo
      */
     public void show() {
-        Dialog dialog = builder.create();
-
+        dialog = builder.create();
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
+    }
+
+    public void hide() {
+        dialog.dismiss();
+    }
+
+    public boolean isShown() {
+        return dialog != null && dialog.isShowing();
     }
 }

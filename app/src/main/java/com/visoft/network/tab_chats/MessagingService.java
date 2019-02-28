@@ -29,6 +29,8 @@ import com.visoft.network.funcionalidades.GsonerUser;
 import com.visoft.network.objects.User;
 import com.visoft.network.util.Constants;
 
+import static com.visoft.network.MainActivityNormalFragment.RECEIVER_INTENT;
+
 public class MessagingService extends FirebaseMessagingService {
 
     @Override
@@ -62,7 +64,7 @@ public class MessagingService extends FirebaseMessagingService {
         if (!MainActivityNormal.isRunning && !SpecificChatActivity.isRunning) {
             createNotification(remoteMessage.getData().get("sender"), remoteMessage.getData().get("body"), remoteMessage.getData().get("title"));
         } else {
-            Intent intent = new Intent(MainActivityNormal.RECEIVER_INTENT);
+            Intent intent = new Intent(RECEIVER_INTENT);
             LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
         }
     }
