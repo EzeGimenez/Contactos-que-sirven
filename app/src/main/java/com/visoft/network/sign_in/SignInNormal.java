@@ -32,12 +32,13 @@ import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
 
 public class SignInNormal extends Fragment implements View.OnClickListener {
-    private static final int RC_SIGNINEMAIL = 1, RC_SIGNINGOOGLE = 2, RC_SIGNUP = 4;
+    private static final int RC_SIGNINEMAIL = 10, RC_SIGNINGOOGLE = 11, RC_SIGNUP = 12;
 
     private EditText etEmail, etPassword;
     private AccountManager accountManager;
     private ImageView btnShowPassword;
     private LoadingScreen loadingScreen;
+    private AccountManager.ListenerRequestResult listener;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -49,13 +50,28 @@ public class SignInNormal extends Fragment implements View.OnClickListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        listener = new AccountManager.ListenerRequestResult() {
+            @Override
+            public void onRequestResult(boolean result, int requestCode, Bundle data) {
+                if (result && (requestCode == RC_SIGNINEMAIL || requestCode == RC_SIGNINGOOGLE)) {
+                    goBackSuccesfully();
+                } else if (!result) {
+                    if (data != null) {
+                        showSnackBar(data.getString("error"));
+                    }
+                }
+
+                loadingScreen.hide();
+            }
+        };
+
+        accountManager = AccountManagerFirebaseNormal.getInstance(listener, (AppCompatActivity) getActivity());
+
         this.loadingScreen = new LoadingScreen(getContext(), (ViewGroup) view.findViewById(R.id.rootView));
 
-        //Initialization of UI Components
         etEmail = view.findViewById(R.id.etUsername);
         etPassword = view.findViewById(R.id.etPassword);
 
-        //Listeners for buttons
         view.findViewById(R.id.buttonAcceptLogIn).setOnClickListener(this);
         view.findViewById(R.id.buttonSignInWithGoogle).setOnClickListener(this);
         view.findViewById(R.id.buttonSignUp).setOnClickListener(this);
@@ -152,7 +168,7 @@ public class SignInNormal extends Fragment implements View.OnClickListener {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.SHARED_PREF_NAME, MODE_PRIVATE);
         sharedPreferences.edit().putBoolean("asPro", false).commit();
         Intent intent = new Intent(getContext(), MainActivityNormal.class);
-        loadingScreen.hide();
+        accountManager.removeListener(listener);
         startActivity(intent);
         getActivity().finish();
     }
@@ -173,21 +189,6 @@ public class SignInNormal extends Fragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-
-        accountManager = AccountManagerFirebaseNormal.getInstance(new AccountManager.ListenerRequestResult() {
-            @Override
-            public void onRequestResult(boolean result, int requestCode, Bundle data) {
-                if (result) {
-                    goBackSuccesfully();
-                } else {
-                    if (data != null) {
-                        showSnackBar(data.getString("error"));
-                    }
-                }
-
-                loadingScreen.hide();
-            }
-        }, (AppCompatActivity) getActivity());
         HolderCurrentAccountManager.setCurrent(accountManager);
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.SHARED_PREF_NAME, MODE_PRIVATE);
         sharedPreferences.edit().putBoolean("asPro", false).commit();

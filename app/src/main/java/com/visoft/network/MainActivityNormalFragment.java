@@ -40,6 +40,7 @@ public class MainActivityNormalFragment extends Fragment {
     private MainContactsFragment mainContactsFragment;
     private SharedPreferences sharedPref;
     private FusedLocationProviderClient mFusedLocationClient;
+    private ViewPagerAdapter viewPagerAdapter;
 
     private TabLayout tabLayout;
 
@@ -47,7 +48,7 @@ public class MainActivityNormalFragment extends Fragment {
     private ViewPager viewPagerMain;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_main_activity_normal, container, false);
     }
@@ -95,8 +96,12 @@ public class MainActivityNormalFragment extends Fragment {
     }
 
     public void onBackPressed() {
-        if (holderFirstTab != null && holderFirstTab.isVisible() && !holderFirstTab.onBackPressed()) {
-            getActivity().finish();
+        if (viewPagerMain.getCurrentItem() != 0) {
+            viewPagerMain.setCurrentItem(0);
+        } else {
+            if (holderFirstTab.isVisible() && !holderFirstTab.onBackPressed()) {
+                getActivity().finish();
+            }
         }
     }
 
@@ -135,7 +140,7 @@ public class MainActivityNormalFragment extends Fragment {
         mainContactsFragment = mainContactsFragment == null ? new MainContactsFragment() : mainContactsFragment;
 
         viewPagerMain = getView().findViewById(R.id.ViewPagerMain);
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getFragmentManager());
+        viewPagerAdapter = new ViewPagerAdapter(getFragmentManager());
 
         tabLayout = getView().findViewById(R.id.tabLayoutMain);
         tabLayout.setupWithViewPager(viewPagerMain);
@@ -165,7 +170,14 @@ public class MainActivityNormalFragment extends Fragment {
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-
+                Fragment visible = getVisible();
+                if (tab.getPosition() == 0) {
+                    if (!((HolderFirstTab) visible).getActual().equals(HolderFirstTab.idGeneral)) {
+                        while (((HolderFirstTab) visible).getCurrent() > 0) {
+                            ((HolderFirstTab) visible).onBackPressed();
+                        }
+                    }
+                }
             }
         });
 
@@ -174,6 +186,10 @@ public class MainActivityNormalFragment extends Fragment {
         if (!sharedPref.getBoolean("unreadMessages", false)) {
             tabLayout.getTabAt(1).getCustomView().findViewById(R.id.notImg).setVisibility(View.INVISIBLE);
         }
+    }
+
+    public Fragment getVisible() {
+        return viewPagerAdapter.getItem(viewPagerMain.getCurrentItem());
     }
 
     private class ViewPagerAdapter extends FragmentPagerAdapter {

@@ -34,7 +34,6 @@ public class ConfiguratorWorkScope extends ConfiguratorTurnPro implements OnMapR
         map = googleMap;
         MapHighlighter mapHighlighter = new MapHighlighter(getContext(), map);
         mapHighlighter.highlightMap(null);
-
         iniciar();
     }
 
@@ -55,7 +54,11 @@ public class ConfiguratorWorkScope extends ConfiguratorTurnPro implements OnMapR
     protected void iniciar() {
         if (map != null) {
             LatLng current = new LatLng(user.getMapCenterLat(), user.getMapCenterLng());
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(current, user.getMapZoom()));
+            if (current.latitude == 0 && current.longitude == 0) {
+                map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(-36.581373, -65.517662)));
+            } else {
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(current, user.getMapZoom()));
+            }
         }
     }
 

@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name" translatable="false">Maserv</string>
+    <string name="app_name" translatable="false">Contactos\nque sirven</string>
+
     <!-- RUBROS -->
     <string name="mantenimientohogar">Mantenimiento del hogar</string>
     <string name="serviciosnegocio">Servicios de negocio</string>
@@ -36,7 +37,7 @@
     <string name="albanileria">Albañil</string>
     <string name="carpintero">Carpintería</string>
     <string name="electricista">Electricista</string>
-    <string name="singuero">Singuero</string>
+    <string name="singuero">Zinguero</string>
     <string name="serviciosgeneral">Servicios generales</string>
     <string name="rellenos">Rellenos</string>
     <string name="mudanza">Mudanza</string>
@@ -246,8 +247,10 @@
     <string name="aceptable">Aceptable</string>
     <string name="mala">Mala</string>
     <string name="muy_mala">Muy mala</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="brinda_muy_buena_atenci_n">Brinda muy buena atención</string>
+    <string name="es_muy_puntual">Es muy puntual</string>
+    <string name="brinda_buena_calidad_de_servicio">Brinda buena calidad de servicio</string>
+    <string name="no_favs">¿Aún sin contactos favoritos? Añádelos haciendo click en la estrella superior en su perfil</string>
+    <string name="app_info">Info del desarrolador</string>
 
 </resources>

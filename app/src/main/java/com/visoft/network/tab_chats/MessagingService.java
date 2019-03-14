@@ -90,7 +90,7 @@ public class MessagingService extends FirebaseMessagingService {
         notificationLayoutExpanded.setTextViewText(R.id.body, body);
 
         builder
-                .setSmallIcon(R.drawable.arrow_back)
+                .setSmallIcon(R.drawable.arrow_back_2)
                 .setCustomContentView(notificationLayoutExpanded)
                 .setCustomBigContentView(notificationLayoutExpanded)
                 .setDefaults(Notification.DEFAULT_ALL)

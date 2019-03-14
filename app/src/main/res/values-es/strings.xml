@@ -35,7 +35,7 @@
     <string name="albanileria">Albañil</string>
     <string name="carpintero">Carpintería</string>
     <string name="electricista">Electricista</string>
-    <string name="singuero">Singuero</string>
+    <string name="singuero">Zinguero</string>
     <string name="serviciosgeneral">Servicios generales</string>
     <string name="rellenos">Rellenos</string>
     <string name="mudanza">Mudanza</string>
@@ -167,8 +167,8 @@
     <string name="chats">Chats</string>
     <string name="buscar">Buscar</string>
     <string name="contactos">Favoritos</string>
-    <string name="email_erroneo">Email inválido</string>
-    <string name="wrong_password">Contraseña inválida</string>
+    <string name="email_erroneo">Revise su dirección de email e inténtelo nuevamente</string>
+    <string name="wrong_password">Revise la contraseña e inténtelo nuevamente</string>
     <string name="wrong_username">Usuario ya registrado</string>
     <string name="error_sign_up">No se pudo crear el usuario</string>
     <string name="error_iniciar_sesion">Error al iniciar sesion</string>
@@ -183,7 +183,7 @@
     <string name="usuario_existente_normal">Su usuario ya está registrado como prestador de servicio, por favor utilice las mismas credenciales para iniciar sesión como cliente</string>
     <string name="username_length_wrong">El nombre de usuario debe tener al menos 4 caracteres</string>
     <string name="password_length_wrong">La contraseña debe contener al menos 6 caracteres</string>
-    <string name="todavia_no_tienes_chats">Todavía no tienes chats. ¡No te preocupes! Nuevos mensajes llegarán muy pronto</string>
+    <string name="todavia_no_tienes_chats">Todavía no tienes chats. ¡No te preocupes! Nuevos mensajes llegarán muy pronto.</string>
     <string name="selecciona_un_rubro">Seleccione al menos un rubro</string>
     <string name="ingrese_telefono">Ingrese un teléfono</string>
     <string name="seguro_salir">Está seguro que desea salir?</string>
@@ -197,9 +197,9 @@
     <string name="todavia_no_tienes_completados">Los contratos finalizados aparecerán por acá.</string>
     <string name="finished_at">Finalizado el:</string>
     <string name="no_hay_usuario_registrado">No hay usuario creado con esas credenciales</string>
-    <string name="ingrese_dni">Ingrese dni</string>
-    <string name="ingrese_direccion_legal">Ingrese direccion legal</string>
-    <string name="ingrese_patente">Ingrese una patente</string>
+    <string name="ingrese_dni">Ingrese su número de documento</string>
+    <string name="ingrese_direccion_legal">Ingrese su dirección legal</string>
+    <string name="ingrese_patente">Ingrese su patente</string>
     <string name="ingrese_obra_social">Ingrese su Cobertura médica</string>
     <string name="complete_personal_info">Rellene la siguiente información personal</string>
     <string name="borrar_acompanante">¿Desea borrar este acompañante?</string>
@@ -242,4 +242,9 @@
     <string name="aceptable">Aceptable</string>
     <string name="mala">Mala</string>
     <string name="muy_mala">Muy mala</string>
+    <string name="brinda_muy_buena_atenci_n">Brinda muy buena atención</string>
+    <string name="es_muy_puntual">Es muy puntual</string>
+    <string name="brinda_buena_calidad_de_servicio">Brinda buena calidad de servicio</string>
+    <string name="no_favs">¿Aún sin contactos favoritos? Añádelos haciendo click en la estrella superior en su perfil</string>
+    <string name="app_info">Info del desarrolador</string>
 </resources>

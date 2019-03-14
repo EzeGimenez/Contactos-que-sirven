@@ -85,6 +85,7 @@ public class ProfileActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+        toolbar.setNavigationIcon(R.drawable.arrow_back_2);
 
         userContacts.child(shownUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

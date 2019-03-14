@@ -99,11 +99,16 @@ public class MainContactsFragment extends Fragment {
         contactsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot d : dataSnapshot.getChildren()) {
-                    i++;
-                    getProUserFromUID(d.getKey());
+                if (dataSnapshot.getChildrenCount() > 0) {
+                    yesFavs();
+                    for (DataSnapshot d : dataSnapshot.getChildren()) {
+                        i++;
+                        getProUserFromUID(d.getKey());
+                    }
+                    setAdapter();
+                } else {
+                    noFavs();
                 }
-                setAdapter();
             }
 
             @Override
@@ -111,6 +116,16 @@ public class MainContactsFragment extends Fragment {
 
             }
         });
+    }
+
+    private void noFavs() {
+        getView().findViewById(R.id.noFavs).setVisibility(View.VISIBLE);
+        rvContacts.setVisibility(View.GONE);
+    }
+
+    private void yesFavs() {
+        rvContacts.setVisibility(View.VISIBLE);
+        getView().findViewById(R.id.noFavs).setVisibility(View.GONE);
     }
 
     private void setAdapter() {

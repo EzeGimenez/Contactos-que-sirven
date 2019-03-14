@@ -23,7 +23,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/snap/android-studio/70/android-studio/plugins/android/lib/android.jar!/images/material_design_icons/image/ic_remove_red_eye_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/snap/android-studio/71/android-studio/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_info_outline_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -33,10 +33,10 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="arrow_back_2" />
+                            <entry key="color" value="aaaaaa" />
+                            <entry key="outputName" value="app_info" />
                             <entry key="overrideSize" value="true" />
-                            <entry key="sourceFile" value="$PROJECT_DIR$/../../../Downloads-Linux/untitled (21).svg" />
+                            <entry key="sourceFile" value="$PROJECT_DIR$/../../../Downloads-Linux/profile_pic.svg" />
                           </map>
                         </option>
                       </PersistentState>

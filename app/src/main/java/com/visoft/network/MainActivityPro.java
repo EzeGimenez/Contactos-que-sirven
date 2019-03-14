@@ -46,7 +46,7 @@ public class MainActivityPro extends AppCompatActivity {
         AccountManager.ListenerRequestResult l = new AccountManager.ListenerRequestResult() {
             @Override
             public void onRequestResult(boolean result, int requestCode, Bundle data) {
-                if (result && data.getBoolean("isNewUser", false)) {
+                if (result && data != null && data.getBoolean("isNewUser", false)) {
                     showLogInScreen();
                     mAuth.signOut();
                 } else {

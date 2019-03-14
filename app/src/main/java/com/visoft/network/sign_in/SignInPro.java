@@ -223,9 +223,9 @@ public class SignInPro extends Fragment implements View.OnClickListener {
                         intent.putExtra("proUser", (UserPro) data.get("user"));
                         intent.putExtra("isEditing", false);
                         startActivityForResult(intent, RC_SIGNUP);
-                    } else if (data.getBoolean("isNewUser")) {
+                    } else if (data != null && data.getBoolean("isNewUser")) {
                         startProConfig();
-                    } else if (!data.getBoolean("registered") && (requestCode == RC_SIGNINGOOGLE || requestCode == RC_SIGNINEMAIL)) {
+                    } else if (data != null && !data.getBoolean("registered") && (requestCode == RC_SIGNINGOOGLE || requestCode == RC_SIGNINEMAIL)) {
                         loadingScreen.hide();
                         goBackSuccesfully();
                     }

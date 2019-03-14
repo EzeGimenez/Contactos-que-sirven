@@ -62,7 +62,6 @@ public class MapHighlighter {
             final Marker marker = map.addMarker(options);
             marker.setDraggable(true);
 
-            // I used this listener to make align the circle center
             map.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
 
                 @Override

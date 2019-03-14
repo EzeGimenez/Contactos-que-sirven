@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.RelativeLayout;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
@@ -61,14 +62,14 @@ public class SpecificChatFragment extends Fragment {
             }
         });
 
-        /*if (isFinished) {
+        if (isFinished) {
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT);
 
             recyclerView
                     .setLayoutParams(lp);
-        }*/
+        }
 
         final View activityRootView = getView();
         activityRootView.getViewTreeObserver().

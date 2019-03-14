@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -40,6 +41,7 @@ public class TurnProActivity extends AppCompatActivity implements View.OnClickLi
     private DatabaseReference ref;
     private boolean isNewUser;
     private int current;
+    private boolean finished = false;
 
     private TextView tvInfo;
 
@@ -146,7 +148,7 @@ public class TurnProActivity extends AppCompatActivity implements View.OnClickLi
                 current++;
             } else {
                 actual.finalizar();
-                exit();
+                exitSuccessfully();
             }
         }
     }
@@ -160,9 +162,19 @@ public class TurnProActivity extends AppCompatActivity implements View.OnClickLi
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    private void exit() {
+    private void exitSuccessfully() {
         loadingScreen.show();
+        finished = true;
         saveInUser();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (!finished
+        ) {
+            FirebaseAuth.getInstance().signOut();
+        }
     }
 
     private void saveInUser() {

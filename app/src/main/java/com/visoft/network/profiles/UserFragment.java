@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.visoft.network.R;
+import com.visoft.network.custom_views.CustomDialog;
 import com.visoft.network.objects.UserNormal;
 
 public class UserFragment extends Fragment {
@@ -42,6 +43,16 @@ public class UserFragment extends Fragment {
 
     private void iniciarUI() {
         tvUsername.setText(user.getUsername());
+
+        getView().findViewById(R.id.infoApp).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CustomDialog dialog = new CustomDialog(getContext());
+                dialog.setPositiveButton(getString(R.string.aceptar), null);
+                dialog.setMessage("Ezequiel Gimenez\neze.gimenez.98@gmail.com");
+                dialog.show();
+            }
+        });
 
         getView().findViewById(R.id.cerrarSesion).setOnClickListener(new View.OnClickListener() {
             @Override

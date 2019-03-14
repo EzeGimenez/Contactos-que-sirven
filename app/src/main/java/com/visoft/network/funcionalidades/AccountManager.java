@@ -69,7 +69,9 @@ public abstract class AccountManager {
 
     public abstract void deleteAccount(int requestCode);
 
-    public abstract void setListener(ListenerRequestResult l);
+    public abstract void addListener(ListenerRequestResult l);
+
+    public abstract void removeListener(ListenerRequestResult l);
 
     public abstract static class ListenerRequestResult {
         public abstract void onRequestResult(boolean result, int requestCode, Bundle data);

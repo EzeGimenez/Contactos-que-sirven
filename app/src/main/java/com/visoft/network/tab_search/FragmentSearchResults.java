@@ -79,28 +79,30 @@ public class FragmentSearchResults extends FragmentFirstTab {
                 public void onFinish(List<UserPro> l) {
                     loadingScreen.hide();
 
-                    list = l;
-                    removeCurrentUserFromList(list);
-                    adapter = new FlexibleAdapter<>(list);
-                    if (list.isEmpty()) {
-                        int id = getResources().getIdentifier(
-                                a, "string", getActivity().getPackageName()
-                        );
-                        noResults(getString(id));
-                    } else {
-                        if (isVisible()) {
-                            yesResults();
-                            recyclerView.setAdapter(adapter);
-                            adapter.addListener(new FlexibleAdapter.OnItemClickListener() {
-                                @Override
-                                public boolean onItemClick(View view, int position) {
-                                    Intent intent = new Intent(getContext(), ProfileActivity.class);
-                                    intent.putExtra("user", list.get(position));
+                    if(isVisible()) {
+                        list = l;
+                        removeCurrentUserFromList(list);
+                        adapter = new FlexibleAdapter<>(list);
+                        if (list.isEmpty()) {
+                            int id = getResources().getIdentifier(
+                                    a, "string", getActivity().getPackageName()
+                            );
+                            noResults(getString(id));
+                        } else {
+                            if (isVisible()) {
+                                yesResults();
+                                recyclerView.setAdapter(adapter);
+                                adapter.addListener(new FlexibleAdapter.OnItemClickListener() {
+                                    @Override
+                                    public boolean onItemClick(View view, int position) {
+                                        Intent intent = new Intent(getContext(), ProfileActivity.class);
+                                        intent.putExtra("user", list.get(position));
 
-                                    startActivity(intent);
-                                    return true;
-                                }
-                            });
+                                        startActivity(intent);
+                                        return true;
+                                    }
+                                });
+                            }
                         }
                     }
                 }

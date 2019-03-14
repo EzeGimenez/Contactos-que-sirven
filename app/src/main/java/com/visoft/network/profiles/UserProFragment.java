@@ -148,6 +148,8 @@ public class UserProFragment extends Fragment implements OnMapReadyCallback, Vie
                 showContactInfo();
             }
         });
+        getView().findViewById(R.id.infoApp).setOnClickListener(this);
+
 
         final String cv = user.getCvText();
         if (cv.trim().length() > 0) {
@@ -218,7 +220,7 @@ public class UserProFragment extends Fragment implements OnMapReadyCallback, Vie
         final Activity act = getActivity();
         if (act instanceof ProfileActivity) {
             ProfileActivity.hideLoadingScreen();
-            new Messenger(getContext(), HolderCurrentAccountManager.getCurrent(null).getCurrentUser(1).getUid(), user.getUid(), (ViewGroup) getView().findViewById(R.id.rootView), containerScreens, database);
+            new Messenger(getContext(), HolderCurrentAccountManager.getCurrent(null).getCurrentUser(-1).getUid(), user.getUid(), (ViewGroup) getView().findViewById(R.id.rootView), containerScreens, database);
 
             profileControls.setVisibility(View.GONE);
         } else {
@@ -377,6 +379,12 @@ public class UserProFragment extends Fragment implements OnMapReadyCallback, Vie
                 dialog.setView(view);
                 dialog.show();
                 break;
+            case R.id.infoApp:
+                CustomDialog dialog2 = new CustomDialog(getContext());
+                dialog2.setPositiveButton(getString(R.string.aceptar), null);
+                dialog2.setMessage("Ezequiel Gimenez\neze.gimenez.98@gmail.com");
+                dialog2.show();
+                break;
         }
     }
 
@@ -521,16 +529,25 @@ public class UserProFragment extends Fragment implements OnMapReadyCallback, Vie
     private void putInsignias(QualityInfo qualityInfo) {
         if (qualityInfo != null) {
             if (qualityInfo.getAtencion() >= Constants.MIN_ATENCION_INSIGNIA) {
-                ImageView insigniaAtencion = getView().findViewById(R.id.ivInsigniaAtencion);
+                TextView insigniaAtencion = getView().findViewById(R.id.ivInsigniaAtencion);
                 insigniaAtencion.setVisibility(View.VISIBLE);
+            } else {
+                TextView insigniaAtencion = getView().findViewById(R.id.ivInsigniaAtencion);
+                insigniaAtencion.setVisibility(View.GONE);
             }
             if (qualityInfo.getCalidad() >= Constants.MIN_CALIDAD_INSIGNIA) {
-                ImageView insigniaCalidad = getView().findViewById(R.id.ivInsigniaCalidad);
+                TextView insigniaCalidad = getView().findViewById(R.id.ivInsigniaCalidad);
                 insigniaCalidad.setVisibility(View.VISIBLE);
+            } else {
+                TextView insigniaCalidad = getView().findViewById(R.id.ivInsigniaCalidad);
+                insigniaCalidad.setVisibility(View.GONE);
             }
             if (qualityInfo.getTiempoResp() >= Constants.MIN_TIEMPO_RESP_INSIGNIA) {
-                ImageView insigniaTiempoResp = getView().findViewById(R.id.ivInsigniaTiempoResp);
+                TextView insigniaTiempoResp = getView().findViewById(R.id.ivInsigniaTiempoResp);
                 insigniaTiempoResp.setVisibility(View.VISIBLE);
+            } else {
+                TextView insigniaTiempoResp = getView().findViewById(R.id.ivInsigniaTiempoResp);
+                insigniaTiempoResp.setVisibility(View.GONE);
             }
         }
     }

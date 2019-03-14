@@ -12,9 +12,11 @@ import com.visoft.network.R;
 public class CustomNavigationBar extends LinearLayout {
     private int cantItems;
     private ViewGroup[] items;
+    private int selectedTab;
 
     public CustomNavigationBar(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        selectedTab = 0;
     }
 
     public int getCantItems() {
@@ -32,6 +34,10 @@ public class CustomNavigationBar extends LinearLayout {
             items[i] = item;
             addView(item);
         }
+    }
+
+    public void setSelectedTab(int i) {
+        this.selectedTab = i;
     }
 
     public ViewGroup getItem(int i) {

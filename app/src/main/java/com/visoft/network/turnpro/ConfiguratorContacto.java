@@ -63,8 +63,13 @@ public class ConfiguratorContacto extends ConfiguratorTurnPro {
 
     @Override
     protected void finalizar() {
-        user.setTelefono1(etTel1.getText().toString());
-        user.setTelefono2(etTel2.getText().toString());
+        if (etTel1.getText().length() == 0) {
+            user.setTelefono1(etTel2.getText().toString());
+        } else {
+            user.setTelefono1(etTel1.getText().toString());
+            user.setTelefono2(etTel2.getText().toString());
+        }
+
         user.setDiasAtencion(
                 sFecha1.getSelectedItemPosition() * 10 + sFecha2.getSelectedItemPosition());
         user.setHoraAtencion(
@@ -88,7 +93,7 @@ public class ConfiguratorContacto extends ConfiguratorTurnPro {
     @Override
     public boolean canContinue() {
 
-        if (etTel1.getText().toString().length() > 0) {
+        if (etTel1.getText().toString().length() > 0 || etTel2.getText().length() > 0) {
             return true;
         }
 

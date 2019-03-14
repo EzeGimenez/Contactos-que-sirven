@@ -31,6 +31,7 @@ import com.visoft.network.funcionalidades.AccountManagerFirebaseNormal;
 import com.visoft.network.funcionalidades.HolderCurrentAccountManager;
 import com.visoft.network.profiles.ProfileFragmentOwnUser;
 import com.visoft.network.sign_in.SignInActivity;
+import com.visoft.network.tab_search.HolderFirstTab;
 import com.visoft.network.util.Constants;
 
 import java.util.ArrayList;
@@ -44,6 +45,8 @@ public class MainActivityNormal extends AppCompatActivity {
     private BroadcastReceiver broadcastReceiver;
     private ProfileFragmentOwnUser profileFragmentOwnUser;
     private MainActivityNormalFragment mainActivityNormalFragment;
+    private CustomNavigationBar customNavigationBar;
+    private ViewPager vp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +103,6 @@ public class MainActivityNormal extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        super.onStart();
         LocalBroadcastManager.getInstance(this).registerReceiver((broadcastReceiver),
                 new IntentFilter(RECEIVER_INTENT)
         );
@@ -120,10 +122,10 @@ public class MainActivityNormal extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (mainActivityNormalFragment.isVisible()) {
+        if (vp.getCurrentItem() == 0) {
             mainActivityNormalFragment.onBackPressed();
         } else {
-            super.onBackPressed();
+            changeToHome();
         }
         if (isRunning) {
             hideKeyboard();
@@ -150,7 +152,7 @@ public class MainActivityNormal extends AppCompatActivity {
     private void updateUI(@Nullable FirebaseUser user) {
 
         if (user != null) {
-            CustomNavigationBar customNavigationBar = findViewById(R.id.customNavBar);
+            customNavigationBar = findViewById(R.id.customNavBar);
             customNavigationBar.setCantItems(3);
             ViewGroup viewGroup = customNavigationBar.getItem(2);
 
@@ -161,7 +163,7 @@ public class MainActivityNormal extends AppCompatActivity {
             ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
             adapter.addFragment(mainActivityNormalFragment, "");
             adapter.addFragment(profileFragmentOwnUser, "");
-            final ViewPager vp = findViewById(R.id.Container);
+            vp = findViewById(R.id.Container);
             vp.setAdapter(adapter);
 
             vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -195,9 +197,7 @@ public class MainActivityNormal extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     if (vp.getCurrentItem() != 1) {
-                        vp.setCurrentItem(1);
-                        ivPerson.setImageDrawable(getResources().getDrawable(R.drawable.person_filled));
-                        ivHome.setImageDrawable(getResources().getDrawable(R.drawable.home_unfilled));
+                        changeToProfile();
                     }
                 }
             });
@@ -206,9 +206,16 @@ public class MainActivityNormal extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     if (vp.getCurrentItem() != 0) {
-                        vp.setCurrentItem(0);
-                        ivPerson.setImageDrawable(getResources().getDrawable(R.drawable.person_unfilled));
-                        ivHome.setImageDrawable(getResources().getDrawable(R.drawable.home_filled));
+                        changeToHome();
+                    } else {
+                        Fragment visible = mainActivityNormalFragment.getVisible();
+                        if (visible instanceof HolderFirstTab) {
+                            if (!((HolderFirstTab) visible).getActual().equals(HolderFirstTab.idGeneral)) {
+                                while (((HolderFirstTab) visible).getCurrent() > 0) {
+                                    ((HolderFirstTab) visible).onBackPressed();
+                                }
+                            }
+                        }
                     }
                 }
             });
@@ -220,6 +227,22 @@ public class MainActivityNormal extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    private void changeToHome() {
+        vp.setCurrentItem(0);
+        ImageView ivHome = customNavigationBar.getItem(1).findViewById(R.id.imageView);
+        ImageView ivPerson = customNavigationBar.getItem(2).findViewById(R.id.imageView);
+        ivPerson.setImageDrawable(getResources().getDrawable(R.drawable.person_unfilled));
+        ivHome.setImageDrawable(getResources().getDrawable(R.drawable.home_filled));
+    }
+
+    private void changeToProfile() {
+        vp.setCurrentItem(1);
+        ImageView ivHome = customNavigationBar.getItem(1).findViewById(R.id.imageView);
+        ImageView ivPerson = customNavigationBar.getItem(2).findViewById(R.id.imageView);
+        ivPerson.setImageDrawable(getResources().getDrawable(R.drawable.person_filled));
+        ivHome.setImageDrawable(getResources().getDrawable(R.drawable.home_unfilled));
     }
 
     private void showLogInScreen() {

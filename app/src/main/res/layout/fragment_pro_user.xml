@@ -29,7 +29,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_margin="8dp"
+                android:padding="8dp"
                 android:src="@drawable/edit_24dp"
                 android:visibility="gone" />
 
@@ -128,34 +128,39 @@
                     android:layout_below="@id/btnShowContactInfo"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_gravity="bottom"
+                    android:layout_marginStart="8dp"
                     android:layout_marginTop="20dp"
-                    android:gravity="center"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
 
-                    <ImageView
+                    <TextView
                         android:id="@+id/ivInsigniaAtencion"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="24dp"
                         android:layout_margin="8dp"
-                        android:src="@drawable/insignia_atencion"
-                        android:visibility="gone" />
+                        android:drawableStart="@drawable/insignia_tick"
+                        android:drawablePadding="8dp"
+                        android:text="@string/brinda_muy_buena_atenci_n"
+                        android:textColor="@color/white" />
 
-                    <ImageView
+                    <TextView
                         android:id="@+id/ivInsigniaTiempoResp"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="24dp"
                         android:layout_margin="8dp"
-                        android:src="@drawable/insignia_puntual"
-                        android:visibility="gone" />
+                        android:drawableStart="@drawable/insignia_tick"
+                        android:drawablePadding="8dp"
+                        android:text="@string/es_muy_puntual"
+                        android:textColor="@color/white" />
 
-                    <ImageView
+                    <TextView
                         android:id="@+id/ivInsigniaCalidad"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="24dp"
                         android:layout_margin="8dp"
-                        android:src="@drawable/insignia_buena_calidad"
-                        android:visibility="gone" />
+                        android:drawableStart="@drawable/insignia_tick"
+                        android:drawablePadding="8dp"
+                        android:text="@string/brinda_buena_calidad_de_servicio"
+                        android:textColor="@color/white" />
 
                 </LinearLayout>
 
@@ -257,29 +262,41 @@
         <LinearLayout
             android:id="@+id/personalControls"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_gravity="bottom">
-
-            <TextView
-                android:id="@+id/eliminarCuenta"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:drawableStart="@drawable/ic_close_black_24dp"
-                android:gravity="center"
-                android:paddingStart="16dp"
-                android:text="@string/eliminar_cuenta"
-                android:textColor="@android:color/holo_red_light"
-                android:textSize="15sp" />
+            android:layout_height="150dp"
+            android:layout_alignParentBottom="true"
+            android:gravity="start"
+            android:orientation="vertical"
+            android:paddingStart="16dp">
 
             <TextView
                 android:id="@+id/cerrarSesion"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center"
-                android:paddingStart="16dp"
+                android:gravity="start|center_vertical"
                 android:text="@string/cerrar_sesi_n"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/eliminarCuenta"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="start|center_vertical"
+                android:text="@string/eliminar_cuenta"
+                android:textColor="@android:color/holo_red_light"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/infoApp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawableStart="@drawable/app_info"
+                android:drawablePadding="4dp"
+                android:gravity="start|center_vertical"
+                android:text="@string/app_info"
+                android:textColor="@android:color/darker_gray"
                 android:textSize="15sp" />
 
         </LinearLayout>

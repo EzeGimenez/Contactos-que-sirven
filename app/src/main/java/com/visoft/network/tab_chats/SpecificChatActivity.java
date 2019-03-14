@@ -50,7 +50,7 @@ public class SpecificChatActivity extends AppCompatActivity {
         final DatabaseReference messagesRef = Database
                 .getDatabase()
                 .getReference(Constants.FIREBASE_MESSAGES_CONTAINER_NAME)
-                .child(chatID); //TODO
+                .child(chatID);
 
         final ChatOverview c = (ChatOverview) getIntent().getSerializableExtra("chatOverview");
 

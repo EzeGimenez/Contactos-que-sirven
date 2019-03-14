@@ -54,11 +54,15 @@ public class ProfileFragmentOwnUser extends Fragment {
             public void onRequestResult(boolean result, int requestCode, Bundle data) {
                 if (requestCode == RC_CURRENTUSER) {
                     user = (User) data.get("user");
-                    getFragmentManager().popBackStack();
-                    iniciarUI();
-                } else if (requestCode == RC_DELETEACCOUNT) {
-                    if (result) {
-                        //finish();
+                    if (getFragmentManager() != null) {
+                        //getFragmentManager().popBackStack();
+                        iniciarUI();
+                    }
+                } else if (requestCode == RC_DELETEACCOUNT && result) {
+                    if (getActivity() instanceof MainActivityPro) {
+                        ((MainActivityPro) getActivity()).update();
+                    } else {
+                        ((MainActivityNormal) getActivity()).update();
                     }
                 }
                 loadingScreen.hide();

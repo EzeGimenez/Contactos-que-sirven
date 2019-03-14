@@ -42,7 +42,7 @@ import java.util.ArrayList;
 public class AccountManagerFirebaseNormal extends AccountManager {
 
     private static AccountManager instance;
-    private static ListenerRequestResult listener;
+    private static ArrayList<ListenerRequestResult> listeners;
     private static AppCompatActivity act;
 
     private FirebaseAuth mAuth;
@@ -63,12 +63,16 @@ public class AccountManagerFirebaseNormal extends AccountManager {
                 .getReference()
                 .child(Constants.FIREBASE_USERS_NORMAL_CONTAINER_NAME);
 
+        listeners = new ArrayList<>();
         googleClient = GoogleSignIn.getClient(act, op);
         mAuth = FirebaseAuth.getInstance();
     }
 
     public static AccountManager getInstance(ListenerRequestResult l, AppCompatActivity a) {
-        listener = l;
+        if (listeners == null) {
+            listeners = new ArrayList<>();
+        }
+        listeners.add(l);
         act = a;
 
         if (instance == null) {
@@ -298,13 +302,16 @@ public class AccountManagerFirebaseNormal extends AccountManager {
     }
 
     @Override
-    public void setListener(ListenerRequestResult l) {
-        listener = l;
+    public void addListener(ListenerRequestResult l) {
+        listeners.add(l);
     }
 
     private void notifyAccountActivity(boolean result, int requestCode, Bundle data) {
-        if (listener != null)
-            listener.onRequestResult(result, requestCode, data);
+        for (ListenerRequestResult listener : listeners) {
+            if (listener != null) {
+                listener.onRequestResult(result, requestCode, data);
+            }
+        }
     }
 
     //EMAIL
@@ -338,10 +345,16 @@ public class AccountManagerFirebaseNormal extends AccountManager {
         usersRef.child(user.getUid())
                 .setValue(GsonerUser.getGson().toJson(user, User.class));
 
+        listeners = new ArrayList<>();
         user = null;
         fbUser = null;
 
         mAuth.signOut();
+    }
+
+    @Override
+    public void removeListener(ListenerRequestResult l) {
+        listeners.remove(l);
     }
 
     //SIGN UPS
@@ -405,6 +418,10 @@ public class AccountManagerFirebaseNormal extends AccountManager {
      * @param password password
      */
     private void checkCredentials(String email, String password, String username) throws InvalidEmailException, InvalidPasswordException, InvalidUsernameException {
+        if (username == null || username.length() < 4) {
+            throw new InvalidUsernameException(act.getString(R.string.username_length_wrong));
+        }
+
         if (email == null || email.length() < 3 || !email.contains("@")) {
             throw new InvalidEmailException(act.getString(R.string.email_erroneo));
         }
@@ -412,10 +429,5 @@ public class AccountManagerFirebaseNormal extends AccountManager {
         if (password == null || password.length() < 6) {
             throw new InvalidPasswordException(act.getString(R.string.password_length_wrong));
         }
-
-        if (username == null || username.length() < 4) {
-            throw new InvalidUsernameException(act.getString(R.string.username_length_wrong));
-        }
-
     }
 }

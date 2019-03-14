@@ -18,13 +18,13 @@ import com.visoft.network.funcionalidades.SearcherProUser;
 
 public class HolderFirstTab extends Fragment {
 
+    public static String idGeneral = "general";
+    public static String idSearchResult = "searchResult";
     private static SearcherProUser searcherProUser;
     private final int containerId = R.id.ContainerFirstTab;
     private FragmentManager fragmentManager;
     private FragmentFirstTab fragmentGeneral, fragmentEspecifico, fragmentSearchResult;
     private String actual;
-    private String idGeneral = "general";
-    private String idSearchResult = "searchResult";
     private SearchView.OnQueryTextListener listenerSearchView;
     private PageIndicatorView tabLayout;
     private int current;
@@ -182,7 +182,15 @@ public class HolderFirstTab extends Fragment {
         this.currentQuery = a;
     }
 
+    public String getActual() {
+        return actual;
+    }
+
     public void setActual(String actual) {
         this.actual = actual;
+    }
+
+    public int getCurrent() {
+        return current;
     }
 }

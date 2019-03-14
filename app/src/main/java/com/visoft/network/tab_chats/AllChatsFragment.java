@@ -47,14 +47,12 @@ public class AllChatsFragment extends Fragment {
     private DatabaseReference userChatRef;
     private long lastUpdate;
     private ChatOverViewFlexibleAdapter adapter, adapterFinished;
-    private boolean got;
     //Componentes gráficas
     private RecyclerView recyclerView, recyclerViewFinished;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        got = false;
 
         database = Database.getDatabase().getReference();
         listener = new ValueEventListener() {
@@ -73,7 +71,8 @@ public class AllChatsFragment extends Fragment {
                             chatOverviews.add(chatOverview);
                         }
                     }
-                    if (getView() != null) {
+
+                    if (isVisible()) {
                         if (chatUIDS.isEmpty()) {
                             noChats();
                             noCompleted();
@@ -83,6 +82,7 @@ public class AllChatsFragment extends Fragment {
                             getUsers();
                         }
                     }
+
                 }
             }
 
@@ -95,8 +95,7 @@ public class AllChatsFragment extends Fragment {
         accountManager = HolderCurrentAccountManager.getCurrent(new AccountManager.ListenerRequestResult() {
             @Override
             public void onRequestResult(boolean result, int requestCode, Bundle data) {
-                if (!got && result) {
-                    got = true;
+                if (result && data != null) {
                     current = (User) data.get("user");
                     userChatRef = database
                             .child(Constants.FIREBASE_CHATS_CONTAINER_NAME)
@@ -112,8 +111,7 @@ public class AllChatsFragment extends Fragment {
         });
 
         current = accountManager.getCurrentUser(1);
-        if (current != null && !got) {
-            got = true;
+        if (current != null) {
             userChatRef = database
                     .child(Constants.FIREBASE_CHATS_CONTAINER_NAME)
                     .child(current.getUid());
